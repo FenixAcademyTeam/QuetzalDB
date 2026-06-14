@@ -413,7 +413,7 @@ function showPokemonDetail(p) {
           border-radius: 18px;
           padding: 20px;
         ">
-          <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">📝 Datos del Pokémon</h3>
+          <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">Datos del Pokémon</h3>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.88em;color:#e8ecf7;">
             <p><strong style="color:#aaa;">Categoría</strong><br>${p.field17 || '-'}</p>
             <p><strong style="color:#aaa;">Altura</strong><br>${p.field18 || '-'}</p>
@@ -442,7 +442,7 @@ function showPokemonDetail(p) {
           border-radius: 18px;
           padding: 20px;
         ">
-          <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">📊 Estadísticas Base</h3>
+          <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">Estadísticas Base</h3>
           <div style="display:flex;flex-direction:column;gap:12px;">
             ${statsHtml}
           </div>
