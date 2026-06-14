@@ -128,7 +128,7 @@
     "field19": "155.5 kg",
     "field20": "Muy Dificil",
     "field21": "Medio Lento",
-    "field26": "Sebo",
+    "field24": "Sebo",
     "field27": "Monstruo",
     "field28": "Planta"
   },
@@ -255,7 +255,7 @@
     "field19": "110.5 kg",
     "field20": "Muy Dificil",
     "field21": "Medio Lento",
-    "field26": "Garra Dura",
+    "field24": "Garra Dura",
     "field27": "Monstruo",
     "field28": "Dragon"
   },
@@ -280,7 +280,7 @@
     "field19": "100.5 kg",
     "field20": "Muy Dificil",
     "field21": "Medio Lento",
-    "field26": "Sequia",
+    "field24": "Sequia",
     "field27": "Monstruo",
     "field28": "Dragon"
   },
@@ -402,7 +402,7 @@
     "field19": "101.1 kg",
     "field20": "Muy Dificil",
     "field21": "Medio Lento",
-    "field26": "Megadisparador",
+    "field24": "Megadisparador",
     "field27": "Monstruo",
     "field28": "Agua 1"
   },
@@ -626,7 +626,7 @@
     "field20": "Muy Dificil",
     "field21": "Medio Lento",
     "field22": "Flecha Venenosa",
-    "field26": "Adaptable",
+    "field24": "Adaptable",
     "field27": "Bicho"
   },
   {
@@ -729,7 +729,7 @@
     "field19": "50.5 kg",
     "field20": "Muy Dificil",
     "field21": "Medio Lento",
-    "field26": "Indefenso",
+    "field24": "Indefenso",
     "field27": "Volador"
   },
   {
@@ -1398,7 +1398,7 @@
     "field19": "38.0 kg",
     "field20": "Dificil",
     "field21": "Medio Lento",
-    "field26": "Piel Electrica",
+    "field24": "Piel Electrica",
     "field27": "Campo",
     "field28": "Hada"
   },
@@ -1421,7 +1421,7 @@
     "field19": "26.0 kg",
     "field20": "Dificil",
     "field21": "Medio Lento",
-    "field26": "Electrogenesis",
+    "field24": "Electrogenesis",
     "field27": "Campo",
     "field28": "Hada"
   },
@@ -1748,7 +1748,7 @@
     "field20": "Muy Dificil",
     "field21": "Medio Lento",
     "field22": "Piedra Lunar",
-    "field26": "Dicha",
+    "field24": "Dicha",
     "field27": "Hada"
   },
   {
@@ -2767,7 +2767,7 @@
     "field20": "Muy Dificil",
     "field21": "Medio Lento",
     "field22": "Cuchara Torcida",
-    "field26": "Calco",
+    "field24": "Calco",
     "field27": "Human"
   },
   {
@@ -2967,7 +2967,7 @@
     "field19": "125.5 kg",
     "field20": "Muy Dificil",
     "field21": "Medio Lento",
-    "field26": "Corrosion",
+    "field24": "Corrosion",
     "field27": "Planta"
   },
   {
@@ -3413,7 +3413,7 @@
     "field20": "Dificil",
     "field21": "Medio Lento",
     "field22": "Roca del Rey",
-    "field26": "Caparazon",
+    "field24": "Caparazon",
     "field27": "Monstruo",
     "field28": "Agua 1"
   },
@@ -3883,7 +3883,7 @@
     "field19": "40.5 kg",
     "field20": "Muy Dificil",
     "field21": "Medio Lento",
-    "field26": "Sombra Trampa",
+    "field24": "Sombra Trampa",
     "field27": "Amorfo"
   },
   {
@@ -4607,7 +4607,7 @@
     "field19": "100.0 kg",
     "field20": "Muy Dificil",
     "field21": "Medio Lento",
-    "field26": "Amor Filial",
+    "field24": "Amor Filial",
     "field27": "Monstruo"
   },
   {
@@ -4788,7 +4788,7 @@
     "field21": "Medio Lento",
     "field22": "Polvo Estelar",
     "field23": "Trozo Estrella",
-    "field26": "Energia Pura",
+    "field24": "Energia Pura",
     "field27": "Agua 3"
   },
   {
@@ -4992,7 +4992,7 @@
     "field19": "59.0 kg",
     "field20": "Muy Dificil",
     "field21": "Medio Lento",
-    "field26": "Piel Celeste",
+    "field24": "Piel Celeste",
     "field27": "Bicho"
   },
   {
@@ -5167,7 +5167,7 @@
     "field19": "305.0 kg",
     "field20": "Muy Dificil",
     "field21": "Medio Lento",
-    "field26": "Rompemoldes",
+    "field24": "Rompemoldes",
     "field27": "Agua 2",
     "field28": "Dragon"
   },
@@ -5526,7 +5526,7 @@
     "field19": "79.0 kg",
     "field20": "Muy Dificil",
     "field21": "Medio Lento",
-    "field26": "Garra Dura",
+    "field24": "Garra Dura",
     "field27": "Volador"
   },
   {
@@ -5819,7 +5819,7 @@
     "field20": "Muy Dificil",
     "field21": "Medio Lento",
     "field22": "Escama Dragon",
-    "field26": "Coranima",
+    "field24": "Coranima",
     "field27": "Agua 1",
     "field28": "Dragon"
   },
@@ -5868,7 +5868,7 @@
     "field19": "127.0 kg",
     "field20": "Legendario",
     "field21": "Medio Lento",
-    "field26": "Impasible"
+    "field24": "Impasible"
   },
   {
     "field2": "Mega Mewtwo Y",
@@ -5889,7 +5889,7 @@
     "field19": "33.0 kg",
     "field20": "Legendario",
     "field21": "Medio Lento",
-    "field26": "Insomnio"
+    "field24": "Insomnio"
   },
   {
     "field2": "Mew",
