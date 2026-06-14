@@ -278,7 +278,7 @@ function renderCreditsAndChangelog() {
     <div style="grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 20px;">
       
       <div class="card" style="text-align: left; cursor: default; height: fit-content;">
-        <h2 style="color: var(--green); margin-bottom: 20px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 8px;">👥 Créditos del Proyecto</h2>
+        <h2 style="color: var(--green); margin-bottom: 20px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 8px;">Créditos del Proyecto</h2>
         <div style="display: flex; flex-direction: column; gap: 16px;">
           ${infoExtra.creditos.map(c => `
             <div>
@@ -292,7 +292,7 @@ function renderCreditsAndChangelog() {
       </div>
 
       <div class="card" style="text-align: left; cursor: default;">
-        <h2 style="color: var(--green); margin-bottom: 20px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 8px;">⏳ Historial de Cambios</h2>
+        <h2 style="color: var(--green); margin-bottom: 20px; border-bottom: 2px solid rgba(0,200,83,0.2); padding-bottom: 8px;">Historial de Cambios</h2>
         <div style="display: flex; flex-direction: column; gap: 24px;">
           ${infoExtra.changelog.map(ch => `
             <div style="border-left: 3px solid var(--green); padding-left: 15px;">
@@ -547,7 +547,7 @@ function showObjectDetail(o) {
         border-radius: 18px;
         padding: 20px;
       ">
-        <h3 style="color:var(--green);margin-bottom:12px;font-size:0.95rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:6px;">📖 Descripción</h3>
+        <h3 style="color:var(--green);margin-bottom:12px;font-size:0.95rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:6px;">Descripción</h3>
         <p style="color:#e8ecf7;line-height:1.7;font-size:0.92em;">${o.field6 || 'Sin descripción'}</p>
       </div>
 
