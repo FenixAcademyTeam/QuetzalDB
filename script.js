@@ -261,7 +261,7 @@ function showHabilidadDetail(h) {
 
       <!-- Pokémon que la poseen -->
       <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">
-        🔍 Pokémon con esta habilidad
+        Pokémon con esta habilidad
         <span style="font-size:0.8em;color:#aaa;font-weight:400;margin-left:8px;">(${poseedores.length})</span>
       </h3>
       ${pokemonListHtml}
@@ -415,18 +415,18 @@ function showPokemonDetail(p) {
         ">
           <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">📝 Datos del Pokémon</h3>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.88em;color:#e8ecf7;">
-            <p><strong style="color:#aaa;">🏷️ Categoría</strong><br>${p.field17 || '-'}</p>
-            <p><strong style="color:#aaa;">📏 Altura</strong><br>${p.field18 || '-'}</p>
-            <p><strong style="color:#aaa;">⚖️ Peso</strong><br>${p.field19 || '-'}</p>
-            <p><strong style="color:#aaa;">🎯 Captura</strong><br>${p.field20 || '-'}</p>
-            <p><strong style="color:#aaa;">📈 Crecimiento</strong><br>${p.field21 || '-'}</p>
-            <p><strong style="color:#aaa;">🥚 Grupo Huevo</strong><br>${p.field27 || '-'}${p.field28 ? ` / ${p.field28}` : ''}</p>
-            <p style="grid-column:1/-1;"><strong style="color:#aaa;">🧬 Habilidades</strong><br>
+            <p><strong style="color:#aaa;">Categoría</strong><br>${p.field17 || '-'}</p>
+            <p><strong style="color:#aaa;">Altura</strong><br>${p.field18 || '-'}</p>
+            <p><strong style="color:#aaa;">Peso</strong><br>${p.field19 || '-'}</p>
+            <p><strong style="color:#aaa;">Captura</strong><br>${p.field20 || '-'}</p>
+            <p><strong style="color:#aaa;">Crecimiento</strong><br>${p.field21 || '-'}</p>
+            <p><strong style="color:#aaa;">Grupo Huevo</strong><br>${p.field27 || '-'}${p.field28 ? ` / ${p.field28}` : ''}</p>
+            <p style="grid-column:1/-1;"><strong style="color:#aaa;">Habilidades</strong><br>
               ${p.field24 ? `<span style="color:#00c853;cursor:pointer;border-bottom:1px dashed rgba(0,200,83,0.4);transition:opacity 0.2s;" onclick="openHabilidad('${p.field24.replace(/'/g,"\\'")}')">` + p.field24 + `</span>` : '-'}
               ${p.field25 ? ` / <span style="cursor:pointer;border-bottom:1px dashed rgba(255,255,255,0.3);transition:opacity 0.2s;" onclick="openHabilidad('${p.field25.replace(/'/g,"\\'")}')">` + p.field25 + `</span>` : ''}
               ${p.field26 ? ` / <em style="color:#ff80ab;cursor:pointer;border-bottom:1px dashed rgba(255,128,171,0.4);transition:opacity 0.2s;" onclick="openHabilidad('${p.field26.replace(/'/g,"\\'")}')">` + p.field26 + ` (Oculta)</em>` : ''}
             </p>
-            ${p.field22 ? `<p style="grid-column:1/-1;"><strong style="color:#aaa;">🎒 Objetos</strong><br>
+            ${p.field22 ? `<p style="grid-column:1/-1;"><strong style="color:#aaa;">Objetos</strong><br>
               <span style="display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;">
                 <span style="display:inline-flex;align-items:center;gap:4px;">${renderItemSprite(p.field22, obj1)}</span>
                 ${p.field23 ? `<span style="color:#555;">/</span><span style="display:inline-flex;align-items:center;gap:4px;">${renderItemSprite(p.field23, obj2)}</span>` : ''}
@@ -534,7 +534,7 @@ function showObjectDetail(o) {
           border-radius: 18px;
           padding: 18px;
         ">
-          <h3 style="color:var(--green);margin-bottom:12px;font-size:0.95rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:6px;">💰 Precios</h3>
+          <h3 style="color:var(--green);margin-bottom:12px;font-size:0.95rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:6px;">Precios</h3>
           <p style="font-size:0.95em;color:#e8ecf7;margin-bottom:8px;"><strong style="color:#aaa;">Compra:</strong> ${o.field8 || '-'}</p>
           <p style="font-size:0.95em;color:#e8ecf7;"><strong style="color:#aaa;">Venta:</strong> ${o.field7 || '-'}</p>
         </div>
@@ -556,7 +556,7 @@ function showObjectDetail(o) {
     <!-- Pokémon portadores -->
     <div style="margin-top:24px;">
       <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">
-        🎒 Pokémon que portan este objeto
+        Pokémon que portan este objeto
         <span style="font-size:0.8em;color:#aaa;font-weight:400;margin-left:8px;">(${portadores.length})</span>
       </h3>
       ${pokemonListHtml}
