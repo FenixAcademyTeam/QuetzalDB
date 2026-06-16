@@ -112,19 +112,9 @@ body {
   max-width: 580px;
   margin: 0 auto 28px;
 }
-.search-icon {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #555;
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-}
 .search-input {
   width: 100%;
-  padding: 14px 18px 14px 46px;
+  padding: 14px 18px;
   border: none;
   outline: none;
   border-radius: 12px;
