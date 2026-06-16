@@ -21,33 +21,49 @@
 
   <div class="container">
     <header class="hero">
-      <div class="logo-circle">
-        <img src="https://raw.githubusercontent.com/nellyama7w7/QuetzalSprites/main/PokemonSprites/RAYQUAZA.png" 
-             alt="Quetzal Logo" 
-             style="width:85px; height:85px; image-rendering:pixelated;">
+      <div class="logo-square">
+        <img src="https://raw.githubusercontent.com/nellyama7w7/QuetzalSprites/main/PokemonSprites/RAYQUAZA.png"
+             alt="Quetzal Logo"
+             style="width:54px; height:54px; image-rendering:pixelated;">
       </div>
-      <h1>
-        Pokémon
-        <span>Quetzal</span>
-      </h1>
-      <p class="subtitle">
-        Database v1.4
-      </p>
+      <p class="hero-label">Base de Datos</p>
+      <h1>Pokémon <span>Quetzal</span></h1>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="hero-stat-num" id="statPokemon">—</span>
+          <span class="hero-stat-label">Pokémon</span>
+        </div>
+        <div class="hero-stat-divider"></div>
+        <div class="hero-stat">
+          <span class="hero-stat-num" id="statObjetos">—</span>
+          <span class="hero-stat-label">Objetos</span>
+        </div>
+        <div class="hero-stat-divider"></div>
+        <div class="hero-stat">
+          <span class="hero-stat-num" id="statHabilidades">—</span>
+          <span class="hero-stat-label">Habilidades</span>
+        </div>
+      </div>
     </header>
 
     <div class="tabs">
-      <button class="tab active" data-tab="pokemon">Pokémon</button>
-      <button class="tab" data-tab="objetos">Objetos</button>
-      <button class="tab" data-tab="habilidades">Habilidades</button>
-      <button class="tab" data-tab="creditos">Créditos</button>
+      <div class="tabs-container">
+        <button class="tab active" data-tab="pokemon">Pokémon</button>
+        <button class="tab" data-tab="objetos">Objetos</button>
+        <button class="tab" data-tab="habilidades">Habilidades</button>
+        <button class="tab" data-tab="creditos">Créditos</button>
+      </div>
     </div>
 
-    <input
-      type="text"
-      id="search"
-      placeholder="Buscar Pokémon, número, objeto, habilidad..."
-      class="search-input"
-    >
+    <div class="search-wrapper">
+      <span class="search-icon">⌕</span>
+      <input
+        type="text"
+        id="search"
+        placeholder="Buscar Pokémon, número, objeto, habilidad..."
+        class="search-input"
+      >
+    </div>
 
     <div id="results" class="results-grid"></div>
   </div>

@@ -11,6 +11,7 @@ const infoExtra = {
     { rol: "Creador de Pokémon Quetzal", nombre: "TenmaRH", link: "#" }
   ],
   changelog: [
+    { version: "v1.5", fecha: "16 de Junio, 2026", cambios: ["Rediseño del hero: logo cuadrado, etiqueta de sección y píldora de estadísticas en tiempo real.", "Rediseño de las tabs: selector segmentado unificado con transición suave.", "Buscador centrado con ícono integrado y ancho máximo más compacto."] },
     { version: "v1.4", fecha: "12 de Junio, 2026", cambios: ["Los objetos en la vista detallada del Pokémon son clicables.", "El modal de Objetos muestra qué Pokémon portan el objeto (con indicador Común/Raro).", "Cada Pokémon portador es clicable para ir a su vista detallada."] },
     { version: "v1.3", fecha: "11 de Junio, 2026", cambios: ["Se agregó la pestaña de Habilidades con buscador.", "Las habilidades muestran qué Pokémon las poseen y de qué tipo (normal, secundaria, oculta).", "Las habilidades en la vista detallada del Pokémon son clicables para ver su información."] },
     { version: "v1.2", fecha: "11 de Junio, 2026", cambios: ["Se rediseñó el modal de detalle con header dinámico por tipo.", "Se eliminó el slot Shiny del modal de Pokémon.", "Se añaden sprites de objetos en la sección de objetos portados.", "Se corrigió el header del modal para que no quede cortado por el borde.", "Se aplicó el mismo diseño de header al modal de Objetos."] },
@@ -42,7 +43,12 @@ async function loadData() {
     pokemonData = pokemonJson.slice(1);
     objetosData = objetosJson.slice(1);
     habilidadesData = habilidadesJson.slice(1);
-    
+
+    // Actualizar contadores del hero
+    document.getElementById('statPokemon').textContent = pokemonData.length;
+    document.getElementById('statObjetos').textContent = objetosData.length;
+    document.getElementById('statHabilidades').textContent = habilidadesData.length;
+
     renderResults(pokemonData);
   } catch (e) {
     console.error("Error cargando archivos:", e);
