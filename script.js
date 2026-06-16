@@ -7,8 +7,7 @@ let currentTab = 'pokemon';
 const infoExtra = {
   creditos: [
     { rol: "Creador de Pokémon Quetzal", nombre: "TenmaRH", link: "https://pastebin.com/ncvkGPQJ" },
-    { rol: "Equipo de la Database", nombre: "Chayansito", link: "#" },
-    { rol: "Equipo de la Database", nombre: "Nelly & Danny", link: "#" }
+    { rol: "Equipo de la Database", nombre: "Chayansito, Nelly y Danny", link: "#" }
   ],
   changelog: [
     { version: "v1.5", fecha: "16 de Junio, 2026", cambios: ["Rediseño del hero: logo cuadrado, etiqueta de sección y píldora de estadísticas en tiempo real.", "Rediseño de las tabs: selector segmentado unificado con transición suave.", "Buscador centrado con ícono integrado y ancho máximo más compacto."] },
