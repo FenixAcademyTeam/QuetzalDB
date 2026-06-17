@@ -7,9 +7,11 @@ let currentTab = 'pokemon';
 const infoExtra = {
   creditos: [
     { rol: "Creador de Pokémon Quetzal", nombre: "TenmaRH", link: "https://pastebin.com/ncvkGPQJ" },
-    { rol: "Equipo de la Database", nombre: "Chayansito, Nelly y Danny", link: "#" }
+    { rol: "Equipo de la Database", nombre: "Chayansito", link: "#" },
+    { rol: "Equipo de la Database", nombre: "Nelly & Danny", link: "#" }
   ],
   changelog: [
+    { version: "v1.6", fecha: "16 de Junio, 2026", cambios: ["Se agregó descripción estilo Pokédex en la ficha de cada Pokémon.", "Se actualizó el JSON de Pokémon con el nuevo campo de descripción.", "Se ajustaron todos los campos internos para mantener compatibilidad."] },
     { version: "v1.5", fecha: "16 de Junio, 2026", cambios: ["Rediseño del hero: logo cuadrado, etiqueta de sección y píldora de estadísticas en tiempo real.", "Rediseño de las tabs: selector segmentado unificado con transición suave.", "Buscador centrado con ícono integrado y ancho máximo más compacto."] },
     { version: "v1.4", fecha: "12 de Junio, 2026", cambios: ["Los objetos en la vista detallada del Pokémon son clicables.", "El modal de Objetos muestra qué Pokémon portan el objeto (con indicador Común/Raro).", "Cada Pokémon portador es clicable para ir a su vista detallada."] },
     { version: "v1.3", fecha: "11 de Junio, 2026", cambios: ["Se agregó la pestaña de Habilidades con buscador.", "Las habilidades muestran qué Pokémon las poseen y de qué tipo (normal, secundaria, oculta).", "Las habilidades en la vista detallada del Pokémon son clicables para ver su información."] },
@@ -192,14 +194,14 @@ function showHabilidadDetail(h) {
   // Pokémon que poseen esta habilidad (normal, secundaria u oculta)
   const nombreH = h.field2.toLowerCase();
   const poseedores = pokemonData.filter(p => 
-    (p.field24 && p.field24.toLowerCase() === nombreH) ||
     (p.field25 && p.field25.toLowerCase() === nombreH) ||
-    (p.field26 && p.field26.toLowerCase() === nombreH)
+    (p.field26 && p.field26.toLowerCase() === nombreH) ||
+    (p.field27 && p.field27.toLowerCase() === nombreH)
   );
 
   const getPokemonRole = (p) => {
-    if (p.field26 && p.field26.toLowerCase() === nombreH) return 'oculta';
-    if (p.field25 && p.field25.toLowerCase() === nombreH) return 'secundaria';
+    if (p.field27 && p.field27.toLowerCase() === nombreH) return 'oculta';
+    if (p.field26 && p.field26.toLowerCase() === nombreH) return 'secundaria';
     return 'normal';
   };
 
@@ -319,12 +321,12 @@ function renderCreditsAndChangelog() {
 
 function showPokemonDetail(p) {
   const stats = [
-    {name: "PS", value: p.field10, color: "#FF5959"},
-    {name: "Ataque", value: p.field11, color: "#F5AC78"},
-    {name: "Defensa", value: p.field12, color: "#FAE078"},
-    {name: "At. Especial", value: p.field13, color: "#9DB7F5"},
-    {name: "Def. Especial", value: p.field14, color: "#A7DB8D"},
-    {name: "Velocidad", value: p.field15, color: "#FA92B2"}
+    {name: "PS", value: p.field11, color: "#FF5959"},
+    {name: "Ataque", value: p.field12, color: "#F5AC78"},
+    {name: "Defensa", value: p.field13, color: "#FAE078"},
+    {name: "At. Especial", value: p.field14, color: "#9DB7F5"},
+    {name: "Def. Especial", value: p.field15, color: "#A7DB8D"},
+    {name: "Velocidad", value: p.field16, color: "#FA92B2"}
   ];
 
   // Color del tipo principal para el banner
@@ -348,8 +350,8 @@ function showPokemonDetail(p) {
   });
 
   // Buscar sprites de los objetos que porta el Pokémon
-  const obj1 = p.field22 ? objetosData.find(o => o.field3 && o.field3.toLowerCase() === p.field22.toLowerCase()) : null;
-  const obj2 = p.field23 ? objetosData.find(o => o.field3 && o.field3.toLowerCase() === p.field23.toLowerCase()) : null;
+  const obj1 = p.field23 ? objetosData.find(o => o.field3 && o.field3.toLowerCase() === p.field23.toLowerCase()) : null;
+  const obj2 = p.field24 ? objetosData.find(o => o.field3 && o.field3.toLowerCase() === p.field24.toLowerCase()) : null;
 
   const renderItemSprite = (nombre, objData) => {
     if (!nombre) return '';
@@ -370,7 +372,7 @@ function showPokemonDetail(p) {
       flex-wrap: wrap;
       min-height: 78px;
     ">
-      <img src="${p.field16}" alt="${p.field2}" style="width:38px;height:38px;image-rendering:pixelated;flex-shrink:0;">
+      <img src="${p.field17}" alt="${p.field2}" style="width:38px;height:38px;image-rendering:pixelated;flex-shrink:0;">
       <div style="flex-shrink:0;">
         <span style="font-size:0.75em;color:${bannerColor};font-weight:600;letter-spacing:2px;text-transform:uppercase;display:block;">#${p.field4}</span>
         <h2 style="font-size:1.6rem;font-weight:700;line-height:1.1;color:#fff;white-space:nowrap;">${p.field2}</h2>
@@ -388,8 +390,24 @@ function showPokemonDetail(p) {
     <!-- CUERPO -->
     <div class="modal-inner">
 
+    <!-- Descripción Pokédex -->
+    ${p.field10 ? `
+    <div style="
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    ">
+      <span style="font-size:1.1rem;flex-shrink:0;margin-top:2px;">📖</span>
+      <p style="color:#b0b8cc;font-size:0.88em;line-height:1.65;font-style:italic;">${p.field10}</p>
+    </div>` : ''}
+
     <!-- CUERPO PRINCIPAL: izquierda sprite | derecha info -->
-    <div style="display:grid; grid-template-columns: 200px 1fr; gap: 24px; margin-top: 8px;">
+    <div style="display:grid; grid-template-columns: 200px 1fr; gap: 24px;">
 
       <!-- COLUMNA IZQUIERDA: sprite normal -->
       <div style="display:flex; flex-direction:column; gap:16px;">
@@ -420,21 +438,21 @@ function showPokemonDetail(p) {
         ">
           <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">Datos del Pokémon</h3>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.88em;color:#e8ecf7;">
-            <p><strong style="color:#aaa;">Categoría</strong><br>${p.field17 || '-'}</p>
-            <p><strong style="color:#aaa;">Altura</strong><br>${p.field18 || '-'}</p>
-            <p><strong style="color:#aaa;">Peso</strong><br>${p.field19 || '-'}</p>
-            <p><strong style="color:#aaa;">Captura</strong><br>${p.field20 || '-'}</p>
-            <p><strong style="color:#aaa;">Crecimiento</strong><br>${p.field21 || '-'}</p>
-            <p><strong style="color:#aaa;">Grupo Huevo</strong><br>${p.field27 || '-'}${p.field28 ? ` / ${p.field28}` : ''}</p>
+            <p><strong style="color:#aaa;">Categoría</strong><br>${p.field18 || '-'}</p>
+            <p><strong style="color:#aaa;">Altura</strong><br>${p.field19 || '-'}</p>
+            <p><strong style="color:#aaa;">Peso</strong><br>${p.field20 || '-'}</p>
+            <p><strong style="color:#aaa;">Captura</strong><br>${p.field21 || '-'}</p>
+            <p><strong style="color:#aaa;">Crecimiento</strong><br>${p.field22 || '-'}</p>
+            <p><strong style="color:#aaa;">Grupo Huevo</strong><br>${p.field28 || '-'}${p.field29 ? ` / ${p.field29}` : ''}</p>
             <p style="grid-column:1/-1;"><strong style="color:#aaa;">Habilidades</strong><br>
-              ${p.field24 ? `<span style="color:#00c853;cursor:pointer;border-bottom:1px dashed rgba(0,200,83,0.4);transition:opacity 0.2s;" onclick="openHabilidad('${p.field24.replace(/'/g,"\\'")}')">` + p.field24 + `</span>` : '-'}
-              ${p.field25 ? ` / <span style="cursor:pointer;border-bottom:1px dashed rgba(255,255,255,0.3);transition:opacity 0.2s;" onclick="openHabilidad('${p.field25.replace(/'/g,"\\'")}')">` + p.field25 + `</span>` : ''}
-              ${p.field26 ? ` / <em style="color:#ff80ab;cursor:pointer;border-bottom:1px dashed rgba(255,128,171,0.4);transition:opacity 0.2s;" onclick="openHabilidad('${p.field26.replace(/'/g,"\\'")}')">` + p.field26 + ` (Oculta)</em>` : ''}
+              ${p.field25 ? `<span style="color:#00c853;cursor:pointer;border-bottom:1px dashed rgba(0,200,83,0.4);transition:opacity 0.2s;" onclick="openHabilidad('${p.field25.replace(/'/g,"\\'")}')">` + p.field25 + `</span>` : '-'}
+              ${p.field26 ? ` / <span style="cursor:pointer;border-bottom:1px dashed rgba(255,255,255,0.3);transition:opacity 0.2s;" onclick="openHabilidad('${p.field26.replace(/'/g,"\\'")}')">` + p.field26 + `</span>` : ''}
+              ${p.field27 ? ` / <em style="color:#ff80ab;cursor:pointer;border-bottom:1px dashed rgba(255,128,171,0.4);transition:opacity 0.2s;" onclick="openHabilidad('${p.field27.replace(/'/g,"\\'")}')">` + p.field27 + ` (Oculta)</em>` : ''}
             </p>
-            ${p.field22 ? `<p style="grid-column:1/-1;"><strong style="color:#aaa;">Objetos</strong><br>
+            ${p.field23 ? `<p style="grid-column:1/-1;"><strong style="color:#aaa;">Objetos</strong><br>
               <span style="display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;">
-                <span style="display:inline-flex;align-items:center;gap:4px;">${renderItemSprite(p.field22, obj1)}</span>
-                ${p.field23 ? `<span style="color:#555;">/</span><span style="display:inline-flex;align-items:center;gap:4px;">${renderItemSprite(p.field23, obj2)}</span>` : ''}
+                <span style="display:inline-flex;align-items:center;gap:4px;">${renderItemSprite(p.field23, obj1)}</span>
+                ${p.field24 ? `<span style="color:#555;">/</span><span style="display:inline-flex;align-items:center;gap:4px;">${renderItemSprite(p.field24, obj2)}</span>` : ''}
               </span>
             </p>` : ''}
           </div>
@@ -466,12 +484,12 @@ function showObjectDetail(o) {
   // Pokémon que portan este objeto (campo 1 o campo 2)
   const nombreO = o.field3.toLowerCase();
   const portadores = pokemonData.filter(p =>
-    (p.field22 && p.field22.toLowerCase() === nombreO) ||
-    (p.field23 && p.field23.toLowerCase() === nombreO)
+    (p.field23 && p.field23.toLowerCase() === nombreO) ||
+    (p.field24 && p.field24.toLowerCase() === nombreO)
   );
 
   const getSlotLabel = (p) => {
-    if (p.field23 && p.field23.toLowerCase() === nombreO) return { txt: 'Raro', color: '#FFD700' };
+    if (p.field24 && p.field24.toLowerCase() === nombreO) return { txt: 'Raro', color: '#FFD700' };
     return { txt: 'Común', color: '#81D4FA' };
   };
 
