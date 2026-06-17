@@ -402,7 +402,7 @@ function showPokemonDetail(p) {
       gap: 10px;
       align-items: flex-start;
     ">
-      <span style="font-size:1.1rem;flex-shrink:0;margin-top:2px;">📖</span>
+      <span style="font-size:1.1rem;flex-shrink:0;margin-top:2px;"></span>
       <p style="color:#b0b8cc;font-size:0.88em;line-height:1.65;font-style:italic;">${p.field10}</p>
     </div>` : ''}
 
