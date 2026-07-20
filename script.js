@@ -25,8 +25,8 @@ const infoExtra = {
 const typeColors = {
   "Planta": "#4CAF50", "Fuego": "#FF5722", "Agua": "#2196F3", "Electrico": "#FFEB3B",
   "Hielo": "#81D4FA", "Lucha": "#D32F2F", "Veneno": "#9C27B0", "Tierra": "#E67E22",
-  "Volador": "#81D4FA", "Psiquico": "#E91E63", "Bicho": "#8BC34A", "Roca": "#795548",
-  "Fantasma": "#673AB7", "Dragon": "#3F51B5", "Siniestro": "#212121", "Acero": "#607D8B",
+  "Volador": "#81D4FA", "Psiquico": "#E91E63", "Bicho": "#8BC34A", "Roca": "#A1887F",
+  "Fantasma": "#9575CD", "Dragon": "#5C6BC0", "Siniestro": "#8D6E63", "Acero": "#78909C",
   "Hada": "#FF80AB", "Normal": "#9E9E9E"
 };
 
