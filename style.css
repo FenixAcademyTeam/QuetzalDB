@@ -388,10 +388,104 @@ body::before {
   background: rgba(0, 200, 83, 0.6);
 }
 
-/* Responsive */
-@media (max-width: 700px) {
-  .hero h1 { font-size: 2.2rem; }
-  .results-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
-  .modal-content { margin: 10px auto; }
+/* ================== RESPONSIVE ================== */
+@media (max-width: 768px) {
+
+  /* Hero */
+  .hero h1 { font-size: 2rem; }
+  .hero-stats { padding: 8px 16px; }
+  .hero-stat { padding: 0 12px; }
+  .hero-stat-num { font-size: 0.95rem; }
+
+  /* Tabs — scroll horizontal si no caben */
+  .tabs { overflow-x: auto; padding-bottom: 4px; justify-content: flex-start; }
+  .tabs-container { padding: 3px; }
+  .tab { padding: 8px 16px; font-size: 0.82rem; }
+
+  /* Grid de tarjetas */
+  .results-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+
+  /* Modal */
+  .modal { padding: 10px; }
+  .modal-content { margin: 8px auto; border-radius: 20px; }
   .modal-inner { padding: 16px; }
+
+  /* Modal banner */
+  .modal-content [style*="padding: 20px 60px"] {
+    padding: 16px 50px 14px 16px !important;
+    min-height: 64px !important;
+  }
+
+  /* Modal detail grid — una columna */
+  .modal-inner > div[style*="grid-template-columns: 200px"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Sprite en modal más pequeño */
+  .modal-inner img[style*="width:150px"] {
+    width: 110px !important;
+    height: 110px !important;
+  }
+
+  /* Grid de datos 1 columna en móvil */
+  .modal-inner div[style*="grid-template-columns:1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Portadores de habilidad/objeto — más pequeños */
+  .modal-inner div[style*="minmax(110px"] {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)) !important;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .container { padding: 24px 14px; }
+
+  /* Hero más compacto */
+  .logo-square { width: 62px; height: 62px; border-radius: 16px; }
+  .logo-square img { width: 44px !important; height: 44px !important; }
+  .hero h1 { font-size: 1.7rem; }
+  .hero-label { font-size: 0.62rem; letter-spacing: 3px; }
+  .hero-stats { padding: 7px 10px; }
+  .hero-stat { padding: 0 8px; }
+  .hero-stat-num { font-size: 0.88rem; }
+  .hero-stat-label { font-size: 0.56rem; }
+
+  /* Tabs más compactas */
+  .tab { padding: 7px 12px; font-size: 0.78rem; }
+
+  /* Grid 2 columnas fijas en móvil pequeño */
+  .results-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .card { padding: 16px 12px; border-radius: 18px; }
+  .card h3 { font-size: 0.85rem; }
+  .card-number { font-size: 0.6rem; }
+  .type-pill { font-size: 0.62rem; padding: 2px 8px; }
+
+  /* Modal full-width */
+  .modal { padding: 6px; }
+  .modal-content { border-radius: 16px; }
+  .modal-inner { padding: 12px; }
+
+  /* Banner del modal */
+  .modal-content [style*="padding: 20px 60px"] {
+    padding: 14px 44px 12px 14px !important;
+    gap: 10px !important;
+    min-height: 58px !important;
+  }
+  .modal-content h2 { font-size: 1.3rem !important; }
+
+  /* Tipos en banner — ocultar en pantallas muy pequeñas */
+  .modal-content .type { font-size: 0.75em !important; padding: 6px 12px !important; }
+
+  /* Stats grid 1 col */
+  .modal-inner div[style*="grid-template-columns:1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Portadores más pequeños */
+  .modal-inner div[style*="minmax(110px"] {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+  }
 }
