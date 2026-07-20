@@ -306,7 +306,7 @@ function renderHome() {
   const sections = [
     {
       tab: 'pokemon',
-      icon: `<img src="https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/PokemonSprites/PIKACHU.png" style="width:52px;height:52px;image-rendering:pixelated;">`,
+      icon: `<img src="https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/PokemonSprites/PIKACHU.png" style="width:78px;height:78px;image-rendering:pixelated;">`,
       title: 'Pokémon',
       desc: 'Explora la Pokédex completa con stats, tipos, habilidades y más',
       blob: 'rgba(0,200,83,0.14)',
@@ -316,7 +316,7 @@ function renderHome() {
     },
     {
       tab: 'objetos',
-      icon: `<img src="https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Objetos/POKE_BALL.png" style="width:52px;height:52px;image-rendering:pixelated;">`,
+      icon: `<img src="https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Objetos/POKE_BALL.png" style="width:78px;height:78px;image-rendering:pixelated;">`,
       title: 'Objetos',
       desc: 'Busca items, consulta precios y descubre qué Pokémon los portan',
       blob: 'rgba(255,215,0,0.1)',
