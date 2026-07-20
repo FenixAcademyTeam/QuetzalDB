@@ -11,6 +11,7 @@ const infoExtra = {
     { rol: "Equipo de la Database", nombre: "Nelly & Danny", link: "#" }
   ],
   changelog: [
+    { version: "v1.7", fecha: "20 de Julio, 2026", cambios: ["Rediseño de tarjetas Pokémon: número en esquina, nombre en blanco, tipos como píldoras de color.", "Blob de color del tipo principal en esquina inferior de cada tarjeta.", "Total de estadísticas base visible al hacer hover sobre la tarjeta.", "Fondo con textura de puntos sutil para dar profundidad a la página."] },
     { version: "v1.6", fecha: "16 de Junio, 2026", cambios: ["Se agregó descripción estilo Pokédex en la ficha de cada Pokémon.", "Se actualizó el JSON de Pokémon con el nuevo campo de descripción.", "Se ajustaron todos los campos internos para mantener compatibilidad."] },
     { version: "v1.5", fecha: "16 de Junio, 2026", cambios: ["Rediseño del hero: logo cuadrado, etiqueta de sección y píldora de estadísticas en tiempo real.", "Rediseño de las tabs: selector segmentado unificado con transición suave.", "Buscador centrado con ícono integrado y ancho máximo más compacto."] },
     { version: "v1.4", fecha: "12 de Junio, 2026", cambios: ["Los objetos en la vista detallada del Pokémon son clicables.", "El modal de Objetos muestra qué Pokémon portan el objeto (con indicador Común/Raro).", "Cada Pokémon portador es clicable para ir a su vista detallada."] },
@@ -123,20 +124,24 @@ function renderResults(pokemons) {
   }
   pokemons.forEach(p => {
     const card = document.createElement('div');
-    card.className = 'card';
+    card.className = 'card pokemon-card';
     const type1 = p.field6 || '';
     const type2 = p.field8 || '';
+    const color1 = typeColors[type1] || '#666';
+    const color2 = typeColors[type2] || color1;
+    const totalStats = [p.field11, p.field12, p.field13, p.field14, p.field15, p.field16]
+      .reduce((sum, v) => sum + (parseInt(v) || 0), 0);
+
     card.innerHTML = `
+      <div class="card-blob" style="background: radial-gradient(circle, ${color1}22 0%, transparent 70%);"></div>
+      <span class="card-number">#${p.field4}</span>
       <img src="${p.field5}" alt="${p.field2}">
-      <h3>#${p.field4} ${p.field2}</h3>
+      <h3>${p.field2}</h3>
       <div class="types">
-        <span class="type" style="background:${typeColors[type1]||'#666'}">
-          <img src="${p.field7}" alt="${type1}">
-        </span>
-        ${type2 ? `<span class="type" style="background:${typeColors[type2]||'#666'}">
-          <img src="${p.field9}" alt="${type2}">
-        </span>` : ''}
+        ${type1 ? `<span class="type-pill" style="background:${color1}22;border:1px solid ${color1}44;color:${color1};">${type1}</span>` : ''}
+        ${type2 ? `<span class="type-pill" style="background:${color2}22;border:1px solid ${color2}44;color:${color2};">${type2}</span>` : ''}
       </div>
+      <div class="card-total">Total <strong>${totalStats}</strong></div>
     `;
     card.addEventListener('click', () => showPokemonDetail(p));
     resultsDiv.appendChild(card);

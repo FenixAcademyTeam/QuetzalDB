@@ -14,12 +14,27 @@
 body {
   font-family: 'Poppins', sans-serif;
   background: 
-    radial-gradient(circle at top left, #00c85333, transparent 35%),
-    radial-gradient(circle at bottom right, #00b14033, transparent 30%),
+    radial-gradient(circle at top left, #00c85318, transparent 35%),
+    radial-gradient(circle at bottom right, #00b14018, transparent 30%),
     linear-gradient(135deg, #07111d, #111827);
   min-height: 100vh;
   color: var(--text);
   overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(rgba(0, 200, 83, 0.07) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
 }
 
 /* Contenedor Principal */
@@ -28,6 +43,8 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
+  position: relative;
+  z-index: 1;
 }
 
 /* ================== HERO ================== */
@@ -192,30 +209,79 @@ body {
 }
 .card:hover {
   transform: translateY(-8px);
-  border-color: rgba(0, 200, 83, 0.4);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 200, 83, 0.15);
+  border-color: rgba(0, 200, 83, 0.35);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 200, 83, 0.1);
 }
 .card img {
   image-rendering: pixelated;
   transition: .3s;
 }
-.card:hover img { 
-  transform: scale(1.12); 
+.card:hover img {
+  transform: scale(1.1);
 }
 .card h3 {
-  margin-top: 12px;
-  color: var(--green);
-  font-size: 1.05rem;
+  margin-top: 10px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
-/* TIPOS */
-.card .types {
+/* Blob de color de tipo en tarjeta */
+.card-blob {
+  position: absolute;
+  bottom: -30px;
+  right: -30px;
+  width: 110px;
+  height: 110px;
+  pointer-events: none;
+  transition: opacity 0.4s;
+  opacity: 0.7;
+}
+.card:hover .card-blob { opacity: 1; }
+
+/* Número en esquina */
+.card-number {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  font-size: 0.65rem;
+  color: #444;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* Píldoras de tipo */
+.types {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 12px;
+  gap: 6px;
+  margin-top: 10px;
 }
+.type-pill {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 3px 11px;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+}
+
+/* Total de stats al hover */
+.card-total {
+  margin-top: 10px;
+  font-size: 0.72rem;
+  color: #444;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: all 0.3s ease;
+}
+.card-total strong { color: var(--green); }
+.card:hover .card-total {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Mantener compatibilidad con tarjetas de objetos/habilidades */
 .card .type {
   background: none !important;
   padding: 0;
