@@ -306,7 +306,7 @@ function renderHome() {
   const sections = [
     {
       tab: 'pokemon',
-      emoji: '🎮',
+      icon: `<img src="https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/PokemonSprites/PIKACHU.png" style="width:52px;height:52px;image-rendering:pixelated;">`,
       title: 'Pokémon',
       desc: 'Explora la Pokédex completa con stats, tipos, habilidades y más',
       blob: 'rgba(0,200,83,0.14)',
@@ -316,7 +316,7 @@ function renderHome() {
     },
     {
       tab: 'objetos',
-      emoji: '🎒',
+      icon: `<img src="https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Objetos/POKE_BALL.png" style="width:52px;height:52px;image-rendering:pixelated;">`,
       title: 'Objetos',
       desc: 'Busca items, consulta precios y descubre qué Pokémon los portan',
       blob: 'rgba(255,215,0,0.1)',
@@ -326,7 +326,7 @@ function renderHome() {
     },
     {
       tab: 'habilidades',
-      emoji: '🧬',
+      icon: `<span style="font-size:1.8rem;">🧬</span>`,
       title: 'Habilidades',
       desc: 'Consulta efectos y qué Pokémon poseen cada habilidad',
       blob: 'rgba(100,100,255,0.1)',
@@ -336,7 +336,7 @@ function renderHome() {
     },
     {
       tab: 'creditos',
-      emoji: '📋',
+      icon: `<span style="font-size:1.8rem;">📋</span>`,
       title: 'Créditos',
       desc: 'Equipo detrás del proyecto e historial de cambios',
       blob: 'rgba(255,255,255,0.04)',
@@ -370,7 +370,7 @@ function renderHome() {
           onmouseout="this.style.transform='';this.style.borderColor='rgba(255,255,255,0.08)';this.style.boxShadow=''">
             <div style="position:absolute;bottom:-24px;right:-24px;width:100px;height:100px;background:radial-gradient(circle,${s.blob},transparent 70%);pointer-events:none;"></div>
             ${s.count !== null ? `<span style="position:absolute;top:16px;right:16px;font-size:0.65rem;color:#444;font-weight:600;letter-spacing:1px;">${s.count}</span>` : ''}
-            <div style="font-size:1.8rem;margin-bottom:12px;">${s.emoji}</div>
+            <div style="margin-bottom:12px;">${s.icon}</div>
             <h3 style="color:#fff;font-size:1.05rem;font-weight:600;margin-bottom:6px;">${s.title}</h3>
             <p style="color:#555;font-size:0.78rem;line-height:1.55;margin-bottom:16px;">${s.desc}</p>
             <div style="
