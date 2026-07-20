@@ -1,7 +1,7 @@
 let pokemonData = [];
 let objetosData = [];
 let habilidadesData = [];
-let currentTab = 'pokemon';
+let currentTab = 'home';
 
 // Datos de Créditos y Changelog (Fácil de editar aquí mismo)
 const infoExtra = {
@@ -11,7 +11,7 @@ const infoExtra = {
     { rol: "Equipo de la Database", nombre: "Nelly & Danny", link: "#" }
   ],
   changelog: [
-    { version: "v1.7", fecha: "20 de Julio, 2026", cambios: ["Rediseño de tarjetas Pokémon: número en esquina, nombre en blanco, tipos como píldoras de color.", "Blob de color del tipo principal en esquina inferior de cada tarjeta.", "Total de estadísticas base visible al hacer hover sobre la tarjeta.", "Fondo con textura de puntos sutil para dar profundidad a la página."] },
+    { version: "v1.7", fecha: "20 de Julio, 2026", cambios: ["Nueva Main Page con tarjetas de acceso a cada sección.", "Rediseño de tarjetas Pokémon: número en esquina, nombre en blanco, tipos como píldoras de color.", "Blob de color del tipo principal en esquina inferior de cada tarjeta.", "Total de estadísticas base visible al hacer hover sobre la tarjeta de Pokémon.", "Tarjetas de Objetos y Habilidades actualizadas con el mismo lenguaje visual.", "Fondo con textura de puntos sutil para dar profundidad a la página."] },
     { version: "v1.6", fecha: "16 de Junio, 2026", cambios: ["Se agregó descripción estilo Pokédex en la ficha de cada Pokémon.", "Se actualizó el JSON de Pokémon con el nuevo campo de descripción.", "Se ajustaron todos los campos internos para mantener compatibilidad."] },
     { version: "v1.5", fecha: "16 de Junio, 2026", cambios: ["Rediseño del hero: logo cuadrado, etiqueta de sección y píldora de estadísticas en tiempo real.", "Rediseño de las tabs: selector segmentado unificado con transición suave.", "Buscador centrado con ícono integrado y ancho máximo más compacto."] },
     { version: "v1.4", fecha: "12 de Junio, 2026", cambios: ["Los objetos en la vista detallada del Pokémon son clicables.", "El modal de Objetos muestra qué Pokémon portan el objeto (con indicador Común/Raro).", "Cada Pokémon portador es clicable para ir a su vista detallada."] },
@@ -51,7 +51,9 @@ async function loadData() {
     document.getElementById('statObjetos').textContent = objetosData.length;
     document.getElementById('statHabilidades').textContent = habilidadesData.length;
 
-    renderResults(pokemonData);
+    // Empezar en home
+    searchInput.style.display = 'none';
+    renderHome();
   } catch (e) {
     console.error("Error cargando archivos:", e);
     resultsDiv.innerHTML = '<p style="color:red; text-align:center;">Error al cargar los datos. Verifica los archivos JSON.</p>';
@@ -73,8 +75,7 @@ document.querySelectorAll('.tab').forEach(tab => {
     currentTab = tab.dataset.tab;
     searchInput.value = '';
     
-    // Ocultar barra de búsqueda si estamos en Créditos
-    if (currentTab === 'creditos') {
+    if (currentTab === 'creditos' || currentTab === 'home') {
       searchInput.style.display = 'none';
     } else {
       searchInput.style.display = 'block';
@@ -95,7 +96,8 @@ window.addEventListener('click', e => {
 });
 
 function renderCurrentTab() {
-  if (currentTab === 'pokemon') renderResults(pokemonData);
+  if (currentTab === 'home') renderHome();
+  else if (currentTab === 'pokemon') renderResults(pokemonData);
   else if (currentTab === 'objetos') renderObjects(objetosData);
   else if (currentTab === 'habilidades') renderHabilidades(habilidadesData);
   else renderCreditsAndChangelog();
@@ -158,12 +160,16 @@ function renderObjects(objetos) {
     const card = document.createElement('div');
     card.className = 'card';
     card.innerHTML = `
-      <img src="${o.field5}" alt="${o.field3}" style="width:110px;height:110px;">
-      <h3>#${o.field2} ${o.field3}</h3>
-      <p style="font-size:0.9em; margin:8px 0 4px 0; color:#ccc;">${o.field6 ? o.field6.substring(0, 80) + '...' : ''}</p>
-      <p style="font-size:0.85em;color:#aaa;">
-        <strong>Compra:</strong> ${o.field8} | <strong>Venta:</strong> ${o.field7}
-      </p>
+      <div class="card-blob" style="background: radial-gradient(circle, rgba(255,215,0,0.15) 0%, transparent 70%);"></div>
+      <span class="card-number">#${o.field2}</span>
+      <img src="${o.field5}" alt="${o.field3}" style="width:96px;height:96px;margin-top:8px;">
+      <h3>${o.field3}</h3>
+      <p style="font-size:0.78em;color:#666;margin-top:6px;line-height:1.4;">${o.field6 ? o.field6.substring(0, 72) + '…' : ''}</p>
+      <div class="card-total" style="opacity:1;transform:none;margin-top:8px;">
+        <span style="color:#aaa;font-size:0.72rem;">
+          <strong style="color:#FFD700;">$${o.field8 || '—'}</strong> compra &nbsp;·&nbsp; <strong style="color:#81D4FA;">$${o.field7 || '—'}</strong> venta
+        </span>
+      </div>
     `;
     card.addEventListener('click', () => showObjectDetail(o));
     resultsDiv.appendChild(card);
@@ -180,15 +186,16 @@ function renderHabilidades(habilidades) {
     const card = document.createElement('div');
     card.className = 'card';
     card.innerHTML = `
+      <div class="card-blob" style="background: radial-gradient(circle, rgba(100,100,255,0.12) 0%, transparent 70%);"></div>
       <div style="
-        width: 56px; height: 56px; border-radius: 50%;
-        background: linear-gradient(135deg, rgba(0,200,83,0.25), rgba(100,221,23,0.1));
-        border: 2px solid rgba(0,200,83,0.4);
-        display: flex; align-items: center; justify-content: center;
-        margin: 0 auto 12px; font-size: 1.5rem;
+        width:54px; height:54px; border-radius:14px;
+        background: rgba(0,200,83,0.08);
+        border: 1px solid rgba(0,200,83,0.2);
+        display:flex; align-items:center; justify-content:center;
+        margin: 8px auto 12px; font-size:1.4rem;
       ">🧬</div>
-      <h3 style="font-size:1rem;">${h.field2}</h3>
-      <p style="font-size:0.85em;color:#aaa;margin-top:8px;line-height:1.4;">${h.field3 || '-'}</p>
+      <h3>${h.field2}</h3>
+      <p style="font-size:0.8em;color:#666;margin-top:8px;line-height:1.5;">${h.field3 || '-'}</p>
     `;
     card.addEventListener('click', () => showHabilidadDetail(h));
     resultsDiv.appendChild(card);
@@ -282,6 +289,102 @@ function showHabilidadDetail(h) {
 
   modalBody.innerHTML = html;
   modal.style.display = 'block';
+}
+
+function goToTab(tabName) {
+  currentTab = tabName;
+  document.querySelectorAll('.tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.tab === tabName);
+  });
+  searchInput.style.display = (tabName === 'creditos' || tabName === 'home') ? 'none' : 'block';
+  searchInput.value = '';
+  renderCurrentTab();
+}
+
+function renderHome() {
+  const sections = [
+    {
+      tab: 'pokemon',
+      emoji: '🎮',
+      title: 'Pokémon',
+      desc: 'Explora la Pokédex completa con stats, tipos, habilidades y más',
+      blob: 'rgba(0,200,83,0.14)',
+      btn: 'Ver Pokédex',
+      accent: '#00c853',
+      count: pokemonData.length
+    },
+    {
+      tab: 'objetos',
+      emoji: '🎒',
+      title: 'Objetos',
+      desc: 'Busca items, consulta precios y descubre qué Pokémon los portan',
+      blob: 'rgba(255,215,0,0.1)',
+      btn: 'Ver Items',
+      accent: '#FFD700',
+      count: objetosData.length
+    },
+    {
+      tab: 'habilidades',
+      emoji: '🧬',
+      title: 'Habilidades',
+      desc: 'Consulta efectos y qué Pokémon poseen cada habilidad',
+      blob: 'rgba(100,100,255,0.1)',
+      btn: 'Ver Habilidades',
+      accent: '#9c88ff',
+      count: habilidadesData.length
+    },
+    {
+      tab: 'creditos',
+      emoji: '📋',
+      title: 'Créditos',
+      desc: 'Equipo detrás del proyecto e historial de cambios',
+      blob: 'rgba(255,255,255,0.04)',
+      btn: 'Ver Créditos',
+      accent: '#aaa',
+      count: null
+    }
+  ];
+
+  resultsDiv.innerHTML = `
+    <div style="grid-column:1/-1;">
+      <div style="
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 16px;
+        max-width: 700px;
+        margin: 8px auto 0;
+      ">
+        ${sections.map(s => `
+          <div onclick="goToTab('${s.tab}')" style="
+            position: relative;
+            overflow: hidden;
+            border-radius: 22px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 26px 22px;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.25,1,0.5,1);
+          "
+          onmouseover="this.style.transform='translateY(-6px)';this.style.borderColor='${s.accent}44';this.style.boxShadow='0 16px 40px rgba(0,0,0,0.35)'"
+          onmouseout="this.style.transform='';this.style.borderColor='rgba(255,255,255,0.08)';this.style.boxShadow=''">
+            <div style="position:absolute;bottom:-24px;right:-24px;width:100px;height:100px;background:radial-gradient(circle,${s.blob},transparent 70%);pointer-events:none;"></div>
+            ${s.count !== null ? `<span style="position:absolute;top:16px;right:16px;font-size:0.65rem;color:#444;font-weight:600;letter-spacing:1px;">${s.count}</span>` : ''}
+            <div style="font-size:1.8rem;margin-bottom:12px;">${s.emoji}</div>
+            <h3 style="color:#fff;font-size:1.05rem;font-weight:600;margin-bottom:6px;">${s.title}</h3>
+            <p style="color:#555;font-size:0.78rem;line-height:1.55;margin-bottom:16px;">${s.desc}</p>
+            <div style="
+              display:inline-flex;align-items:center;gap:6px;
+              background:${s.accent}18;
+              border:1px solid ${s.accent}33;
+              border-radius:20px;padding:5px 14px;
+            ">
+              <span style="font-size:0.72rem;color:${s.accent};font-weight:600;">${s.btn} →</span>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
 }
 
 function renderCreditsAndChangelog() {
