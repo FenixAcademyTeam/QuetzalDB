@@ -52,7 +52,7 @@ async function loadData() {
     document.getElementById('statHabilidades').textContent = habilidadesData.length;
 
     // Empezar en home
-    searchInput.style.display = 'none';
+    setNavVisibility('home');
     renderHome();
   } catch (e) {
     console.error("Error cargando archivos:", e);
@@ -65,6 +65,13 @@ const resultsDiv = document.getElementById('results');
 const modal = document.getElementById('detailModal');
 const modalBody = document.getElementById('modalBody');
 const closeBtn = document.querySelector('.close');
+const tabsContainer = document.querySelector('.tabs');
+
+function setNavVisibility(tab) {
+  const isHome = tab === 'home';
+  tabsContainer.style.display = isHome ? 'none' : 'flex';
+  searchInput.style.display = (isHome || tab === 'creditos') ? 'none' : 'block';
+}
 
 loadData();
 
@@ -74,13 +81,7 @@ document.querySelectorAll('.tab').forEach(tab => {
     tab.classList.add('active');
     currentTab = tab.dataset.tab;
     searchInput.value = '';
-    
-    if (currentTab === 'creditos' || currentTab === 'home') {
-      searchInput.style.display = 'none';
-    } else {
-      searchInput.style.display = 'block';
-    }
-    
+    setNavVisibility(currentTab);
     renderCurrentTab();
   });
 });
@@ -296,7 +297,7 @@ function goToTab(tabName) {
   document.querySelectorAll('.tab').forEach(t => {
     t.classList.toggle('active', t.dataset.tab === tabName);
   });
-  searchInput.style.display = (tabName === 'creditos' || tabName === 'home') ? 'none' : 'block';
+  setNavVisibility(tabName);
   searchInput.value = '';
   renderCurrentTab();
 }
