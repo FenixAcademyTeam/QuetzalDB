@@ -11,8 +11,8 @@ const infoExtra = {
     { rol: "Equipo de la Database", nombre: "Nelly & Danny", link: "#" }
   ],
   changelog: [
-    { version: "v1.8", fecha: "20 de Julio, 2026", cambios: ["Se agregó sección de Área de Encuentro en la ficha del Pokémon.", "El mapa del área aparece automáticamente para los Pokémon que lo tengan definido.", "Los Pokémon sin área asignada no muestran la sección (no se rompe nada)."] },
-    { version: "v1.7", fecha: "20 de Julio, 2026", cambios: ["Nueva Main Page con tarjetas de acceso a cada sección.", "Rediseño de tarjetas Pokémon: número en esquina, nombre en blanco, tipos como píldoras de color.", "Blob de color del tipo principal en esquina inferior de cada tarjeta.", "Total de estadísticas base visible al hacer hover sobre la tarjeta de Pokémon.", "Tarjetas de Objetos y Habilidades actualizadas con el mismo lenguaje visual.", "Fondo con textura de puntos sutil para dar profundidad a la página."] },
+    { version: "v1.8", fecha: "20 de Julio, 2026", cambios: ["Se agregó sección de Área de Encuentro en la ficha del Pokémon.", "El mapa del área aparece automáticamente para los Pokémon que lo tengan definido.", "Los Pokémon sin área asignada no muestran la sección."] },
+    { version: "v1.7", fecha: "19 de Julio, 2026", cambios: ["Nueva Main Page con tarjetas de acceso a cada sección.", "Rediseño de tarjetas Pokémon: número en esquina, nombre en blanco, tipos como píldoras de color.", "Blob de color del tipo principal en esquina inferior de cada tarjeta.", "Total de estadísticas base visible al hacer hover sobre la tarjeta de Pokémon.", "Tarjetas de Objetos y Habilidades actualizadas con el mismo lenguaje visual.", "Fondo con textura de puntos sutil para dar profundidad a la página."] },
     { version: "v1.6", fecha: "16 de Junio, 2026", cambios: ["Se agregó descripción estilo Pokédex en la ficha de cada Pokémon.", "Se actualizó el JSON de Pokémon con el nuevo campo de descripción.", "Se ajustaron todos los campos internos para mantener compatibilidad."] },
     { version: "v1.5", fecha: "16 de Junio, 2026", cambios: ["Rediseño del hero: logo cuadrado, etiqueta de sección y píldora de estadísticas en tiempo real.", "Rediseño de las tabs: selector segmentado unificado con transición suave.", "Buscador centrado con ícono integrado y ancho máximo más compacto."] },
     { version: "v1.4", fecha: "12 de Junio, 2026", cambios: ["Los objetos en la vista detallada del Pokémon son clicables.", "El modal de Objetos muestra qué Pokémon portan el objeto (con indicador Común/Raro).", "Cada Pokémon portador es clicable para ir a su vista detallada."] },
@@ -307,7 +307,7 @@ function renderHome() {
   const sections = [
     {
       tab: 'pokemon',
-      icon: `<img src="https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/PokemonSprites/PIKACHU.png" style="width:52px;height:52px;image-rendering:pixelated;">`,
+      icon: `<img src="https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/PokemonSprites/PIKACHU.png" style="width:104px;height:104px;image-rendering:pixelated;">`,
       title: 'Pokémon',
       desc: 'Explora la Pokédex completa con stats, tipos, habilidades y más',
       blob: 'rgba(0,200,83,0.14)',
@@ -317,7 +317,7 @@ function renderHome() {
     },
     {
       tab: 'objetos',
-      icon: `<img src="https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Objetos/POKE_BALL.png" style="width:52px;height:52px;image-rendering:pixelated;">`,
+      icon: `<img src="https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Objetos/POKE_BALL.png" style="width:104px;height:104px;image-rendering:pixelated;">`,
       title: 'Objetos',
       desc: 'Busca items, consulta precios y descubre qué Pokémon los portan',
       blob: 'rgba(255,215,0,0.1)',
