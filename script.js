@@ -34,7 +34,7 @@ const typeColors = {
 async function loadData() {
   try {
     const [pokemonRes, objetosRes, habilidadesRes] = await Promise.all([
-      fetch('pokemon.json'),
+      fetch('Pokemon.json'),
       fetch('Objetos.json'),
       fetch('Habilidades.json')
     ]);
