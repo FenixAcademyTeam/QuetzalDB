@@ -593,7 +593,7 @@ function showPokemonDetail(p) {
       border-radius: 18px;
       padding: 20px;
     ">
-      <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">🗺️ Área de Encuentro</h3>
+      <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">Área de Encuentro</h3>
       <img src="${p.field30}" alt="Área de encuentro" style="
         width: 100%;
         border-radius: 12px;
