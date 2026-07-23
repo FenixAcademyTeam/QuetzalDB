@@ -169,7 +169,7 @@ function renderObjects(objetos) {
       <p style="font-size:0.78em;color:#666;margin-top:6px;line-height:1.4;">${o.field6 ? o.field6.substring(0, 72) + '…' : ''}</p>
       <div class="card-total" style="opacity:1;transform:none;margin-top:8px;">
         <span style="color:#aaa;font-size:0.72rem;">
-          <strong style="color:#FFD700;">$${o.field8 || '—'}</strong> compra &nbsp;·&nbsp; <strong style="color:#81D4FA;">$${o.field7 || '—'}</strong> venta
+          <strong style="color:#FFD700;">${o.field8 || '—'}</strong> compra &nbsp;·&nbsp; <strong style="color:#81D4FA;">${o.field7 || '—'}</strong> venta
         </span>
       </div>
     `;
