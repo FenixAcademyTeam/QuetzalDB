@@ -1,551 +1,554 @@
 [
   {
-    "field2": "Habilidad",
-    "field3": "Descripcion"
+    "field1": "Habilidad",
+    "field2": "Descripcion"
   },
   {
-    "field2": "Espesura",
-    "field3": "Sube Planta bajos PS."
+    "field1": "Espesura",
+    "field2": "Sube Planta bajos PS."
   },
   {
-    "field2": "Clorofila",
-    "field3": "Duplica Vel. en sol."
+    "field1": "Clorofila",
+    "field2": "Duplica Vel. en sol."
   },
   {
-    "field2": "Sebo",
-    "field3": "Reduce Hielo y Fuego."
+    "field1": "Sebo",
+    "field2": "Reduce Hielo y Fuego."
   },
   {
-    "field2": "Mar Llamas",
-    "field3": "Sube Fuego bajos PS."
+    "field1": "Mar Llamas",
+    "field2": "Sube Fuego bajos PS."
   },
   {
-    "field2": "Poder Solar",
-    "field3": "Sube At. Esp. en sol."
+    "field1": "Poder Solar",
+    "field2": "Sube At. Esp. en sol."
   },
   {
-    "field2": "Garra Dura",
-    "field3": "Sube mov. de contacto."
+    "field1": "Garra Dura",
+    "field2": "Sube mov. de contacto."
   },
   {
-    "field2": "Sequia",
-    "field3": "Provoca sol."
+    "field1": "Sequia",
+    "field2": "Provoca sol."
   },
   {
-    "field2": "Torrente",
-    "field3": "Sube Agua bajos PS."
+    "field1": "Torrente",
+    "field2": "Sube Agua bajos PS."
   },
   {
-    "field2": "Cura Lluvia",
-    "field3": "Recupera PS en lluvia."
+    "field1": "Cura Lluvia",
+    "field2": "Recupera PS en lluvia."
   },
   {
-    "field2": "Megadisparador",
-    "field3": "Potencia mov. pulso."
+    "field1": "Megadisparador",
+    "field2": "Potencia mov. pulso."
   },
   {
-    "field2": "Polvo Escudo",
-    "field3": "Inmune efectos sec."
+    "field1": "Polvo Escudo",
+    "field2": "Inmune efectos sec."
   },
   {
-    "field2": "Fuga",
-    "field3": "100% huida PKM salvajes."
+    "field1": "Fuga",
+    "field2": "100% huida PKM salvajes."
   },
   {
-    "field2": "Mudar",
-    "field3": "Puede curar estado."
+    "field1": "Mudar",
+    "field2": "Puede curar estado."
   },
   {
-    "field2": "Ojo Compuesto",
-    "field3": "Sube precision."
+    "field1": "Ojo Compuesto",
+    "field2": "Sube precision."
   },
   {
-    "field2": "Cromolente",
-    "field3": "Sube daño no eficaz."
+    "field1": "Cromolente",
+    "field2": "Sube daño no eficaz."
   },
   {
-    "field2": "Enjambre",
-    "field3": "Sube Bicho bajos PS.",
-    "field4": "70"
+    "field1": "Enjambre",
+    "field2": "Sube Bicho bajos PS."
   },
   {
-    "field2": "Francotirador",
-    "field3": "Potencia golpes criticos."
+    "field1": "Francotirador",
+    "field2": "Potencia golpes criticos."
   },
   {
-    "field2": "Adaptable",
-    "field3": "Sube mov. mismo tipo."
+    "field1": "Adaptable",
+    "field2": "Sube mov. mismo tipo."
   },
   {
-    "field2": "Vista Lince",
-    "field3": "Impide bajada Prec."
+    "field1": "Vista Lince",
+    "field2": "Impide bajada Prec."
   },
   {
-    "field2": "Tumbos",
-    "field3": "Sube Eva. si confuso."
+    "field1": "Tumbos",
+    "field2": "Sube Eva. si confuso."
   },
   {
-    "field2": "Sacapecho",
-    "field3": "Impide bajada de Defensa."
+    "field1": "Sacapecho",
+    "field2": "Impide bajada de Defensa."
   },
   {
-    "field2": "Indefenso",
-    "field3": "Mov. siempre aciertan."
+    "field1": "Indefenso",
+    "field2": "Mov. siempre aciertan."
   },
   {
-    "field2": "Agallas",
-    "field3": "Sube Ataque con estado."
+    "field1": "Agallas",
+    "field2": "Sube Ataque con estado."
   },
   {
-    "field2": "Entusiasmo",
-    "field3": "Sube At. reduce Prec."
+    "field1": "Entusiasmo",
+    "field2": "Sube At. reduce Prec."
   },
   {
-    "field2": "Gula",
-    "field3": "Consume baya antes."
+    "field1": "Gula",
+    "field2": "Consume baya antes."
   },
   {
-    "field2": "Intimidacion",
-    "field3": "Baja Ataque rival."
+    "field1": "Intimidacion",
+    "field2": "Baja Ataque rival."
   },
   {
-    "field2": "Nerviosismo",
-    "field3": "Impide Baya rival."
+    "field1": "Nerviosismo",
+    "field2": "Impide Baya rival."
   },
   {
-    "field2": "Elec. Estatica",
-    "field3": "Paraliza al contacto."
+    "field1": "Elec. Estatica",
+    "field2": "Paraliza al contacto."
   },
   {
-    "field2": "Pararrayos",
-    "field3": "Atrae mov. Electrico."
+    "field1": "Pararrayos",
+    "field2": "Atrae mov. Electrico."
   },
   {
-    "field2": "Cola Surf",
-    "field3": "Duplica Vel. en campo elec."
+    "field1": "Cola Surf",
+    "field2": "Duplica Vel. en campo elec."
   },
   {
-    "field2": "Piel Electrica",
-    "field3": "Cambia mov. Normal a Elec."
+    "field1": "Piel Electrica",
+    "field2": "Cambia mov. Normal a Elec."
   },
   {
-    "field2": "Electrogenesis",
-    "field3": "Crea campo electrico."
+    "field1": "Electrogenesis",
+    "field2": "Crea campo electrico."
   },
   {
-    "field2": "Velo Arena",
-    "field3": "Sube Eva. en torm. arena."
+    "field1": "Velo Arena",
+    "field2": "Sube Eva. en torm. arena."
   },
   {
-    "field2": "Impetu Arena",
-    "field3": "Sube Vel. en torm. arena."
+    "field1": "Impetu Arena",
+    "field2": "Sube Vel. en torm. arena."
   },
   {
-    "field2": "Manto Niveo",
-    "field3": "Sube Evasion en nieve."
+    "field1": "Manto Niveo",
+    "field2": "Sube Evasion en nieve."
   },
   {
-    "field2": "Quitanieves",
-    "field3": "Sube Vel. en nieve."
+    "field1": "Quitanieves",
+    "field2": "Sube Vel. en nieve."
   },
   {
-    "field2": "Punto Toxico",
-    "field3": "Puede env. al contacto."
+    "field1": "Punto Toxico",
+    "field2": "Puede env. al contacto."
   },
   {
-    "field2": "Rivalidad",
-    "field3": "Sube pot. mismo sexo."
+    "field1": "Rivalidad",
+    "field2": "Sube pot. mismo sexo."
   },
   {
-    "field2": "Potencia Bruta",
-    "field3": "Sube mov. efectos sec."
+    "field1": "Potencia Bruta",
+    "field2": "Sube mov. efectos sec."
   },
   {
-    "field2": "Gran Encanto",
-    "field3": "Enamora al contacto."
+    "field1": "Gran Encanto",
+    "field2": "Enamora al contacto."
   },
   {
-    "field2": "Muro Magico",
-    "field3": "Inmune al daño indirecto."
+    "field1": "Muro Magico",
+    "field2": "Inmune al daño indirecto."
   },
   {
-    "field2": "Compiescolta",
-    "field3": "Reduce daño aliados."
+    "field1": "Compiescolta",
+    "field2": "Reduce daño aliados."
   },
   {
-    "field2": "Ignorante",
-    "field3": "Ignora cambio caract. rival."
+    "field1": "Ignorante",
+    "field2": "Ignora cambio caract. rival."
   },
   {
-    "field2": "Dicha",
-    "field3": "Sube % efectos sec."
+    "field1": "Dicha",
+    "field2": "Sube % efectos sec."
   },
   {
-    "field2": "Absorbe Fuego",
-    "field3": "Sube Fuego con Fuego."
+    "field1": "Absorbe Fuego",
+    "field2": "Sube Fuego con Fuego."
   },
   {
-    "field2": "Nevada",
-    "field3": "Provoca Nieve."
+    "field1": "Nevada",
+    "field2": "Provoca Nieve."
   },
   {
-    "field2": "Tenacidad",
-    "field3": "Sube At.Esp. si baja caract."
+    "field1": "Tenacidad",
+    "field2": "Sube At.Esp. si baja caract."
   },
   {
-    "field2": "Cacheo",
-    "field3": "Percibe el objeto rival."
+    "field1": "Cacheo",
+    "field2": "Percibe el objeto rival."
   },
   {
-    "field2": "Fuerza Mental",
-    "field3": "No puede amedrentarse."
+    "field1": "Fuerza Mental",
+    "field2": "No puede amedrentarse."
   },
   {
-    "field2": "Allanamiento",
-    "field3": "Ignora muros y sustitutos."
+    "field1": "Allanamiento",
+    "field2": "Ignora muros y sustitutos."
   },
   {
-    "field2": "Hedor",
-    "field3": "Puede amedrentar al cont."
+    "field1": "Hedor",
+    "field2": "Puede amedrentar al cont."
   },
   {
-    "field2": "Efecto Espora",
-    "field3": "Causa estado al contacto."
+    "field1": "Efecto Espora",
+    "field2": "Causa estado al contacto."
   },
   {
-    "field2": "Piel Seca",
-    "field3": "Recupera PS con Agua."
+    "field1": "Piel Seca",
+    "field2": "Recupera PS con Agua."
   },
   {
-    "field2": "Humedad",
-    "field3": "Impide explotar."
+    "field1": "Humedad",
+    "field2": "Impide explotar."
   },
   {
-    "field2": "Piel Milagro",
-    "field3": "Reduce Prec. mov. Estado."
+    "field1": "Piel Milagro",
+    "field2": "Reduce Prec. mov. Estado."
   },
   {
-    "field2": "Trampa Arena",
-    "field3": "Impide camb. PKM terrestre."
+    "field1": "Trampa Arena",
+    "field2": "Impide camb. PKM terrestre."
   },
   {
-    "field2": "Poder Arena",
-    "field3": "Sube Ti. Ro. Ac. en arena."
+    "field1": "Poder Arena",
+    "field2": "Sube Ti. Ro. Ac. en arena."
   },
   {
-    "field2": "Rizos Rebeldes",
-    "field3": "Baja Vel. al contacto."
+    "field1": "Rizos Rebeldes",
+    "field2": "Baja Vel. al contacto."
   },
   {
-    "field2": "Recogida",
-    "field3": "Puede obtener objetos."
+    "field1": "Recogida",
+    "field2": "Puede obtener objetos."
   },
   {
-    "field2": "Experto",
-    "field3": "Sube potencia mov. debiles."
+    "field1": "Experto",
+    "field2": "Sube potencia mov. debiles."
   },
   {
-    "field2": "Cobardia",
-    "field3": "Sube Vel. con Fa, Bi, Si."
+    "field1": "Cobardia",
+    "field2": "Sube Vel. con Fa, Bi, Si."
   },
   {
-    "field2": "Flexibilidad",
-    "field3": "No puede paralizarse."
+    "field1": "Flexibilidad",
+    "field2": "No puede paralizarse."
   },
   {
-    "field2": "Pelaje Recio",
-    "field3": "Reduce mov. contacto."
+    "field1": "Pelaje Recio",
+    "field2": "Reduce mov. contacto."
   },
   {
-    "field2": "Aclimatacion",
-    "field3": "Anula efecto atmosferico."
+    "field1": "Aclimatacion",
+    "field2": "Anula efecto atmosferico."
   },
   {
-    "field2": "Nado Rapido",
-    "field3": "Sube Vel. en lluvia."
+    "field1": "Nado Rapido",
+    "field2": "Sube Vel. en lluvia."
   },
   {
-    "field2": "Espiritu Vital",
-    "field3": "No puede dormirse."
+    "field1": "Espiritu Vital",
+    "field2": "No puede dormirse."
   },
   {
-    "field2": "Irascible",
-    "field3": "Sube At. si golpe critico."
+    "field1": "Irascible",
+    "field2": "Sube At. si golpe critico."
   },
   {
-    "field2": "Competitivo",
-    "field3": "Sube At. al bajar caract."
+    "field1": "Competitivo",
+    "field2": "Sube At. al bajar caract."
   },
   {
-    "field2": "Justiciero",
-    "field3": "Sube At. con Siniestro."
+    "field1": "Justiciero",
+    "field2": "Sube At. con Siniestro."
   },
   {
-    "field2": "Cabeza Roca",
-    "field3": "Protege auto daño."
+    "field1": "Cabeza Roca",
+    "field2": "Protege auto daño."
   },
   {
-    "field2": "Absorbe Agua",
-    "field3": "Recupera PS con Agua."
+    "field1": "Absorbe Agua",
+    "field2": "Recupera PS con Agua."
   },
   {
-    "field2": "Sincronia",
-    "field3": "Cambia estado rival al suyo."
+    "field1": "Sincronia",
+    "field2": "Cambia estado rival al suyo."
   },
   {
-    "field2": "Calco",
-    "field3": "Copia habilidad rival."
+    "field1": "Calco",
+    "field2": "Copia habilidad rival."
   },
   {
-    "field2": "Impasible",
-    "field3": "Sube Vel. si se amedrenta."
+    "field1": "Impasible",
+    "field2": "Sube Vel. si se amedrenta."
   },
   {
-    "field2": "Corrosion",
-    "field3": "Envenena Acero y Veneno."
+    "field1": "Corrosion",
+    "field2": "Envenena Acero y Veneno."
   },
   {
-    "field2": "Cuerpo Puro",
-    "field3": "Impide la bajada caract."
+    "field1": "Cuerpo Puro",
+    "field2": "Impide la bajada caract."
   },
   {
-    "field2": "Viscosecrecion",
-    "field3": "Daña si mov. absorcion PS."
+    "field1": "Viscosecrecion",
+    "field2": "Daña si mov. absorcion PS."
   },
   {
-    "field2": "Robustez",
-    "field3": "Aguanta 1 PS si 100% PS."
+    "field1": "Robustez",
+    "field2": "Aguanta 1 PS si 100% PS."
   },
   {
-    "field2": "Iman",
-    "field3": "Impide rival Acero cambie."
+    "field1": "Iman",
+    "field2": "Impide rival Acero cambie."
   },
   {
-    "field2": "Cuerpo Llama",
-    "field3": "Quema al contacto."
+    "field1": "Cuerpo Llama",
+    "field2": "Quema al contacto."
   },
   {
-    "field2": "Velo Pastel",
-    "field3": "No puede envenenarse."
+    "field1": "Velo Pastel",
+    "field2": "No puede envenenarse."
   },
   {
-    "field2": "Anticipacion",
-    "field3": "Presiente mov. fuertes."
+    "field1": "Anticipacion",
+    "field2": "Presiente mov. fuertes."
   },
   {
-    "field2": "Despiste",
-    "field3": "Protege Atrac, Mofa, Intim."
+    "field1": "Despiste",
+    "field2": "Protege Atrac, Mofa, Intim."
   },
   {
-    "field2": "Ritmo Propio",
-    "field3": "No puede confundirse."
+    "field1": "Ritmo Propio",
+    "field2": "No puede confundirse."
   },
   {
-    "field2": "Regeneracion",
-    "field3": "Cura PS al cambiar."
+    "field1": "Regeneracion",
+    "field2": "Cura PS al cambiar."
   },
   {
-    "field2": "Mano Rapida",
-    "field3": "Puede atacar primero."
+    "field1": "Mano Rapida",
+    "field2": "Puede atacar primero."
   },
   {
-    "field2": "Caparazon",
-    "field3": "Impide golpes criticos."
+    "field1": "Caparazon",
+    "field2": "Impide golpes criticos."
   },
   {
-    "field2": "Calculo Final",
-    "field3": "Pot. mov. si ataca ultimo."
+    "field1": "Calculo Final",
+    "field2": "Pot. mov. si ataca ultimo."
   },
   {
-    "field2": "Intrepido",
-    "field3": "Norm. y Lucha golpean Fant."
+    "field1": "Intrepido",
+    "field2": "Norm. y Lucha golpean Fant."
   },
   {
-    "field2": "Madrugar",
-    "field3": "Despierta antes."
+    "field1": "Madrugar",
+    "field2": "Despierta antes."
   },
   {
-    "field2": "Hidratacion",
-    "field3": "Cura estado en lluvia."
+    "field1": "Hidratacion",
+    "field2": "Cura estado en lluvia."
   },
   {
-    "field2": "Gelido",
-    "field3": "Recupera PS en nieve."
+    "field1": "Gelido",
+    "field2": "Recupera PS en nieve."
   },
   {
-    "field2": "Viscosidad",
-    "field3": "Impide robo de objeto."
+    "field1": "Viscosidad",
+    "field2": "Impide robo de objeto."
   },
   {
-    "field2": "Toque Toxico",
-    "field3": "Puede env. al contacto."
+    "field1": "Toque Toxico",
+    "field2": "Puede env. al contacto."
   },
   {
-    "field2": "Reaccion Quimica",
-    "field3": "Copia hab. aliado KO."
+    "field1": "Reaccion Quimica",
+    "field2": "Copia hab. aliado KO."
   },
   {
-    "field2": "Encadenado",
-    "field3": "Golpea maximo veces."
+    "field1": "Encadenado",
+    "field2": "Golpea maximo veces."
   },
   {
-    "field2": "Funda",
-    "field3": "Inmune daño clima y polvos."
+    "field1": "Funda",
+    "field2": "Inmune daño clima y polvos."
   },
   {
-    "field2": "Levitacion",
-    "field3": "Inmune a Tierra."
+    "field1": "Levitacion",
+    "field2": "Inmune a Tierra."
   },
   {
-    "field2": "Cuerpo Maldito",
-    "field3": "Puede impedir movimiento."
+    "field1": "Cuerpo Maldito",
+    "field2": "Puede impedir movimiento."
   },
   {
-    "field2": "Sombra Trampa",
-    "field3": "Impide rival cambiar PKM."
+    "field1": "Sombra Trampa",
+    "field2": "Impide rival cambiar PKM."
   },
   {
-    "field2": "Armadura Fragil",
-    "field3": "Baja Def. sube Vel."
+    "field1": "Armadura Fragil",
+    "field2": "Baja Def. sube Vel."
   },
   {
-    "field2": "Insomnio",
-    "field3": "No puede dormirse."
+    "field1": "Insomnio",
+    "field2": "No puede dormirse."
   },
   {
-    "field2": "Alerta",
-    "field3": "Percibe movimiento rival."
+    "field1": "Alerta",
+    "field2": "Percibe movimiento rival."
   },
   {
-    "field2": "Corte Fuerte",
-    "field3": "Impide bajada de Ataque."
+    "field1": "Corte Fuerte",
+    "field2": "Impide bajada de Ataque."
   },
   {
-    "field2": "Insonorizar",
-    "field3": "Inmunidad mov. sonido."
+    "field1": "Insonorizar",
+    "field2": "Inmunidad mov. sonido."
   },
   {
-    "field2": "Detonacion",
-    "field3": "Daña al rival al debilitarse."
+    "field1": "Detonacion",
+    "field2": "Daña al rival al debilitarse."
   },
   {
-    "field2": "Cosecha",
-    "field3": "Regenera Baya."
+    "field1": "Cosecha",
+    "field2": "Regenera Baya."
   },
   {
-    "field2": "Armadura Batalla",
-    "field3": "Impide golpes criticos."
+    "field1": "Armadura Batalla",
+    "field2": "Impide golpes criticos."
   },
   {
-    "field2": "Audaz",
-    "field3": "Potencia mov. auto daño."
+    "field1": "Audaz",
+    "field2": "Potencia mov. auto daño."
   },
   {
-    "field2": "Liviano",
-    "field3": "x2 Vel. al perder objeto."
+    "field1": "Liviano",
+    "field2": "x2 Vel. al perder objeto."
   },
   {
-    "field2": "Puño Ferreo",
-    "field3": "Potencia los mov. puños."
+    "field1": "Puño Ferreo",
+    "field2": "Potencia los mov. puños."
   },
   {
-    "field2": "Gas Reactivo",
-    "field3": "Anula habilidades."
+    "field1": "Gas Reactivo",
+    "field2": "Anula habilidades."
   },
   {
-    "field2": "Nebulogenesis",
-    "field3": "Crea campo niebla."
+    "field1": "Nebulogenesis",
+    "field2": "Crea campo niebla."
   },
   {
-    "field2": "Cura Natural",
-    "field3": "Cura estado al cambiar."
+    "field1": "Cura Natural",
+    "field2": "Cura estado al cambiar."
   },
   {
-    "field2": "Alma Cura",
-    "field3": "Cura estados aliados."
+    "field1": "Alma Cura",
+    "field2": "Cura estados aliados."
   },
   {
-    "field2": "Defensa Hoja",
-    "field3": "Cura estado en sol."
+    "field1": "Defensa Hoja",
+    "field2": "Cura estado en sol."
   },
   {
-    "field2": "Amor Filial",
-    "field3": "Golpea dos veces."
+    "field1": "Amor Filial",
+    "field2": "Golpea dos veces."
   },
   {
-    "field2": "Velo Agua",
-    "field3": "No puede quemarse."
+    "field1": "Velo Agua",
+    "field2": "No puede quemarse."
   },
   {
-    "field2": "Iluminacion",
-    "field3": "Impide bajada de Precision."
+    "field1": "Iluminacion",
+    "field2": "Impide bajada de Precision."
   },
   {
-    "field2": "Energia Pura",
-    "field3": "Duplica el Ataque."
+    "field1": "Energia Pura",
+    "field2": "Duplica el Ataque."
   },
   {
-    "field2": "Filtro",
-    "field3": "Reduce super eficaces."
+    "field1": "Filtro",
+    "field2": "Reduce super eficaces."
   },
   {
-    "field2": "Antibarrera",
-    "field3": "Anula muros."
+    "field1": "Antibarrera",
+    "field2": "Anula muros."
   },
   {
-    "field2": "Rompemoldes",
-    "field3": "Ignora hab. def. rival."
+    "field1": "Rompemoldes",
+    "field2": "Ignora hab. def. rival."
   },
   {
-    "field2": "Autoestima",
-    "field3": "Sube ataque al debilitar."
+    "field1": "Autoestima",
+    "field2": "Sube ataque al debilitar."
   },
   {
-    "field2": "Piel Celeste",
-    "field3": "Cambia mov. Normal a Vol."
+    "field1": "Piel Celeste",
+    "field2": "Cambia mov. Normal a Vol."
   },
   {
-    "field2": "Rumia",
-    "field3": "Come Baya dos veces."
+    "field1": "Rumia",
+    "field2": "Come Baya dos veces."
   },
   {
-    "field2": "Impostor",
-    "field3": "Copia forma PKM rival."
+    "field1": "Impostor",
+    "field2": "Copia forma PKM rival."
   },
   {
-    "field2": "Absorbe Elec.",
-    "field3": "Recupera PS con Elec."
+    "field1": "Absorbe Elec.",
+    "field2": "Recupera PS con Elec."
   },
   {
-    "field2": "Pies Rapidos",
-    "field3": "Sube Vel. con estado."
+    "field1": "Pies Rapidos",
+    "field2": "Sube Vel. con estado."
   },
   {
-    "field2": "Descarga",
-    "field3": "Sube At. o At. Esp."
+    "field1": "Descarga",
+    "field2": "Sube At. o At. Esp."
   },
   {
-    "field2": "Presion",
-    "field3": "Reduce PP rival."
+    "field1": "Presion",
+    "field2": "Reduce PP rival."
   },
   {
-    "field2": "Inmunidad",
-    "field3": "No puede envenenarse."
+    "field1": "Inmunidad",
+    "field2": "No puede envenenarse."
   },
   {
-    "field2": "Colera",
-    "field3": "Sube At. Esp. mitad PS."
+    "field1": "Colera",
+    "field2": "Sube At. Esp. mitad PS."
   },
   {
-    "field2": "Escama Especial",
-    "field3": "Sube Def. con estado."
+    "field1": "Escama Especial",
+    "field2": "Sube Def. con estado."
   },
   {
-    "field2": "Multiescamas",
-    "field3": "Reduce daño maximos PS."
+    "field1": "Multiescamas",
+    "field2": "Reduce daño maximos PS."
   },
   {
-    "field2": "Coranima",
-    "field3": "Sube At.Esp. al debilitar."
+    "field1": "Coranima",
+    "field2": "Sube At.Esp. al debilitar."
+  },
+  {
+    "field1": "Mandibula Dragon",
+    "field2": "Potencia Dragon."
   }
 ]
