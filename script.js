@@ -11,6 +11,7 @@ const infoExtra = {
     { rol: "Equipo de la Database", nombre: "Nelly & Danny", link: "#" }
   ],
   changelog: [
+    { version: "v1.9", fecha: "29 de Julio, 2026", cambios: ["Los JSONs ahora usan nombres descriptivos en lugar de field2/field3 (Pokemon, Habilidad, No, IMG, etc.).", "Se actualizaron todas las referencias internas del script para usar los nuevos nombres.", "Mayor facilidad para identificar y corregir errores en los archivos de datos."] },
     { version: "v1.8", fecha: "20 de Julio, 2026", cambios: ["Se agregó sección de Área de Encuentro en la ficha del Pokémon.", "El mapa del área aparece automáticamente para los Pokémon que lo tengan definido.", "Los Pokémon sin área asignada no muestran la sección."] },
     { version: "v1.7", fecha: "19 de Julio, 2026", cambios: ["Nueva Main Page con tarjetas de acceso a cada sección.", "Rediseño de tarjetas Pokémon: número en esquina, nombre en blanco, tipos como píldoras de color.", "Blob de color del tipo principal en esquina inferior de cada tarjeta.", "Total de estadísticas base visible al hacer hover sobre la tarjeta de Pokémon.", "Tarjetas de Objetos y Habilidades actualizadas con el mismo lenguaje visual.", "Fondo con textura de puntos sutil para dar profundidad a la página."] },
     { version: "v1.6", fecha: "16 de Junio, 2026", cambios: ["Se agregó descripción estilo Pokédex en la ficha de cada Pokémon.", "Se actualizó el JSON de Pokémon con el nuevo campo de descripción.", "Se ajustaron todos los campos internos para mantener compatibilidad."] },
@@ -31,7 +32,57 @@ const typeColors = {
   "Hada": "#FF80AB", "Normal": "#9E9E9E"
 };
 
-async function loadData() {
+const BASE = 'https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/';
+
+// Helpers para abstraer los nuevos nombres de campos
+const pk = {
+  nombre:   p => p.Pokemon,
+  mayus:    p => p.Mayus,
+  num:      p => p.No,
+  sprite:   p => BASE + 'PokemonSprites/' + p.Mayus + '.png',
+  mini:     p => p.MINI,
+  tipo1:    p => p.Type1 || '',
+  tipo2:    p => p.Type2 || '',
+  tipo1img: p => p.Type1 ? BASE + 'Tipos/' + p.Type1 + '.png' : '',
+  tipo2img: p => p.IMG || '',          // IMG = imagen del tipo 2
+  desc:     p => p.Descripcion || '',
+  ps:       p => p.PS,
+  atq:      p => p.ATQ,
+  def:      p => p.DEF,
+  aes:      p => p.AES,
+  des:      p => p.DES,
+  vel:      p => p.VEL,
+  cat:      p => p.PKM,
+  alt:      p => p.ALT,
+  peso:     p => p.PESO,
+  cap:      p => p['%CAP'],
+  crec:     p => p.CREC,
+  obj1:     p => p.OBJ,
+  obj2:     p => p['OBJ 2'],
+  h1:       p => p.H1,
+  h2:       p => p.H2,
+  hoculta:  p => p.H && p.H.O ? p.H.O : null,
+  eclo1:    p => p.ECLO,
+  eclo2:    p => p.ECLO2,
+  area:     p => p.AREA || null,
+};
+
+const ob = {
+  num:    o => o.No,
+  nombre: o => o.Name,
+  mayus:  o => o.Mayus,
+  sprite: o => o.IMG,
+  desc:   o => o.Descripcion,
+  venta:  o => o.VENTA,
+  compra: o => o.COMPRA,
+};
+
+const hab = {
+  nombre: h => h.Habilidad,
+  desc:   h => h.Descripcion,
+};
+
+
   try {
     const [pokemonRes, objetosRes, habilidadesRes] = await Promise.all([
       fetch('Pokemon.json'),
@@ -43,9 +94,9 @@ async function loadData() {
     const objetosJson = await objetosRes.json();
     const habilidadesJson = await habilidadesRes.json();
     
-    pokemonData = pokemonJson.slice(1);
-    objetosData = objetosJson.slice(1);
-    habilidadesData = habilidadesJson.slice(1);
+    pokemonData = pokemonJson;
+    objetosData = objetosJson;
+    habilidadesData = habilidadesJson;
 
     // Actualizar contadores del hero
     document.getElementById('statPokemon').textContent = pokemonData.length;
@@ -115,7 +166,7 @@ function filterCurrentTab(term) {
     const filtered = objetosData.filter(o => Object.values(o).join(' ').toLowerCase().includes(term));
     renderObjects(filtered);
   } else if (currentTab === 'habilidades') {
-    const filtered = habilidadesData.filter(h => Object.values(h).join(' ').toLowerCase().includes(term));
+    const filtered = habilidadesData.filter(h => (hab.nombre(h) + ' ' + hab.desc(h)).toLowerCase().includes(term));
     renderHabilidades(filtered);
   }
 }
@@ -129,18 +180,17 @@ function renderResults(pokemons) {
   pokemons.forEach(p => {
     const card = document.createElement('div');
     card.className = 'card pokemon-card';
-    const type1 = p.field6 || '';
-    const type2 = p.field8 || '';
+    const type1 = pk.tipo1(p), type2 = pk.tipo2(p);
     const color1 = typeColors[type1] || '#666';
     const color2 = typeColors[type2] || color1;
-    const totalStats = [p.field11, p.field12, p.field13, p.field14, p.field15, p.field16]
+    const totalStats = [pk.ps(p), pk.atq(p), pk.def(p), pk.aes(p), pk.des(p), pk.vel(p)]
       .reduce((sum, v) => sum + (parseInt(v) || 0), 0);
 
     card.innerHTML = `
       <div class="card-blob" style="background: radial-gradient(circle, ${color1}22 0%, transparent 70%);"></div>
-      <span class="card-number">#${p.field4}</span>
-      <img src="${p.field5}" alt="${p.field2}">
-      <h3>${p.field2}</h3>
+      <span class="card-number">#${pk.num(p)}</span>
+      <img src="${pk.sprite(p)}" alt="${pk.nombre(p)}">
+      <h3>${pk.nombre(p)}</h3>
       <div class="types">
         ${type1 ? `<span class="type-pill" style="background:${color1}22;border:1px solid ${color1}44;color:${color1};">${type1}</span>` : ''}
         ${type2 ? `<span class="type-pill" style="background:${color2}22;border:1px solid ${color2}44;color:${color2};">${type2}</span>` : ''}
@@ -163,13 +213,13 @@ function renderObjects(objetos) {
     card.className = 'card';
     card.innerHTML = `
       <div class="card-blob" style="background: radial-gradient(circle, rgba(255,215,0,0.15) 0%, transparent 70%);"></div>
-      <span class="card-number">#${o.field2}</span>
-      <img src="${o.field5}" alt="${o.field3}" style="width:96px;height:96px;margin-top:8px;">
-      <h3>${o.field3}</h3>
-      <p style="font-size:0.78em;color:#666;margin-top:6px;line-height:1.4;">${o.field6 ? o.field6.substring(0, 72) + '…' : ''}</p>
+      <span class="card-number">#${ob.num(o)}</span>
+      <img src="${ob.sprite(o)}" alt="${ob.nombre(o)}" style="width:96px;height:96px;margin-top:8px;">
+      <h3>${ob.nombre(o)}</h3>
+      <p style="font-size:0.78em;color:#666;margin-top:6px;line-height:1.4;">${ob.desc(o) ? ob.desc(o).substring(0, 72) + '…' : ''}</p>
       <div class="card-total" style="opacity:1;transform:none;margin-top:8px;">
         <span style="color:#aaa;font-size:0.72rem;">
-          <strong style="color:#FFD700;">${o.field8 || '—'}</strong> compra &nbsp;·&nbsp; <strong style="color:#81D4FA;">${o.field7 || '—'}</strong> venta
+          <strong style="color:#FFD700;">${ob.compra(o) || '—'}</strong> compra &nbsp;·&nbsp; <strong style="color:#81D4FA;">${ob.venta(o) || '—'}</strong> venta
         </span>
       </div>
     `;
@@ -189,15 +239,9 @@ function renderHabilidades(habilidades) {
     card.className = 'card';
     card.innerHTML = `
       <div class="card-blob" style="background: radial-gradient(circle, rgba(100,100,255,0.12) 0%, transparent 70%);"></div>
-      <div style="
-        width:54px; height:54px; border-radius:14px;
-        background: rgba(0,200,83,0.08);
-        border: 1px solid rgba(0,200,83,0.2);
-        display:flex; align-items:center; justify-content:center;
-        margin: 8px auto 12px; font-size:1.4rem;
-      ">🧬</div>
-      <h3>${h.field2}</h3>
-      <p style="font-size:0.8em;color:#666;margin-top:8px;line-height:1.5;">${h.field3 || '-'}</p>
+      <div style="width:54px;height:54px;border-radius:14px;background:rgba(0,200,83,0.08);border:1px solid rgba(0,200,83,0.2);display:flex;align-items:center;justify-content:center;margin:8px auto 12px;font-size:1.4rem;">🧬</div>
+      <h3>${hab.nombre(h)}</h3>
+      <p style="font-size:0.8em;color:#666;margin-top:8px;line-height:1.5;">${hab.desc(h) || '-'}</p>
     `;
     card.addEventListener('click', () => showHabilidadDetail(h));
     resultsDiv.appendChild(card);
@@ -206,16 +250,16 @@ function renderHabilidades(habilidades) {
 
 function showHabilidadDetail(h) {
   // Pokémon que poseen esta habilidad (normal, secundaria u oculta)
-  const nombreH = h.field2.toLowerCase();
+  const nombreH = hab.nombre(h).toLowerCase();
   const poseedores = pokemonData.filter(p => 
-    (p.field25 && p.field25.toLowerCase() === nombreH) ||
-    (p.field26 && p.field26.toLowerCase() === nombreH) ||
-    (p.field27 && p.field27.toLowerCase() === nombreH)
+    (pk.h1(p) && pk.h1(p).toLowerCase() === nombreH) ||
+    (pk.h2(p) && pk.h2(p).toLowerCase() === nombreH) ||
+    (pk.hoculta(p) && pk.hoculta(p).toLowerCase() === nombreH)
   );
 
   const getPokemonRole = (p) => {
-    if (p.field27 && p.field27.toLowerCase() === nombreH) return 'oculta';
-    if (p.field26 && p.field26.toLowerCase() === nombreH) return 'secundaria';
+    if (pk.hoculta(p) && pk.hoculta(p).toLowerCase() === nombreH) return 'oculta';
+    if (pk.h2(p) && pk.h2(p).toLowerCase() === nombreH) return 'secundaria';
     return 'normal';
   };
 
@@ -236,11 +280,11 @@ function showHabilidadDetail(h) {
               text-align:center;
               cursor:pointer;
               transition:all 0.25s;
-            " onclick="modal.style.display='none'; setTimeout(()=>{ const pk = pokemonData.find(x=>x.field3==='${p.field3}'); if(pk) showPokemonDetail(pk); }, 200);"
+            " onclick="modal.style.display='none'; setTimeout(()=>{ const found = pokemonData.find(x=>x.Mayus==='${p.Mayus}'); if(found) showPokemonDetail(found); }, 200);"
               onmouseover="this.style.borderColor='rgba(0,200,83,0.4)'; this.style.transform='translateY(-3px)'"
               onmouseout="this.style.borderColor='rgba(255,255,255,0.08)'; this.style.transform='translateY(0)'">
-              <img src="${p.field5}" alt="${p.field2}" style="width:54px;height:54px;image-rendering:pixelated;">
-              <p style="font-size:0.75em;color:#ddd;margin-top:6px;font-weight:500;">${p.field2}</p>
+              <img src="${pk.sprite(p)}" alt="${pk.nombre(p)}" style="width:54px;height:54px;image-rendering:pixelated;">
+              <p style="font-size:0.75em;color:#ddd;margin-top:6px;font-weight:500;">${pk.nombre(p)}</p>
               <span style="font-size:0.65em;color:${rl.color};font-weight:600;">${rl.txt}</span>
             </div>
           `;
@@ -265,7 +309,7 @@ function showHabilidadDetail(h) {
         display:flex;align-items:center;justify-content:center;
         font-size:1.4rem;flex-shrink:0;
       ">🧬</div>
-      <h2 style="font-size:1.7rem;font-weight:700;color:#fff;">${h.field2}</h2>
+      <h2 style="font-size:1.7rem;font-weight:700;color:#fff;">${hab.nombre(h)}</h2>
     </div>
 
     <div class="modal-inner">
@@ -277,7 +321,7 @@ function showHabilidadDetail(h) {
         padding:18px 20px;
         margin-bottom:24px;
       ">
-        <p style="color:#e8ecf7;font-size:1rem;line-height:1.7;">${h.field3 || 'Sin descripción.'}</p>
+        <p style="color:#e8ecf7;font-size:1rem;line-height:1.7;">${hab.desc(h) || 'Sin descripción.'}</p>
       </div>
 
       <!-- Pokémon que la poseen -->
@@ -431,16 +475,125 @@ function renderCreditsAndChangelog() {
 
 function showPokemonDetail(p) {
   const stats = [
-    {name: "PS", value: p.field11, color: "#FF5959"},
-    {name: "Ataque", value: p.field12, color: "#F5AC78"},
-    {name: "Defensa", value: p.field13, color: "#FAE078"},
-    {name: "At. Especial", value: p.field14, color: "#9DB7F5"},
-    {name: "Def. Especial", value: p.field15, color: "#A7DB8D"},
-    {name: "Velocidad", value: p.field16, color: "#FA92B2"}
+    {name: "PS",          value: pk.ps(p),  color: "#FF5959"},
+    {name: "Ataque",      value: pk.atq(p), color: "#F5AC78"},
+    {name: "Defensa",     value: pk.def(p), color: "#FAE078"},
+    {name: "At. Especial",value: pk.aes(p), color: "#9DB7F5"},
+    {name: "Def. Especial",value: pk.des(p),color: "#A7DB8D"},
+    {name: "Velocidad",   value: pk.vel(p), color: "#FA92B2"}
   ];
 
-  // Color del tipo principal para el banner
-  const bannerColor = typeColors[p.field6] || '#00c853';
+  const bannerColor = typeColors[pk.tipo1(p)] || '#00c853';
+
+  let statsHtml = '';
+  stats.forEach(stat => {
+    const value = parseInt(stat.value) || 0;
+    const percent = Math.min(100, (value / 255) * 100);
+    statsHtml += `
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:0.9em;">
+          <span style="color:#aaa;">${stat.name}</span>
+          <strong style="color:#fff;">${value}</strong>
+        </div>
+        <div class="stats-bar">
+          <div class="stats-fill" style="width:${percent}%;--stat-color:${stat.color};"></div>
+        </div>
+      </div>`;
+  });
+
+  const obj1name = pk.obj1(p);
+  const obj2name = pk.obj2(p);
+  const obj1data = obj1name ? objetosData.find(o => ob.nombre(o) && ob.nombre(o).toLowerCase() === obj1name.toLowerCase()) : null;
+  const obj2data = obj2name ? objetosData.find(o => ob.nombre(o) && ob.nombre(o).toLowerCase() === obj2name.toLowerCase()) : null;
+
+  const renderItemSprite = (nombre, objData) => {
+    if (!nombre) return '';
+    const safe = nombre.replace(/'/g, "\\'");
+    const spriteHtml = objData ? `<img src="${ob.sprite(objData)}" alt="${nombre}" style="width:24px;height:24px;image-rendering:pixelated;vertical-align:middle;margin-right:4px;">` : '';
+    return `<span style="cursor:pointer;border-bottom:1px dashed rgba(255,255,255,0.3);display:inline-flex;align-items:center;gap:2px;" onclick="openObjeto('${safe}')">${spriteHtml}${nombre}</span>`;
+  };
+
+  const tipo1 = pk.tipo1(p), tipo2 = pk.tipo2(p);
+
+  const html = `
+    <div style="padding:20px 60px 18px 24px;background:linear-gradient(135deg,${bannerColor}33,${bannerColor}15);border-bottom:2px solid ${bannerColor}55;display:flex;align-items:center;gap:14px;flex-wrap:wrap;min-height:78px;">
+      <img src="${pk.mini(p)}" style="width:38px;height:38px;image-rendering:pixelated;flex-shrink:0;">
+      <div style="flex-shrink:0;">
+        <span style="font-size:0.75em;color:${bannerColor};font-weight:600;letter-spacing:2px;text-transform:uppercase;display:block;">#${pk.num(p)}</span>
+        <h2 style="font-size:1.6rem;font-weight:700;line-height:1.1;color:#fff;white-space:nowrap;">${pk.nombre(p)}</h2>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
+        ${tipo1 ? `<span class="type" style="background:${typeColors[tipo1]||'#666'};box-shadow:0 4px 10px rgba(0,0,0,0.3);font-size:0.85em;white-space:nowrap;">
+          <img src="${pk.tipo1img(p)}" width="15" height="15" style="vertical-align:middle;"> ${tipo1}
+        </span>` : ''}
+        ${tipo2 ? `<span class="type" style="background:${typeColors[tipo2]||'#666'};box-shadow:0 4px 10px rgba(0,0,0,0.3);font-size:0.85em;white-space:nowrap;">
+          <img src="${pk.tipo2img(p)}" width="15" height="15" style="vertical-align:middle;"> ${tipo2}
+        </span>` : ''}
+      </div>
+    </div>
+
+    <div class="modal-inner">
+
+    ${pk.desc(p) ? `
+    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:14px 18px;margin-bottom:20px;display:flex;gap:10px;align-items:flex-start;">
+      <span style="font-size:1.1rem;flex-shrink:0;margin-top:2px;">📖</span>
+      <p style="color:#b0b8cc;font-size:0.88em;line-height:1.65;font-style:italic;">${pk.desc(p)}</p>
+    </div>` : ''}
+
+    <div style="display:grid;grid-template-columns:200px 1fr;gap:24px;">
+
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:16px;text-align:center;">
+          <p style="font-size:0.7em;color:#aaa;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Normal</p>
+          <img src="${pk.sprite(p)}" alt="${pk.nombre(p)}" style="width:150px;height:150px;image-rendering:pixelated;">
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:22px;">
+
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(0,200,83,0.2);border-radius:18px;padding:20px;">
+          <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">Datos del Pokémon</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.88em;color:#e8ecf7;">
+            <p><strong style="color:#aaa;">Categoría</strong><br>${pk.cat(p) || '-'}</p>
+            <p><strong style="color:#aaa;">Altura</strong><br>${pk.alt(p) || '-'}</p>
+            <p><strong style="color:#aaa;">Peso</strong><br>${pk.peso(p) || '-'}</p>
+            <p><strong style="color:#aaa;">Captura</strong><br>${pk.cap(p) || '-'}</p>
+            <p><strong style="color:#aaa;">Crecimiento</strong><br>${pk.crec(p) || '-'}</p>
+            <p><strong style="color:#aaa;">Grupo Huevo</strong><br>${pk.eclo1(p) || '-'}${pk.eclo2(p) ? ` / ${pk.eclo2(p)}` : ''}</p>
+            <p style="grid-column:1/-1;"><strong style="color:#aaa;">Habilidades</strong><br>
+              ${pk.h1(p) ? `<span style="color:#00c853;cursor:pointer;border-bottom:1px dashed rgba(0,200,83,0.4);" onclick="openHabilidad('${pk.h1(p).replace(/'/g,"\\'")}')">` + pk.h1(p) + `</span>` : '-'}
+              ${pk.h2(p) ? ` / <span style="cursor:pointer;border-bottom:1px dashed rgba(255,255,255,0.3);" onclick="openHabilidad('${pk.h2(p).replace(/'/g,"\\'")}')">` + pk.h2(p) + `</span>` : ''}
+              ${pk.hoculta(p) ? ` / <em style="color:#ff80ab;cursor:pointer;border-bottom:1px dashed rgba(255,128,171,0.4);" onclick="openHabilidad('${pk.hoculta(p).replace(/'/g,"\\'")}')">` + pk.hoculta(p) + ` (Oculta)</em>` : ''}
+            </p>
+            ${obj1name ? `<p style="grid-column:1/-1;"><strong style="color:#aaa;">Objetos</strong><br>
+              <span style="display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                ${renderItemSprite(obj1name, obj1data)}
+                ${obj2name ? `<span style="color:#555;">/</span>${renderItemSprite(obj2name, obj2data)}` : ''}
+              </span>
+            </p>` : ''}
+          </div>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px;">
+          <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">Estadísticas Base</h3>
+          <div style="display:flex;flex-direction:column;gap:12px;">${statsHtml}</div>
+        </div>
+
+      </div>
+    </div>
+
+    ${pk.area(p) ? `
+    <div style="margin-top:22px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px;">
+      <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">🗺️ Área de Encuentro</h3>
+      <img src="${pk.area(p)}" alt="Área de encuentro" style="width:100%;border-radius:12px;image-rendering:pixelated;border:1px solid rgba(255,255,255,0.06);">
+    </div>` : ''}
+
+    </div>
+  `;
+
+  modalBody.innerHTML = html;
+  modal.style.display = 'block';
+}
 
   let statsHtml = '';
   stats.forEach(stat => {
@@ -460,13 +613,13 @@ function showPokemonDetail(p) {
   });
 
   // Buscar sprites de los objetos que porta el Pokémon
-  const obj1 = p.field23 ? objetosData.find(o => o.field3 && o.field3.toLowerCase() === p.field23.toLowerCase()) : null;
-  const obj2 = p.field24 ? objetosData.find(o => o.field3 && o.field3.toLowerCase() === p.field24.toLowerCase()) : null;
+  const obj1 = pk.obj1(p) ? objetosData.find(o => ob.nombre(o) && ob.nombre(o).toLowerCase() === pk.obj1(p).toLowerCase()) : null;
+  const obj2 = pk.obj2(p) ? objetosData.find(o => ob.nombre(o) && ob.nombre(o).toLowerCase() === pk.obj2(p).toLowerCase()) : null;
 
   const renderItemSprite = (nombre, objData) => {
     if (!nombre) return '';
     const safe = nombre.replace(/'/g, "\\'");
-    const spriteHtml = objData ? `<img src="${objData.field5}" alt="${nombre}" style="width:24px;height:24px;image-rendering:pixelated;vertical-align:middle;margin-right:4px;">` : '';
+    const spriteHtml = objData ? `<img src="${ob.sprite(objData)}" alt="${nombre}" style="width:24px;height:24px;image-rendering:pixelated;vertical-align:middle;margin-right:4px;">` : '';
     return `<span style="cursor:pointer;border-bottom:1px dashed rgba(255,255,255,0.3);display:inline-flex;align-items:center;gap:2px;transition:opacity 0.2s;" onclick="openObjeto('${safe}')">${spriteHtml}${nombre}</span>`;
   };
 
@@ -482,17 +635,17 @@ function showPokemonDetail(p) {
       flex-wrap: wrap;
       min-height: 78px;
     ">
-      <img src="${p.field17}" alt="${p.field2}" style="width:38px;height:38px;image-rendering:pixelated;flex-shrink:0;">
+      <img src="${pk.mini(p)}" alt="${pk.nombre(p)}" style="width:38px;height:38px;image-rendering:pixelated;flex-shrink:0;">
       <div style="flex-shrink:0;">
-        <span style="font-size:0.75em;color:${bannerColor};font-weight:600;letter-spacing:2px;text-transform:uppercase;display:block;">#${p.field4}</span>
-        <h2 style="font-size:1.6rem;font-weight:700;line-height:1.1;color:#fff;white-space:nowrap;">${p.field2}</h2>
+        <span style="font-size:0.75em;color:${bannerColor};font-weight:600;letter-spacing:2px;text-transform:uppercase;display:block;">#${pk.num(p)}</span>
+        <h2 style="font-size:1.6rem;font-weight:700;line-height:1.1;color:#fff;white-space:nowrap;">${pk.nombre(p)}</h2>
       </div>
       <div style="margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
-        <span class="type" style="background:${typeColors[p.field6]||'#666'}; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size:0.85em; white-space:nowrap;">
-          <img src="${p.field7}" width="15" height="15" style="vertical-align:middle;"> ${p.field6}
+        <span class="type" style="background:${typeColors[pk.tipo1(p)]||'#666'}; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size:0.85em; white-space:nowrap;">
+          <img src="${pk.tipo1img(p)}" width="15" height="15" style="vertical-align:middle;"> ${pk.tipo1(p)}
         </span>
-        ${p.field8 ? `<span class="type" style="background:${typeColors[p.field8]||'#666'}; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size:0.85em; white-space:nowrap;">
-          <img src="${p.field9}" width="15" height="15" style="vertical-align:middle;"> ${p.field8}
+        ${pk.tipo2(p) ? `<span class="type" style="background:${typeColors[pk.tipo2(p)]||'#666'}; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size:0.85em; white-space:nowrap;">
+          <img src="${pk.tipo2img(p)}" width="15" height="15" style="vertical-align:middle;"> ${pk.tipo2(p)}
         </span>` : ''}
       </div>
     </div>
@@ -501,7 +654,7 @@ function showPokemonDetail(p) {
     <div class="modal-inner">
 
     <!-- Descripción Pokédex -->
-    ${p.field10 ? `
+    ${pk.desc(p) ? `
     <div style="
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.07);
@@ -513,7 +666,7 @@ function showPokemonDetail(p) {
       align-items: flex-start;
     ">
       <span style="font-size:1.1rem;flex-shrink:0;margin-top:2px;"></span>
-      <p style="color:#b0b8cc;font-size:0.88em;line-height:1.65;font-style:italic;">${p.field10}</p>
+      <p style="color:#b0b8cc;font-size:0.88em;line-height:1.65;font-style:italic;">${pk.desc(p)}</p>
     </div>` : ''}
 
     <!-- CUERPO PRINCIPAL: izquierda sprite | derecha info -->
@@ -531,7 +684,7 @@ function showPokemonDetail(p) {
           text-align:center;
         ">
           <p style="font-size:0.7em;color:#aaa;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Normal</p>
-          <img src="${p.field5}" alt="${p.field2}" style="width:150px;height:150px;image-rendering:pixelated;">
+          <img src="${pk.sprite(p)}" alt="${pk.nombre(p)}" style="width:150px;height:150px;image-rendering:pixelated;">
         </div>
 
       </div>
@@ -548,21 +701,21 @@ function showPokemonDetail(p) {
         ">
           <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">Datos del Pokémon</h3>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.88em;color:#e8ecf7;">
-            <p><strong style="color:#aaa;">Categoría</strong><br>${p.field18 || '-'}</p>
-            <p><strong style="color:#aaa;">Altura</strong><br>${p.field19 || '-'}</p>
-            <p><strong style="color:#aaa;">Peso</strong><br>${p.field20 || '-'}</p>
-            <p><strong style="color:#aaa;">Captura</strong><br>${p.field21 || '-'}</p>
-            <p><strong style="color:#aaa;">Crecimiento</strong><br>${p.field22 || '-'}</p>
-            <p><strong style="color:#aaa;">Grupo Huevo</strong><br>${p.field28 || '-'}${p.field29 ? ` / ${p.field29}` : ''}</p>
+            <p><strong style="color:#aaa;">Categoría</strong><br>${pk.cat(p) || '-'}</p>
+            <p><strong style="color:#aaa;">Altura</strong><br>${pk.alt(p) || '-'}</p>
+            <p><strong style="color:#aaa;">Peso</strong><br>${pk.peso(p) || '-'}</p>
+            <p><strong style="color:#aaa;">Captura</strong><br>${pk.cap(p) || '-'}</p>
+            <p><strong style="color:#aaa;">Crecimiento</strong><br>${pk.crec(p) || '-'}</p>
+            <p><strong style="color:#aaa;">Grupo Huevo</strong><br>${pk.eclo1(p) || '-'}${pk.eclo2(p) ? \` / ${pk.eclo2(p)}\` : ''}</p>
             <p style="grid-column:1/-1;"><strong style="color:#aaa;">Habilidades</strong><br>
-              ${p.field25 ? `<span style="color:#00c853;cursor:pointer;border-bottom:1px dashed rgba(0,200,83,0.4);transition:opacity 0.2s;" onclick="openHabilidad('${p.field25.replace(/'/g,"\\'")}')">` + p.field25 + `</span>` : '-'}
-              ${p.field26 ? ` / <span style="cursor:pointer;border-bottom:1px dashed rgba(255,255,255,0.3);transition:opacity 0.2s;" onclick="openHabilidad('${p.field26.replace(/'/g,"\\'")}')">` + p.field26 + `</span>` : ''}
-              ${p.field27 ? ` / <em style="color:#ff80ab;cursor:pointer;border-bottom:1px dashed rgba(255,128,171,0.4);transition:opacity 0.2s;" onclick="openHabilidad('${p.field27.replace(/'/g,"\\'")}')">` + p.field27 + ` (Oculta)</em>` : ''}
+              ${pk.h1(p) ? `<span style="color:#00c853;cursor:pointer;border-bottom:1px dashed rgba(0,200,83,0.4);transition:opacity 0.2s;" onclick="openHabilidad('${pk.h1(p).replace(/'/g,"\\'")}')">` + pk.h1(p) + `</span>` : '-'}
+              ${pk.h2(p) ? ` / <span style="cursor:pointer;border-bottom:1px dashed rgba(255,255,255,0.3);transition:opacity 0.2s;" onclick="openHabilidad('${pk.h2(p).replace(/'/g,"\\'")}')">` + pk.h2(p) + `</span>` : ''}
+              ${pk.hoculta(p) ? ` / <em style="color:#ff80ab;cursor:pointer;border-bottom:1px dashed rgba(255,128,171,0.4);transition:opacity 0.2s;" onclick="openHabilidad('${pk.hoculta(p).replace(/'/g,"\\'")}')">` + pk.hoculta(p) + ` (Oculta)</em>` : ''}
             </p>
-            ${p.field23 ? `<p style="grid-column:1/-1;"><strong style="color:#aaa;">Objetos</strong><br>
+            ${pk.obj1(p) ? `<p style="grid-column:1/-1;"><strong style="color:#aaa;">Objetos</strong><br>
               <span style="display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;">
-                <span style="display:inline-flex;align-items:center;gap:4px;">${renderItemSprite(p.field23, obj1)}</span>
-                ${p.field24 ? `<span style="color:#555;">/</span><span style="display:inline-flex;align-items:center;gap:4px;">${renderItemSprite(p.field24, obj2)}</span>` : ''}
+                <span style="display:inline-flex;align-items:center;gap:4px;">${renderItemSprite(pk.obj1(p), obj1)}</span>
+                ${pk.obj2(p) ? `<span style="color:#555;">/</span><span style="display:inline-flex;align-items:center;gap:4px;">${renderItemSprite(pk.obj2(p), obj2)}</span>` : ''}
               </span>
             </p>` : ''}
           </div>
@@ -584,7 +737,7 @@ function showPokemonDetail(p) {
       </div>
     </div>
 
-    ${p.field30 ? `
+    ${pk.area(p) ? `
     <!-- Área de encuentro -->
     <div style="
       margin-top: 22px;
@@ -594,7 +747,7 @@ function showPokemonDetail(p) {
       padding: 20px;
     ">
       <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">Área de Encuentro</h3>
-      <img src="${p.field30}" alt="Área de encuentro" style="
+      <img src="${pk.area(p)}" alt="Área de encuentro" style="
         width: 100%;
         border-radius: 12px;
         image-rendering: pixelated;
@@ -611,14 +764,14 @@ function showPokemonDetail(p) {
 
 function showObjectDetail(o) {
   // Pokémon que portan este objeto (campo 1 o campo 2)
-  const nombreO = o.field3.toLowerCase();
+  const nombreO = ob.nombre(o).toLowerCase();
   const portadores = pokemonData.filter(p =>
-    (p.field23 && p.field23.toLowerCase() === nombreO) ||
-    (p.field24 && p.field24.toLowerCase() === nombreO)
+    (pk.obj1(p) && pk.obj1(p).toLowerCase() === nombreO) ||
+    (pk.obj2(p) && pk.obj2(p).toLowerCase() === nombreO)
   );
 
   const getSlotLabel = (p) => {
-    if (p.field24 && p.field24.toLowerCase() === nombreO) return { txt: 'Raro', color: '#FFD700' };
+    if (pk.obj2(p) && pk.obj2(p).toLowerCase() === nombreO) return { txt: 'Raro', color: '#FFD700' };
     return { txt: 'Común', color: '#81D4FA' };
   };
 
@@ -636,11 +789,11 @@ function showObjectDetail(o) {
               text-align:center;
               cursor:pointer;
               transition:all 0.25s;
-            " onclick="modal.style.display='none'; setTimeout(()=>{ const pk = pokemonData.find(x=>x.field3==='${p.field3}'); if(pk) showPokemonDetail(pk); }, 200);"
+            " onclick="modal.style.display='none'; setTimeout(()=>{ const found = pokemonData.find(x=>x.Mayus==='${p.Mayus}'); if(found) showPokemonDetail(found); }, 200);"
               onmouseover="this.style.borderColor='rgba(0,200,83,0.4)'; this.style.transform='translateY(-3px)'"
               onmouseout="this.style.borderColor='rgba(255,255,255,0.08)'; this.style.transform='translateY(0)'">
-              <img src="${p.field5}" alt="${p.field2}" style="width:54px;height:54px;image-rendering:pixelated;">
-              <p style="font-size:0.75em;color:#ddd;margin-top:6px;font-weight:500;">${p.field2}</p>
+              <img src="${pk.sprite(p)}" alt="${pk.nombre(p)}" style="width:54px;height:54px;image-rendering:pixelated;">
+              <p style="font-size:0.75em;color:#ddd;margin-top:6px;font-weight:500;">${pk.nombre(p)}</p>
               <span style="font-size:0.65em;color:${sl.color};font-weight:600;">${sl.txt}</span>
             </div>
           `;
@@ -659,10 +812,10 @@ function showObjectDetail(o) {
       flex-wrap: wrap;
       min-height: 78px;
     ">
-      <img src="${o.field5}" alt="${o.field3}" style="width:44px;height:44px;image-rendering:pixelated;flex-shrink:0;">
+      <img src="${ob.sprite(o)}" alt="${ob.nombre(o)}" style="width:44px;height:44px;image-rendering:pixelated;flex-shrink:0;">
       <div>
-        <span style="font-size:0.75em;color:#00c853;font-weight:600;letter-spacing:2px;text-transform:uppercase;display:block;">#${o.field2}</span>
-        <h2 style="font-size:1.6rem;font-weight:700;line-height:1.1;color:#fff;">${o.field3}</h2>
+        <span style="font-size:0.75em;color:#00c853;font-weight:600;letter-spacing:2px;text-transform:uppercase;display:block;">#${ob.num(o)}</span>
+        <h2 style="font-size:1.6rem;font-weight:700;line-height:1.1;color:#fff;">${ob.nombre(o)}</h2>
       </div>
     </div>
 
@@ -678,7 +831,7 @@ function showObjectDetail(o) {
           padding: 20px;
           text-align:center;
         ">
-          <img src="${o.field5}" alt="${o.field3}" style="width:120px;height:120px;image-rendering:pixelated;">
+          <img src="${ob.sprite(o)}" alt="${ob.nombre(o)}" style="width:120px;height:120px;image-rendering:pixelated;">
         </div>
         <div style="
           background: rgba(255,255,255,0.03);
@@ -687,8 +840,8 @@ function showObjectDetail(o) {
           padding: 18px;
         ">
           <h3 style="color:var(--green);margin-bottom:12px;font-size:0.95rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:6px;">Precios</h3>
-          <p style="font-size:0.95em;color:#e8ecf7;margin-bottom:8px;"><strong style="color:#aaa;">Compra:</strong> ${o.field8 || '-'}</p>
-          <p style="font-size:0.95em;color:#e8ecf7;"><strong style="color:#aaa;">Venta:</strong> ${o.field7 || '-'}</p>
+          <p style="font-size:0.95em;color:#e8ecf7;margin-bottom:8px;"><strong style="color:#aaa;">Compra:</strong> ${ob.compra(o) || '-'}</p>
+          <p style="font-size:0.95em;color:#e8ecf7;"><strong style="color:#aaa;">Venta:</strong> ${ob.venta(o) || '-'}</p>
         </div>
       </div>
 
@@ -700,7 +853,7 @@ function showObjectDetail(o) {
         padding: 20px;
       ">
         <h3 style="color:var(--green);margin-bottom:12px;font-size:0.95rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:6px;">Descripción</h3>
-        <p style="color:#e8ecf7;line-height:1.7;font-size:0.92em;">${o.field6 || 'Sin descripción'}</p>
+        <p style="color:#e8ecf7;line-height:1.7;font-size:0.92em;">${ob.desc(o) || 'Sin descripción'}</p>
       </div>
 
     </div>
@@ -721,12 +874,12 @@ function showObjectDetail(o) {
 }
 // Función global para abrir habilidad desde el modal de Pokémon
 function openHabilidad(nombre) {
-  const h = habilidadesData.find(x => x.field2.toLowerCase() === nombre.toLowerCase());
+  const h = habilidadesData.find(x => hab.nombre(x).toLowerCase() === nombre.toLowerCase());
   if (h) showHabilidadDetail(h);
 }
 
 // Función global para abrir objeto desde el modal de Pokémon
 function openObjeto(nombre) {
-  const o = objetosData.find(x => x.field3 && x.field3.toLowerCase() === nombre.toLowerCase());
+  const o = objetosData.find(x => ob.nombre(x) && ob.nombre(x).toLowerCase() === nombre.toLowerCase());
   if (o) showObjectDetail(o);
 }
