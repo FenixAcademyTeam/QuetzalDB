@@ -228,8 +228,16 @@ body::before {
   font-weight: 600;
 }
 
-/* Blob de color de tipo en tarjeta */
-.card-blob {
+.pokemon-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--card-stripe, transparent);
+  z-index: 1;
+}
   position: absolute;
   bottom: -30px;
   right: -30px;
@@ -390,7 +398,49 @@ body::before {
   background: rgba(0, 200, 83, 0.6);
 }
 
-/* ================== RESPONSIVE ================== */
+/* ================== REGIONES ================== */
+.region-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  cursor: pointer;
+  transition: background 0.2s;
+  user-select: none;
+  margin-bottom: 4px;
+}
+.region-header:hover { background: rgba(255,255,255,0.05); }
+.region-stripe {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.region-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+}
+.region-count {
+  font-size: 0.72rem;
+  color: #555;
+  margin-left: 4px;
+}
+.region-chevron {
+  margin-left: auto;
+  color: #555;
+  font-size: 0.8rem;
+  transition: transform 0.2s;
+}
+.region-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+}
 @media (max-width: 768px) {
 
   /* Hero */
@@ -404,8 +454,9 @@ body::before {
   .tabs-container { padding: 3px; }
   .tab { padding: 8px 16px; font-size: 0.82rem; }
 
-  /* Grid de tarjetas */
+  /* Grid de tarjetas y región */
   .results-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+  .region-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
 
   /* Modal */
   .modal { padding: 10px; }
@@ -459,6 +510,7 @@ body::before {
 
   /* Grid 2 columnas fijas en móvil pequeño */
   .results-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .region-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .card { padding: 16px 12px; border-radius: 18px; }
   .card h3 { font-size: 0.85rem; }
   .card-number { font-size: 0.6rem; }
