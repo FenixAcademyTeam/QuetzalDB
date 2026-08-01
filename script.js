@@ -172,34 +172,99 @@ function filterCurrentTab(term) {
   }
 }
 
+const REGIONES = [
+  { nombre: 'Kanto',   inicio: 1,   fin: 151,  color: '#E53935' },
+  { nombre: 'Johto',   inicio: 152, fin: 251,  color: '#FB8C00' },
+  { nombre: 'Hoenn',   inicio: 252, fin: 386,  color: '#43A047' },
+  { nombre: 'Sinnoh',  inicio: 387, fin: 493,  color: '#1E88E5' },
+  { nombre: 'Unova',   inicio: 494, fin: 649,  color: '#757575' },
+  { nombre: 'Kalos',   inicio: 650, fin: 721,  color: '#E91E63' },
+  { nombre: 'Alola',   inicio: 722, fin: 809,  color: '#FF7043' },
+  { nombre: 'Galar',   inicio: 810, fin: 905,  color: '#7B1FA2' },
+  { nombre: 'Paldea',  inicio: 906, fin: 1025, color: '#00838F' },
+  { nombre: 'Especial',inicio: 0,   fin: 0,    color: '#546E7A' },
+];
+
+function getRegion(numStr) {
+  const n = parseInt(numStr);
+  if (!n) return REGIONES[REGIONES.length - 1];
+  return REGIONES.find(r => r.inicio > 0 && n >= r.inicio && n <= r.fin) || REGIONES[REGIONES.length - 1];
+}
+
+function makePokemonCard(p) {
+  const card = document.createElement('div');
+  card.className = 'card pokemon-card';
+  const type1 = pk.tipo1(p), type2 = pk.tipo2(p);
+  const color1 = typeColors[type1] || '#666';
+  const color2 = typeColors[type2] || color1;
+  card.style.setProperty('--card-stripe', color1);
+  const totalStats = [pk.ps(p), pk.atq(p), pk.def(p), pk.aes(p), pk.des(p), pk.vel(p)]
+    .reduce((sum, v) => sum + (parseInt(v) || 0), 0);
+  card.innerHTML = `
+    <div class="card-blob" style="background:radial-gradient(circle,${color1}22 0%,transparent 70%);"></div>
+    <span class="card-number">#${pk.num(p)}</span>
+    <img src="${pk.sprite(p)}" alt="${pk.nombre(p)}">
+    <h3>${pk.nombre(p)}</h3>
+    <div class="types">
+      ${type1 ? `<span class="type-pill" style="background:${color1}22;border:1px solid ${color1}44;color:${color1};">${type1}</span>` : ''}
+      ${type2 ? `<span class="type-pill" style="background:${color2}22;border:1px solid ${color2}44;color:${color2};">${type2}</span>` : ''}
+    </div>
+    <div class="card-total">Total <strong>${totalStats}</strong></div>
+  `;
+  card.addEventListener('click', () => showPokemonDetail(p));
+  return card;
+}
+
 function renderResults(pokemons) {
   resultsDiv.innerHTML = '';
   if (pokemons.length === 0) {
     resultsDiv.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#aaa;">No se encontraron Pokémon</p>';
     return;
   }
-  pokemons.forEach(p => {
-    const card = document.createElement('div');
-    card.className = 'card pokemon-card';
-    const type1 = pk.tipo1(p), type2 = pk.tipo2(p);
-    const color1 = typeColors[type1] || '#666';
-    const color2 = typeColors[type2] || color1;
-    const totalStats = [pk.ps(p), pk.atq(p), pk.def(p), pk.aes(p), pk.des(p), pk.vel(p)]
-      .reduce((sum, v) => sum + (parseInt(v) || 0), 0);
 
-    card.innerHTML = `
-      <div class="card-blob" style="background: radial-gradient(circle, ${color1}22 0%, transparent 70%);"></div>
-      <span class="card-number">#${pk.num(p)}</span>
-      <img src="${pk.sprite(p)}" alt="${pk.nombre(p)}">
-      <h3>${pk.nombre(p)}</h3>
-      <div class="types">
-        ${type1 ? `<span class="type-pill" style="background:${color1}22;border:1px solid ${color1}44;color:${color1};">${type1}</span>` : ''}
-        ${type2 ? `<span class="type-pill" style="background:${color2}22;border:1px solid ${color2}44;color:${color2};">${type2}</span>` : ''}
-      </div>
-      <div class="card-total">Total <strong>${totalStats}</strong></div>
+  // Si hay búsqueda activa o pocos resultados, mostrar sin agrupar
+  const sinAgrupar = pokemons.length < 20 || document.getElementById('search').value.trim();
+  if (sinAgrupar) {
+    pokemons.forEach(p => resultsDiv.appendChild(makePokemonCard(p)));
+    return;
+  }
+
+  // Agrupar por región
+  const grupos = {};
+  pokemons.forEach(p => {
+    const r = getRegion(pk.num(p));
+    if (!grupos[r.nombre]) grupos[r.nombre] = { region: r, items: [] };
+    grupos[r.nombre].items.push(p);
+  });
+
+  Object.values(grupos).forEach(({ region, items }) => {
+    // Header de región
+    const header = document.createElement('div');
+    header.className = 'region-header';
+    header.style.gridColumn = '1/-1';
+    header.dataset.region = region.nombre;
+    header.dataset.open = 'true';
+    header.innerHTML = `
+      <div class="region-stripe" style="background:${region.color};"></div>
+      <span class="region-name">${region.nombre}</span>
+      <span class="region-count">${items.length} Pokémon</span>
+      <span class="region-chevron">▾</span>
     `;
-    card.addEventListener('click', () => showPokemonDetail(p));
-    resultsDiv.appendChild(card);
+    header.addEventListener('click', () => {
+      const isOpen = header.dataset.open === 'true';
+      header.dataset.open = isOpen ? 'false' : 'true';
+      header.querySelector('.region-chevron').textContent = isOpen ? '▸' : '▾';
+      const grid = header.nextElementSibling;
+      grid.style.display = isOpen ? 'none' : 'grid';
+    });
+    resultsDiv.appendChild(header);
+
+    // Sub-grid de tarjetas
+    const subgrid = document.createElement('div');
+    subgrid.className = 'region-grid';
+    subgrid.style.gridColumn = '1/-1';
+    items.forEach(p => subgrid.appendChild(makePokemonCard(p)));
+    resultsDiv.appendChild(subgrid);
   });
 }
 
@@ -537,7 +602,7 @@ function showPokemonDetail(p) {
 
     ${pk.desc(p) ? `
     <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:14px 18px;margin-bottom:20px;display:flex;gap:10px;align-items:flex-start;">
-      <span style="font-size:1.1rem;flex-shrink:0;margin-top:2px;"></span>
+      <span style="font-size:1.1rem;flex-shrink:0;margin-top:2px;">📖</span>
       <p style="color:#b0b8cc;font-size:0.88em;line-height:1.65;font-style:italic;">${pk.desc(p)}</p>
     </div>` : ''}
 
