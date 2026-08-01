@@ -537,7 +537,7 @@ function showPokemonDetail(p) {
 
     ${pk.desc(p) ? `
     <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:14px 18px;margin-bottom:20px;display:flex;gap:10px;align-items:flex-start;">
-      <span style="font-size:1.1rem;flex-shrink:0;margin-top:2px;">📖</span>
+      <span style="font-size:1.1rem;flex-shrink:0;margin-top:2px;"></span>
       <p style="color:#b0b8cc;font-size:0.88em;line-height:1.65;font-style:italic;">${pk.desc(p)}</p>
     </div>` : ''}
 
