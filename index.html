@@ -28,6 +28,9 @@
       </div>
       <p class="hero-label">Base de Datos</p>
       <h1>Pokémon <span>Quetzal</span></h1>
+      <p class="development-notice" role="status">
+        <span aria-hidden="true">●</span> Proyecto en desarrollo: la información se irá ampliando conforme se documente el fangame.
+      </p>
       <div class="hero-stats">
         <div class="hero-stat">
           <span class="hero-stat-num" id="statPokemon">—</span>
@@ -57,6 +60,7 @@
     </div>
 
     <div class="search-wrapper">
+      <label class="sr-only" for="search">Buscar en la base de datos</label>
       <input
         type="text"
         id="search"
@@ -69,9 +73,9 @@
   </div>
 
   <!-- Modal -->
-  <div id="detailModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
+  <div id="detailModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-content" tabindex="-1">
+      <button class="close" type="button" aria-label="Cerrar detalle">&times;</button>
       <div id="modalBody"></div>
     </div>
   </div>

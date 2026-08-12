@@ -87,6 +87,34 @@ body::before {
 }
 .hero h1 span { color: var(--green); }
 
+.development-notice {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 620px;
+  margin: -6px auto 20px;
+  padding: 8px 14px;
+  border: 1px solid rgba(255, 193, 7, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 193, 7, 0.07);
+  color: #c8cbd3;
+  font-size: 0.74rem;
+  line-height: 1.4;
+}
+.development-notice span { color: #ffc107; font-size: 0.7rem; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* Stats pill */
 .hero-stats {
   display: inline-flex;
@@ -238,6 +266,7 @@ body::before {
   background: var(--card-stripe, transparent);
   z-index: 1;
 }
+.card-blob {
   position: absolute;
   bottom: -30px;
   right: -30px;
@@ -339,8 +368,15 @@ body::before {
   transition: color 0.2s;
   line-height: 1;
   z-index: 10;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
 }
 .close:hover { color: white; }
+.close:focus-visible, .tab:focus-visible, .card:focus-visible, .search-input:focus-visible {
+  outline: 3px solid rgba(0, 200, 83, 0.8);
+  outline-offset: 3px;
+}
 
 #modalBody {
   max-height: 80vh;
@@ -500,6 +536,7 @@ body::before {
   .logo-square img { width: 44px !important; height: 44px !important; }
   .hero h1 { font-size: 1.7rem; }
   .hero-label { font-size: 0.62rem; letter-spacing: 3px; }
+  .development-notice { font-size: 0.67rem; border-radius: 14px; }
   .hero-stats { padding: 7px 10px; }
   .hero-stat { padding: 0 8px; }
   .hero-stat-num { font-size: 0.88rem; }

@@ -119,6 +119,7 @@ const modal = document.getElementById('detailModal');
 const modalBody = document.getElementById('modalBody');
 const closeBtn = document.querySelector('.close');
 const tabsContainer = document.querySelector('.tabs');
+let lastFocusedElement = null;
 
 function setNavVisibility(tab) {
   const isHome = tab === 'home';
@@ -144,9 +145,29 @@ searchInput.addEventListener('input', () => {
   filterCurrentTab(term);
 });
 
-closeBtn.addEventListener('click', () => modal.style.display = 'none');
+function closeModal() {
+  modal.style.display = 'none';
+  modal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  lastFocusedElement?.focus();
+}
+
+function openModal() {
+  lastFocusedElement = document.activeElement;
+  modal.style.display = 'block';
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  const modalTitle = modalBody.querySelector('h2');
+  if (modalTitle) modalTitle.id = 'modalTitle';
+  closeBtn.focus();
+}
+
+closeBtn.addEventListener('click', closeModal);
 window.addEventListener('click', e => {
-  if (e.target === modal) modal.style.display = 'none';
+  if (e.target === modal) closeModal();
+});
+window.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && modal.style.display === 'block') closeModal();
 });
 
 function renderCurrentTab() {
@@ -346,7 +367,7 @@ function showHabilidadDetail(h) {
               text-align:center;
               cursor:pointer;
               transition:all 0.25s;
-            " onclick="modal.style.display='none'; setTimeout(()=>{ const found = pokemonData.find(x=>x.Mayus==='${p.Mayus}'); if(found) showPokemonDetail(found); }, 200);"
+            " onclick="closeModal(); setTimeout(()=>{ const found = pokemonData.find(x=>x.Mayus==='${p.Mayus}'); if(found) showPokemonDetail(found); }, 200);"
               onmouseover="this.style.borderColor='rgba(0,200,83,0.4)'; this.style.transform='translateY(-3px)'"
               onmouseout="this.style.borderColor='rgba(255,255,255,0.08)'; this.style.transform='translateY(0)'">
               <img src="${pk.sprite(p)}" alt="${pk.nombre(p)}" style="width:54px;height:54px;image-rendering:pixelated;">
@@ -400,7 +421,7 @@ function showHabilidadDetail(h) {
   `;
 
   modalBody.innerHTML = html;
-  modal.style.display = 'block';
+  openModal();
 }
 
 function goToTab(tabName) {
@@ -658,7 +679,7 @@ function showPokemonDetail(p) {
   `;
 
   modalBody.innerHTML = html;
-  modal.style.display = 'block';
+  openModal();
 }
 
 
@@ -689,7 +710,7 @@ function showObjectDetail(o) {
               text-align:center;
               cursor:pointer;
               transition:all 0.25s;
-            " onclick="modal.style.display='none'; setTimeout(()=>{ const found = pokemonData.find(x=>x.Mayus==='${p.Mayus}'); if(found) showPokemonDetail(found); }, 200);"
+            " onclick="closeModal(); setTimeout(()=>{ const found = pokemonData.find(x=>x.Mayus==='${p.Mayus}'); if(found) showPokemonDetail(found); }, 200);"
               onmouseover="this.style.borderColor='rgba(0,200,83,0.4)'; this.style.transform='translateY(-3px)'"
               onmouseout="this.style.borderColor='rgba(255,255,255,0.08)'; this.style.transform='translateY(0)'">
               <img src="${pk.sprite(p)}" alt="${pk.nombre(p)}" style="width:54px;height:54px;image-rendering:pixelated;">
@@ -770,7 +791,7 @@ function showObjectDetail(o) {
     </div><!-- end modal-inner -->
   `;
   modalBody.innerHTML = html;
-  modal.style.display = 'block';
+  openModal();
 }
 // Función global para abrir habilidad desde el modal de Pokémon
 function openHabilidad(nombre) {
