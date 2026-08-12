@@ -598,6 +598,9 @@ function showPokemonDetail(p) {
   ];
 
   const bannerColor = typeColors[pk.tipo1(p)] || '#00c853';
+  const totalStats = getPokemonStatTotal(p);
+  const documentedFields = [pk.desc(p), pk.cat(p), pk.alt(p), pk.peso(p), pk.cap(p), pk.crec(p), pk.eclo1(p), pk.h1(p), pk.area(p)]
+    .filter(value => value && value !== '-').length;
 
   let statsHtml = '';
   stats.forEach(stat => {
@@ -630,8 +633,8 @@ function showPokemonDetail(p) {
   const tipo1 = pk.tipo1(p), tipo2 = pk.tipo2(p);
 
   const html = `
-    <div style="padding:20px 60px 18px 24px;background:linear-gradient(135deg,${bannerColor}33,${bannerColor}15);border-bottom:2px solid ${bannerColor}55;display:flex;align-items:center;gap:14px;flex-wrap:wrap;min-height:78px;">
-      <img src="${pk.mini(p)}" style="width:38px;height:38px;image-rendering:pixelated;flex-shrink:0;">
+    <div class="pokemon-detail-banner" style="--pokemon-accent:${bannerColor}">
+      <img src="${pk.mini(p)}" alt="" class="pokemon-detail-mini">
       <div style="flex-shrink:0;">
         <span style="font-size:0.75em;color:${bannerColor};font-weight:600;letter-spacing:2px;text-transform:uppercase;display:block;">#${pk.num(p)}</span>
         <h2 style="font-size:1.6rem;font-weight:700;line-height:1.1;color:#fff;white-space:nowrap;">${pk.nombre(p)}</h2>
@@ -654,6 +657,12 @@ function showPokemonDetail(p) {
       <p style="color:#b0b8cc;font-size:0.88em;line-height:1.65;font-style:italic;">${pk.desc(p)}</p>
     </div>` : ''}
 
+    <section class="pokemon-summary" aria-label="Resumen de ${pk.nombre(p)}">
+      <div><span>Estadísticas base</span><strong>${totalStats}</strong></div>
+      <div><span>Datos documentados</span><strong>${documentedFields}/9</strong></div>
+      <p>${pk.desc(p) || 'Descripción aún no documentada.'}</p>
+    </section>
+
     <div style="display:grid;grid-template-columns:200px 1fr;gap:24px;">
 
       <div style="display:flex;flex-direction:column;gap:16px;">
@@ -665,7 +674,7 @@ function showPokemonDetail(p) {
 
       <div style="display:flex;flex-direction:column;gap:22px;">
 
-        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(0,200,83,0.2);border-radius:18px;padding:20px;">
+        <div class="pokemon-detail-panel" style="--pokemon-accent:${bannerColor}">
           <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">Datos del Pokémon</h3>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.88em;color:#e8ecf7;">
             <p><strong style="color:#aaa;">Categoría</strong><br>${pk.cat(p) || '-'}</p>
