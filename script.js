@@ -8,7 +8,8 @@ const pokemonFilters = { region: '', type: '', order: 'number' };
 const infoExtra = {
   creditos: [
     { rol: "Creador de Pokémon Quetzal", nombre: "TenmaRH", link: "https://pastebin.com/ncvkGPQJ" },
-    { rol: "Equipo de la Database", nombre: "Fenix Academy Team", link: "#" }
+    { rol: "Equipo de la Database", nombre: "Chayansito", link: "#" },
+    { rol: "Equipo de la Database", nombre: "Nelly & Danny", link: "#" }
   ],
   changelog: [
     { version: "v2.0", fecha: "12 de Agosto, 2026", cambios: ["Nueva portada con accesos directos a los catálogos y estado de desarrollo del proyecto.", "Filtros para la Pokédex por región, tipo y orden de consulta.", "Mejoras de accesibilidad y navegación: foco visible, cierre de fichas con Escape y diseño adaptable.", "Fichas de Pokémon y documentación del repositorio actualizadas para una consulta más clara."] },
@@ -206,6 +207,20 @@ const REGIONES = [
   { nombre: 'Especial',inicio: 0,   fin: 0,    color: '#546E7A' },
 ];
 
+const CATEGORIAS_OBJETOS = [
+  { nombre: 'Objetos', inicio: 1, fin: 128, color: '#90A4AE' },
+  { nombre: 'Medicinas', inicio: 129, fin: 172, color: '#EF5350' },
+  { nombre: 'Poké Balls', inicio: 173, fin: 199, color: '#E53935' },
+  { nombre: 'Bayas', inicio: 200, fin: 267, color: '#AB47BC' },
+  { nombre: 'Entrenamiento', inicio: 268, fin: 328, color: '#42A5F5' },
+  { nombre: 'Evolución y formas', inicio: 329, fin: 429, color: '#7E57C2' },
+  { nombre: 'Batalla', inicio: 430, fin: 545, color: '#FF7043' },
+  { nombre: 'Megapiedras', inicio: 546, fin: 639, color: '#EC407A' },
+  { nombre: 'Cristales Z', inicio: 640, fin: 674, color: '#FDD835' },
+  { nombre: 'Teralitos', inicio: 675, fin: 694, color: '#26A69A' },
+  { nombre: 'Objetos clave', inicio: 695, fin: 770, color: '#FFB300' },
+];
+
 function getRegion(numStr) {
   const n = parseInt(numStr);
   if (!n) return REGIONES[REGIONES.length - 1];
@@ -347,7 +362,8 @@ function renderObjects(objetos) {
     resultsDiv.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#aaa;">No se encontraron Objetos</p>';
     return;
   }
-  objetos.forEach(o => {
+
+  const appendObjectCard = (o, container) => {
     const card = document.createElement('div');
     card.className = 'card';
     card.innerHTML = `
@@ -363,7 +379,50 @@ function renderObjects(objetos) {
       </div>
     `;
     card.addEventListener('click', () => showObjectDetail(o));
-    resultsDiv.appendChild(card);
+    container.appendChild(card);
+  };
+
+  const hasSearch = searchInput.value.trim();
+  if (hasSearch) {
+    objetos.forEach(o => appendObjectCard(o, resultsDiv));
+    return;
+  }
+
+  const orderedObjects = [...objetos].sort((a, b) => (parseInt(ob.num(a)) || 0) - (parseInt(ob.num(b)) || 0));
+  const groups = CATEGORIAS_OBJETOS.map(category => ({
+    category,
+    items: orderedObjects.filter(o => {
+      const number = parseInt(ob.num(o));
+      return number >= category.inicio && number <= category.fin;
+    })
+  })).filter(group => group.items.length);
+
+  groups.forEach(({ category, items }) => {
+    const header = document.createElement('button');
+    header.type = 'button';
+    header.className = 'object-category-header';
+    header.dataset.open = 'true';
+    header.style.gridColumn = '1/-1';
+    header.innerHTML = `
+      <span class="object-category-marker" style="background:${category.color};"></span>
+      <span class="object-category-name">${category.nombre}</span>
+      <span class="object-category-range">#${category.inicio}–#${category.fin}</span>
+      <span class="object-category-count">${items.length} objetos</span>
+      <span class="object-category-chevron" aria-hidden="true">▾</span>
+    `;
+    const grid = document.createElement('div');
+    grid.className = 'object-category-grid';
+    grid.style.gridColumn = '1/-1';
+    items.forEach(o => appendObjectCard(o, grid));
+    header.addEventListener('click', () => {
+      const isOpen = header.dataset.open === 'true';
+      header.dataset.open = isOpen ? 'false' : 'true';
+      header.setAttribute('aria-expanded', String(!isOpen));
+      header.querySelector('.object-category-chevron').textContent = isOpen ? '▸' : '▾';
+      grid.hidden = isOpen;
+    });
+    header.setAttribute('aria-expanded', 'true');
+    resultsDiv.append(header, grid);
   });
 }
 
