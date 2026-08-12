@@ -648,6 +648,11 @@ function showPokemonDetail(p) {
 
     <div class="modal-inner">
 
+    ${pk.desc(p) ? `
+    <div class="pokemon-description">
+      <p>${pk.desc(p)}</p>
+    </div>` : ''}
+
     <div style="display:grid;grid-template-columns:200px 1fr;gap:24px;">
 
       <div style="display:flex;flex-direction:column;gap:16px;">
