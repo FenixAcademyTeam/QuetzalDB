@@ -417,11 +417,6 @@ body::before {
   flex-wrap: wrap;
 }
 .pokemon-detail-mini { width: 38px; height: 38px; flex-shrink: 0; image-rendering: pixelated; }
-.pokemon-summary { display: grid; grid-template-columns: auto auto 1fr; align-items: center; gap: 16px; margin-bottom: 20px; padding: 14px 16px; border: 1px solid rgba(255,255,255,.07); border-radius: 14px; background: rgba(255,255,255,.025); }
-.pokemon-summary > div { display: flex; min-width: 88px; flex-direction: column; gap: 2px; padding-right: 16px; border-right: 1px solid rgba(255,255,255,.08); }
-.pokemon-summary span { color: #818ba0; font-size: .62rem; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; }
-.pokemon-summary strong { color: #fff; font-size: 1.08rem; }
-.pokemon-summary p { color: #b0b8cc; font-size: .84rem; font-style: italic; line-height: 1.55; }
 .pokemon-detail-panel { padding: 20px; border: 1px solid color-mix(in srgb, var(--pokemon-accent) 28%, transparent); border-radius: 18px; background: rgba(255,255,255,.03); }
 
 /* Barras de estadísticas mejoradas */
@@ -577,11 +572,9 @@ body::before {
   }
 
   /* Modal detail grid — una columna */
-  .modal-inner > div[style*="grid-template-columns: 200px"] {
+  .modal-inner > div[style*="grid-template-columns:200px"] {
     grid-template-columns: 1fr !important;
   }
-  .pokemon-summary { grid-template-columns: 1fr 1fr; }
-  .pokemon-summary p { grid-column: 1 / -1; }
 
   /* Sprite en modal más pequeño */
   .modal-inner img[style*="width:150px"] {
@@ -644,8 +637,6 @@ body::before {
     min-height: 58px !important;
   }
   .modal-content h2 { font-size: 1.3rem !important; }
-  .pokemon-summary { grid-template-columns: 1fr; gap: 10px; }
-  .pokemon-summary > div { padding: 0; border: 0; }
 
   /* Tipos en banner — ocultar en pantallas muy pequeñas */
   .modal-content .type { font-size: 0.75em !important; padding: 6px 12px !important; }
