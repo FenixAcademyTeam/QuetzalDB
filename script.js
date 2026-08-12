@@ -598,9 +598,6 @@ function showPokemonDetail(p) {
   ];
 
   const bannerColor = typeColors[pk.tipo1(p)] || '#00c853';
-  const totalStats = getPokemonStatTotal(p);
-  const documentedFields = [pk.desc(p), pk.cat(p), pk.alt(p), pk.peso(p), pk.cap(p), pk.crec(p), pk.eclo1(p), pk.h1(p), pk.area(p)]
-    .filter(value => value && value !== '-').length;
 
   let statsHtml = '';
   stats.forEach(stat => {
@@ -650,18 +647,6 @@ function showPokemonDetail(p) {
     </div>
 
     <div class="modal-inner">
-
-    ${pk.desc(p) ? `
-    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:14px 18px;margin-bottom:20px;display:flex;gap:10px;align-items:flex-start;">
-      <span style="font-size:1.1rem;flex-shrink:0;margin-top:2px;">📖</span>
-      <p style="color:#b0b8cc;font-size:0.88em;line-height:1.65;font-style:italic;">${pk.desc(p)}</p>
-    </div>` : ''}
-
-    <section class="pokemon-summary" aria-label="Resumen de ${pk.nombre(p)}">
-      <div><span>Estadísticas base</span><strong>${totalStats}</strong></div>
-      <div><span>Datos documentados</span><strong>${documentedFields}/9</strong></div>
-      <p>${pk.desc(p) || 'Descripción aún no documentada.'}</p>
-    </section>
 
     <div style="display:grid;grid-template-columns:200px 1fr;gap:24px;">
 
