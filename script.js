@@ -2,6 +2,7 @@ let pokemonData = [];
 let objetosData = [];
 let habilidadesData = [];
 let currentTab = 'home';
+const pokemonFilters = { region: '', type: '', order: 'number' };
 
 // Datos de Créditos y Changelog (Fácil de editar aquí mismo)
 const infoExtra = {
@@ -172,7 +173,7 @@ window.addEventListener('keydown', e => {
 
 function renderCurrentTab() {
   if (currentTab === 'home') renderHome();
-  else if (currentTab === 'pokemon') renderResults(pokemonData);
+  else if (currentTab === 'pokemon') renderPokemonCatalog();
   else if (currentTab === 'objetos') renderObjects(objetosData);
   else if (currentTab === 'habilidades') renderHabilidades(habilidadesData);
   else renderCreditsAndChangelog();
@@ -182,8 +183,7 @@ function filterCurrentTab(term) {
   if (!term) return renderCurrentTab();
   
   if (currentTab === 'pokemon') {
-    const filtered = pokemonData.filter(p => Object.values(p).join(' ').toLowerCase().includes(term));
-    renderResults(filtered);
+    renderPokemonCatalog();
   } else if (currentTab === 'objetos') {
     const filtered = objetosData.filter(o => Object.values(o).join(' ').toLowerCase().includes(term));
     renderObjects(filtered);
@@ -236,19 +236,71 @@ function makePokemonCard(p) {
   return card;
 }
 
-function renderResults(pokemons) {
-  resultsDiv.innerHTML = '';
+function getPokemonStatTotal(p) {
+  return [pk.ps(p), pk.atq(p), pk.def(p), pk.aes(p), pk.des(p), pk.vel(p)]
+    .reduce((sum, value) => sum + (parseInt(value) || 0), 0);
+}
+
+function renderPokemonCatalog() {
+  const query = searchInput.value.toLowerCase().trim();
+  const availableTypes = [...new Set(pokemonData.flatMap(p => [pk.tipo1(p), pk.tipo2(p)]).filter(Boolean))]
+    .sort((a, b) => a.localeCompare(b, 'es'));
+  let pokemons = pokemonData.filter(p => {
+    const matchesSearch = !query || Object.values(p).join(' ').toLowerCase().includes(query);
+    const matchesRegion = !pokemonFilters.region || getRegion(pk.num(p)).nombre === pokemonFilters.region;
+    const matchesType = !pokemonFilters.type || pk.tipo1(p) === pokemonFilters.type || pk.tipo2(p) === pokemonFilters.type;
+    return matchesSearch && matchesRegion && matchesType;
+  });
+  pokemons.sort((a, b) => {
+    if (pokemonFilters.order === 'name') return pk.nombre(a).localeCompare(pk.nombre(b), 'es');
+    if (pokemonFilters.order === 'stats') return getPokemonStatTotal(b) - getPokemonStatTotal(a);
+    return (parseInt(pk.num(a)) || 0) - (parseInt(pk.num(b)) || 0);
+  });
+
+  resultsDiv.innerHTML = `
+    <section class="pokemon-catalog" aria-label="Filtros de Pokémon">
+      <div class="catalog-toolbar">
+        <div class="catalog-toolbar-heading"><span>${pokemons.length}</span> Pokémon encontrados</div>
+        <div class="catalog-filters">
+          <label>Región<select id="filterRegion"><option value="">Todas las regiones</option>${REGIONES.map(r => `<option value="${r.nombre}" ${pokemonFilters.region === r.nombre ? 'selected' : ''}>${r.nombre}</option>`).join('')}</select></label>
+          <label>Tipo<select id="filterType"><option value="">Todos los tipos</option>${availableTypes.map(type => `<option value="${type}" ${pokemonFilters.type === type ? 'selected' : ''}>${type}</option>`).join('')}</select></label>
+          <label>Ordenar por<select id="filterOrder"><option value="number" ${pokemonFilters.order === 'number' ? 'selected' : ''}>Número</option><option value="name" ${pokemonFilters.order === 'name' ? 'selected' : ''}>Nombre</option><option value="stats" ${pokemonFilters.order === 'stats' ? 'selected' : ''}>Estadísticas base</option></select></label>
+          <button type="button" class="filter-reset" id="resetPokemonFilters">Limpiar filtros</button>
+        </div>
+      </div>
+      <div id="pokemonResults" class="pokemon-results"></div>
+    </section>
+  `;
+
+  document.getElementById('filterRegion').addEventListener('change', e => { pokemonFilters.region = e.target.value; renderPokemonCatalog(); });
+  document.getElementById('filterType').addEventListener('change', e => { pokemonFilters.type = e.target.value; renderPokemonCatalog(); });
+  document.getElementById('filterOrder').addEventListener('change', e => { pokemonFilters.order = e.target.value; renderPokemonCatalog(); });
+  document.getElementById('resetPokemonFilters').addEventListener('click', () => {
+    pokemonFilters.region = ''; pokemonFilters.type = ''; pokemonFilters.order = 'number'; searchInput.value = ''; renderPokemonCatalog();
+  });
+  renderResults(pokemons, document.getElementById('pokemonResults'), Boolean(query || pokemonFilters.region || pokemonFilters.type || pokemonFilters.order !== 'number'));
+}
+
+function renderResults(pokemons, container = resultsDiv, showFlat = false) {
+  container.innerHTML = '';
   if (pokemons.length === 0) {
-    resultsDiv.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#aaa;">No se encontraron Pokémon</p>';
+    container.innerHTML = '<p class="catalog-empty">No se encontraron Pokémon con estos filtros.</p>';
     return;
   }
 
   // Si hay búsqueda activa o pocos resultados, mostrar sin agrupar
-  const sinAgrupar = pokemons.length < 20 || document.getElementById('search').value.trim();
+  const sinAgrupar = showFlat || pokemons.length < 20;
   if (sinAgrupar) {
-    pokemons.forEach(p => resultsDiv.appendChild(makePokemonCard(p)));
+    const grid = document.createElement('div');
+    grid.className = 'results-grid';
+    pokemons.forEach(p => grid.appendChild(makePokemonCard(p)));
+    container.appendChild(grid);
     return;
   }
+
+  const groupedGrid = document.createElement('div');
+  groupedGrid.className = 'results-grid';
+  container.appendChild(groupedGrid);
 
   // Agrupar por región
   const grupos = {};
@@ -278,14 +330,14 @@ function renderResults(pokemons) {
       const grid = header.nextElementSibling;
       grid.style.display = isOpen ? 'none' : 'grid';
     });
-    resultsDiv.appendChild(header);
+    groupedGrid.appendChild(header);
 
     // Sub-grid de tarjetas
     const subgrid = document.createElement('div');
     subgrid.className = 'region-grid';
     subgrid.style.gridColumn = '1/-1';
     items.forEach(p => subgrid.appendChild(makePokemonCard(p)));
-    resultsDiv.appendChild(subgrid);
+    groupedGrid.appendChild(subgrid);
   });
 }
 
