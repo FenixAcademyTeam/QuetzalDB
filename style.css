@@ -480,6 +480,20 @@ body::before {
   margin-bottom: 24px;
 }
 
+/* ================== FILTROS POKÉDEX ================== */
+.pokemon-catalog { grid-column: 1 / -1; }
+.catalog-toolbar { display: flex; align-items: end; justify-content: space-between; gap: 18px; margin-bottom: 22px; padding: 16px 18px; border: 1px solid rgba(255,255,255,.08); border-radius: 16px; background: rgba(255,255,255,.025); }
+.catalog-toolbar-heading { color: #8992a3; font-size: .78rem; white-space: nowrap; }
+.catalog-toolbar-heading span { color: #fff; font-size: 1.15rem; font-weight: 700; }
+.catalog-filters { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
+.catalog-filters label { display: flex; flex-direction: column; gap: 5px; color: #7f899a; font-size: .62rem; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; }
+.catalog-filters select { min-width: 130px; padding: 8px 26px 8px 10px; border: 1px solid rgba(255,255,255,.1); border-radius: 9px; outline: 0; background: #111b2d; color: #dfe5ef; font: inherit; font-size: .76rem; text-transform: none; }
+.catalog-filters select:focus { border-color: rgba(0,200,83,.65); }
+.filter-reset { align-self: end; padding: 8px 4px; border: 0; background: transparent; color: #929caf; cursor: pointer; font: inherit; font-size: .72rem; }
+.filter-reset:hover { color: var(--green); }
+.pokemon-results > .results-grid { width: 100%; }
+.catalog-empty { padding: 42px 16px; color: #8992a3; text-align: center; }
+
 /* ================== INICIO ================== */
 .home-page { grid-column: 1 / -1; width: 100%; max-width: 980px; margin: 4px auto 0; }
 .home-intro { max-width: 680px; margin: 0 auto 44px; text-align: center; }
@@ -527,6 +541,8 @@ body::before {
   /* Grid de tarjetas y región */
   .results-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
   .region-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+  .catalog-toolbar { align-items: flex-start; flex-direction: column; }
+  .catalog-filters { justify-content: flex-start; width: 100%; }
   .home-cards { grid-template-columns: 1fr; }
   .home-card { min-height: 260px; }
 
@@ -588,6 +604,9 @@ body::before {
   .card h3 { font-size: 0.85rem; }
   .card-number { font-size: 0.6rem; }
   .type-pill { font-size: 0.62rem; padding: 2px 8px; }
+  .catalog-toolbar { padding: 14px; }
+  .catalog-filters label, .catalog-filters select { width: 100%; }
+  .filter-reset { align-self: flex-start; }
   .home-intro { margin-bottom: 32px; }
   .home-section-heading { align-items: flex-start; flex-direction: column; gap: 10px; }
   .home-card { padding: 18px; border-radius: 18px; }
