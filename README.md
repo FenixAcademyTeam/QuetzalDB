@@ -12,18 +12,6 @@ Base de datos comunitaria para consultar información documentada de **Pokémon 
 - Buscador y filtros de Pokédex por región, tipo y orden.
 - Historial de cambios y créditos dentro del sitio.
 
-## Uso local
-
-El sitio es estático: no requiere instalar dependencias. Para que el navegador pueda cargar los archivos JSON, ábrelo desde un servidor local.
-
-```bash
-python -m http.server 8000
-```
-
-Después visita `http://localhost:8000`.
-
-También se puede publicar directamente con **GitHub Pages**.
-
 ## Estructura
 
 ```text
@@ -48,6 +36,6 @@ No se deben completar campos con suposiciones: la prioridad de la base es manten
 ## Créditos
 
 - Juego: TenmaRH, creador de Pokémon Quetzal.
-- Base de datos: Chayansito, Nelly y Danny.
+- Base de datos: Fénix Academy Team.
 
 Los créditos y el historial completo se encuentran en la sección **Créditos** del sitio.
