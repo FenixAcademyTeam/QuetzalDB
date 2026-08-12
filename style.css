@@ -88,11 +88,13 @@ body::before {
 .hero h1 span { color: var(--green); }
 
 .development-notice {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   max-width: 620px;
-  margin: -6px auto 20px;
+  width: fit-content;
+  margin: 12px auto 0;
   padding: 8px 14px;
   border: 1px solid rgba(255, 193, 7, 0.22);
   border-radius: 999px;
