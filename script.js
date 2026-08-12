@@ -8,8 +8,7 @@ const pokemonFilters = { region: '', type: '', order: 'number' };
 const infoExtra = {
   creditos: [
     { rol: "Creador de Pokémon Quetzal", nombre: "TenmaRH", link: "https://pastebin.com/ncvkGPQJ" },
-    { rol: "Equipo de la Database", nombre: "Chayansito", link: "#" },
-    { rol: "Equipo de la Database", nombre: "Nelly & Danny", link: "#" }
+    { rol: "Equipo de la Database", nombre: "Fenix Academy Team", link: "#" }
   ],
   changelog: [
     { version: "v2.0", fecha: "12 de Agosto, 2026", cambios: ["Nueva portada con accesos directos a los catálogos y estado de desarrollo del proyecto.", "Filtros para la Pokédex por región, tipo y orden de consulta.", "Mejoras de accesibilidad y navegación: foco visible, cierre de fichas con Escape y diseño adaptable.", "Fichas de Pokémon y documentación del repositorio actualizadas para una consulta más clara."] },
