@@ -6481,5 +6481,58 @@
     "H1": "Mandibula Dragon",
     "ECLO": "Monstruo",
     "ECLO2": "Agua 1"
+  },
+  {
+    "Pokemon": "Sentret",
+    "Mayus": "SENTRET",
+    "No": "0161",
+    "IMG": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Tipos/Normal.png",
+    "Type1": "Normal",
+    "Descripcion": "Es de naturaleza nerviosa. Utiliza la cola para elevarse y otear grandes extensiones.",
+    "PS": "35",
+    "ATQ": "46",
+    "DEF": "34",
+    "AES": "20",
+    "DES": "35",
+    "VEL": "45",
+    "MINI": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/MiniSprites/SENTRET.png",
+    "PKM": "Explorador",
+    "ALT": "0.8 m",
+    "PESO": "6.0 kg",
+    "%CAP": "Facil",
+    "CREC": "Medio Lento",
+    "H1": "Fuga",
+    "H2": "Vista Lince",
+    "H": {
+      "O": "Cacheo"
+    },
+    "ECLO": "Campo",
+    "AREA": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Areas/0161.png"
+  },
+  {
+    "Pokemon": "Furret",
+    "Mayus": "FURRET",
+    "No": "0162",
+    "IMG": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Tipos/Normal.png",
+    "Type1": "Normal",
+    "Descripcion": "Las hembras acurrucan a sus crías con su cuerpo largo y delgado para que duerman. Acorrala a sus enemigos con sus rápidos movimientos.",
+    "PS": "85",
+    "ATQ": "76",
+    "DEF": "64",
+    "AES": "90",
+    "DES": "45",
+    "VEL": "55",
+    "MINI": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/MiniSprites/FURRET.png",
+    "PKM": "Alargado",
+    "ALT": "1.8 m",
+    "PESO": "32.5 kg",
+    "%CAP": "Dificil",
+    "CREC": "Medio Lento",
+    "H1": "Fuga",
+    "H2": "Vista Lince",
+    "H": {
+      "O": "Cacheo"
+    },
+    "ECLO": "Campo"
   }
 ]
