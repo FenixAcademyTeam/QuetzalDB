@@ -100,12 +100,12 @@ async function loadData() {
     objetosData = objetosJson;
     habilidadesData = habilidadesJson;
 
-    // Actualizar contadores del hero
-    document.getElementById('statPokemon').textContent = pokemonData.length;
-    document.getElementById('statObjetos').textContent = objetosData.length;
-    document.getElementById('statHabilidades').textContent = habilidadesData.length;
+    // Contadores del sidebar
+    document.getElementById('sideCountPokemon').textContent = pokemonData.length;
+    document.getElementById('sideCountObjetos').textContent = objetosData.length;
+    document.getElementById('sideCountHabilidades').textContent = habilidadesData.length;
 
-    // Empezar en home
+    buildRegionList();
     setNavVisibility('home');
     renderHome();
   } catch (e) {
@@ -119,27 +119,54 @@ const resultsDiv = document.getElementById('results');
 const modal = document.getElementById('detailModal');
 const modalBody = document.getElementById('modalBody');
 const closeBtn = document.querySelector('.close');
-const tabsContainer = document.querySelector('.tabs');
+const sidebar = document.getElementById('sidebar');
+const sidebarRegions = document.getElementById('sidebarRegions');
+const resultCountEl = document.getElementById('resultCount');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
 let lastFocusedElement = null;
 
 function setNavVisibility(tab) {
-  const isHome = tab === 'home';
-  tabsContainer.style.display = isHome ? 'none' : 'flex';
-  searchInput.style.display = (isHome || tab === 'creditos') ? 'none' : 'block';
+  const hideSearch = (tab === 'home' || tab === 'creditos');
+  searchInput.style.display = hideSearch ? 'none' : 'block';
+  searchInput.parentElement.style.display = hideSearch ? 'none' : 'block';
+  if (resultCountEl) resultCountEl.style.display = hideSearch ? 'none' : 'block';
+  // Regiones solo visibles en Pokémon
+  if (sidebarRegions) {
+    sidebarRegions.classList.toggle('visible', tab === 'pokemon');
+  }
+  // Active side-nav
+  document.querySelectorAll('.side-nav').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === tab);
+  });
+}
+
+function closeSidebarMobile() {
+  sidebar?.classList.remove('open');
+  sidebarOverlay?.classList.remove('visible');
+  if (sidebarOverlay) sidebarOverlay.hidden = true;
+}
+
+function openSidebarMobile() {
+  sidebar?.classList.add('open');
+  sidebarOverlay?.classList.add('visible');
+  if (sidebarOverlay) sidebarOverlay.hidden = false;
 }
 
 loadData();
 
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    currentTab = tab.dataset.tab;
+document.querySelectorAll('.side-nav').forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentTab = btn.dataset.tab;
     searchInput.value = '';
     setNavVisibility(currentTab);
     renderCurrentTab();
+    closeSidebarMobile();
   });
 });
+
+document.getElementById('mobileMenuBtn')?.addEventListener('click', openSidebarMobile);
+document.getElementById('sidebarToggle')?.addEventListener('click', closeSidebarMobile);
+sidebarOverlay?.addEventListener('click', closeSidebarMobile);
 
 searchInput.addEventListener('input', () => {
   const term = searchInput.value.toLowerCase().trim();
@@ -271,12 +298,13 @@ function renderPokemonCatalog() {
     return (parseInt(pk.num(a)) || 0) - (parseInt(pk.num(b)) || 0);
   });
 
+  if (resultCountEl) resultCountEl.textContent = pokemons.length + ' resultados';
+
   resultsDiv.innerHTML = `
     <section class="pokemon-catalog" aria-label="Filtros de Pokémon">
       <div class="catalog-toolbar">
         <div class="catalog-toolbar-heading"><span>${pokemons.length}</span> Pokémon encontrados</div>
         <div class="catalog-filters">
-          <label>Región<select id="filterRegion"><option value="">Todas las regiones</option>${REGIONES.map(r => `<option value="${r.nombre}" ${pokemonFilters.region === r.nombre ? 'selected' : ''}>${r.nombre}</option>`).join('')}</select></label>
           <label>Tipo<select id="filterType"><option value="">Todos los tipos</option>${availableTypes.map(type => `<option value="${type}" ${pokemonFilters.type === type ? 'selected' : ''}>${type}</option>`).join('')}</select></label>
           <label>Ordenar por<select id="filterOrder"><option value="number" ${pokemonFilters.order === 'number' ? 'selected' : ''}>Número</option><option value="name" ${pokemonFilters.order === 'name' ? 'selected' : ''}>Nombre</option><option value="stats" ${pokemonFilters.order === 'stats' ? 'selected' : ''}>Estadísticas base</option></select></label>
           <button type="button" class="filter-reset" id="resetPokemonFilters">Limpiar filtros</button>
@@ -286,11 +314,12 @@ function renderPokemonCatalog() {
     </section>
   `;
 
-  document.getElementById('filterRegion').addEventListener('change', e => { pokemonFilters.region = e.target.value; renderPokemonCatalog(); });
   document.getElementById('filterType').addEventListener('change', e => { pokemonFilters.type = e.target.value; renderPokemonCatalog(); });
   document.getElementById('filterOrder').addEventListener('change', e => { pokemonFilters.order = e.target.value; renderPokemonCatalog(); });
   document.getElementById('resetPokemonFilters').addEventListener('click', () => {
-    pokemonFilters.region = ''; pokemonFilters.type = ''; pokemonFilters.order = 'number'; searchInput.value = ''; renderPokemonCatalog();
+    pokemonFilters.region = ''; pokemonFilters.type = ''; pokemonFilters.order = 'number'; searchInput.value = '';
+    buildRegionList();
+    renderPokemonCatalog();
   });
   renderResults(pokemons, document.getElementById('pokemonResults'), Boolean(query || pokemonFilters.region || pokemonFilters.type || pokemonFilters.order !== 'number'));
 }
@@ -357,6 +386,7 @@ function renderResults(pokemons, container = resultsDiv, showFlat = false) {
 
 function renderObjects(objetos) {
   resultsDiv.innerHTML = '';
+  if (resultCountEl) resultCountEl.textContent = objetos.length + ' resultados';
   if (objetos.length === 0) {
     resultsDiv.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#aaa;">No se encontraron Objetos</p>';
     return;
@@ -427,6 +457,7 @@ function renderObjects(objetos) {
 
 function renderHabilidades(habilidades) {
   resultsDiv.innerHTML = '';
+  if (resultCountEl) resultCountEl.textContent = habilidades.length + ' resultados';
   if (habilidades.length === 0) {
     resultsDiv.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#aaa;">No se encontraron Habilidades</p>';
     return;
@@ -536,12 +567,44 @@ function showHabilidadDetail(h) {
 
 function goToTab(tabName) {
   currentTab = tabName;
-  document.querySelectorAll('.tab').forEach(t => {
-    t.classList.toggle('active', t.dataset.tab === tabName);
-  });
   setNavVisibility(tabName);
   searchInput.value = '';
   renderCurrentTab();
+  closeSidebarMobile();
+}
+
+function buildRegionList() {
+  const list = document.getElementById('regionList');
+  if (!list) return;
+  // Contar por región
+  const counts = {};
+  REGIONES.forEach(r => { counts[r.nombre] = 0; });
+  pokemonData.forEach(p => {
+    const r = getRegion(pk.num(p));
+    counts[r.nombre] = (counts[r.nombre] || 0) + 1;
+  });
+  list.innerHTML = `
+    <button type="button" class="side-region-item ${!pokemonFilters.region ? 'active' : ''}" data-region="">
+      <span class="side-region-bar" style="background:#666"></span>
+      Todas
+      <span class="side-region-count">${pokemonData.length}</span>
+    </button>
+    ${REGIONES.filter(r => r.inicio > 0).map(r => `
+      <button type="button" class="side-region-item ${pokemonFilters.region === r.nombre ? 'active' : ''}" data-region="${r.nombre}">
+        <span class="side-region-bar" style="background:${r.color}"></span>
+        ${r.nombre}
+        <span class="side-region-count">${counts[r.nombre] || 0}</span>
+      </button>
+    `).join('')}
+  `;
+  list.querySelectorAll('.side-region-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+      pokemonFilters.region = btn.dataset.region || '';
+      list.querySelectorAll('.side-region-item').forEach(b => b.classList.toggle('active', b === btn));
+      if (currentTab === 'pokemon') renderPokemonCatalog();
+      closeSidebarMobile();
+    });
+  });
 }
 
 function renderHome() {
