@@ -11,66 +11,78 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="background-glow"></div>
-  <div class="bg-pokeball left"></div>
-  <div class="bg-pokeball right"></div>
-  <div class="particles">
-    <span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span>
-  </div>
-
-  <div class="container">
-    <header class="hero">
-      <div class="logo-square">
+  <div class="app-layout">
+    <!-- SIDEBAR (Opción A) -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
         <img src="https://raw.githubusercontent.com/nellyama7w7/QuetzalSprites/main/PokemonSprites/RAYQUAZA.png"
              alt="Quetzal Logo"
-             style="width:54px; height:54px; image-rendering:pixelated;">
+             width="28" height="28">
+        <span>Quetzal DB</span>
       </div>
-      <p class="hero-label">Base de Datos</p>
-      <h1>Pokémon <span>Quetzal</span></h1>
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <span class="hero-stat-num" id="statPokemon">—</span>
-          <span class="hero-stat-label">Pokémon</span>
-        </div>
-        <div class="hero-stat-divider"></div>
-        <div class="hero-stat">
-          <span class="hero-stat-num" id="statObjetos">—</span>
-          <span class="hero-stat-label">Objetos</span>
-        </div>
-        <div class="hero-stat-divider"></div>
-        <div class="hero-stat">
-          <span class="hero-stat-num" id="statHabilidades">—</span>
-          <span class="hero-stat-label">Habilidades</span>
-        </div>
-      </div>
-      <p class="development-notice" role="status">
-        <span aria-hidden="true">●</span> Proyecto en desarrollo: la información se irá ampliando conforme se documente el fangame.
-      </p>
-    </header>
 
-    <div class="tabs">
-      <div class="tabs-container">
-        <button class="tab active" data-tab="home">Inicio</button>
-        <button class="tab" data-tab="pokemon">Pokémon</button>
-        <button class="tab" data-tab="objetos">Objetos</button>
-        <button class="tab" data-tab="habilidades">Habilidades</button>
-        <button class="tab" data-tab="creditos">Créditos</button>
+      <nav class="sidebar-nav" aria-label="Navegación principal">
+        <button type="button" class="side-nav active" data-tab="home">
+          <span class="side-dot" style="background:#00c853"></span>
+          Inicio
+        </button>
+        <button type="button" class="side-nav" data-tab="pokemon">
+          <span class="side-dot" style="background:#00c853"></span>
+          Pokémon
+          <span class="side-count" id="sideCountPokemon">—</span>
+        </button>
+        <button type="button" class="side-nav" data-tab="objetos">
+          <span class="side-dot" style="background:#FFD700"></span>
+          Objetos
+          <span class="side-count" id="sideCountObjetos">—</span>
+        </button>
+        <button type="button" class="side-nav" data-tab="habilidades">
+          <span class="side-dot" style="background:#9c88ff"></span>
+          Habilidades
+          <span class="side-count" id="sideCountHabilidades">—</span>
+        </button>
+        <button type="button" class="side-nav" data-tab="creditos">
+          <span class="side-dot" style="background:#888"></span>
+          Créditos
+        </button>
+      </nav>
+
+      <div class="sidebar-regions" id="sidebarRegions">
+        <div class="side-region-label">Regiones</div>
+        <div id="regionList"></div>
+      </div>
+
+      <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-label="Cerrar menú">
+        <span aria-hidden="true">‹</span>
+      </button>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-area">
+      <header class="main-top">
+        <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir menú">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="search-wrapper">
+          <label class="sr-only" for="search">Buscar en la base de datos</label>
+          <input
+            type="text"
+            id="search"
+            placeholder="Buscar Pokémon, número, objeto, habilidad..."
+            class="search-input"
+          >
+        </div>
+        <div class="main-result-count" id="resultCount"></div>
+      </header>
+
+      <div class="main-body">
+        <div id="results" class="results-grid"></div>
       </div>
     </div>
-
-    <div class="search-wrapper">
-      <label class="sr-only" for="search">Buscar en la base de datos</label>
-      <input
-        type="text"
-        id="search"
-        placeholder="Buscar Pokémon, número, objeto, habilidad..."
-        class="search-input"
-      >
-    </div>
-
-    <div id="results" class="results-grid"></div>
   </div>
+
+  <!-- Overlay móvil -->
+  <div class="sidebar-overlay" id="sidebarOverlay" hidden></div>
 
   <!-- Modal -->
   <div id="detailModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
