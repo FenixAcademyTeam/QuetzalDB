@@ -6534,5 +6534,60 @@
       "O": "Cacheo"
     },
     "ECLO": "Campo"
+  },
+  {
+    "Pokemon": "Hoothoot",
+    "Mayus": "HOOTHOOT",
+    "No": "0163",
+    "IMG": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Tipos/Volador.png",
+    "Type1": "Normal",
+    "Type2": "Volador",
+    "Descripcion": "Siempre se yergue sobre una pata, Nunca apoya ambas, ni siquiera al sufrir un ataque.",
+    "PS": "60",
+    "ATQ": "30",
+    "DEF": "30",
+    "AES": "50",
+    "DES": "36",
+    "VEL": "56",
+    "MINI": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/MiniSprites/HOOTHOOT.png",
+    "PKM": "Buho",
+    "ALT": "0.7 m",
+    "PESO": "21.2 kg",
+    "%CAP": "Facil",
+    "CREC": "Medio Lento",
+    "H1": "Insomnio",
+    "H2": "Vista Lince",
+    "H": {
+      "O": "Cromolente"
+    },
+    "ECLO": "Volador",
+    "AREA": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Areas/0163.png"
+  },
+  {
+    "Pokemon": "Noctowl",
+    "Mayus": "NOCTOWL",
+    "No": "0164",
+    "IMG": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Tipos/Volador.png",
+    "Type1": "Normal",
+    "Type2": "Volador",
+    "Descripcion": "Tiene unos ojos especiales que le permiten ver en la oscuridad sin necesitar apenas luz.",
+    "PS": "100",
+    "ATQ": "50",
+    "DEF": "50",
+    "AES": "70",
+    "DES": "86",
+    "VEL": "96",
+    "MINI": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/MiniSprites/NOCTOWL.png",
+    "PKM": "Buho",
+    "ALT": "1.6 m",
+    "PESO": "40.8 kg",
+    "%CAP": "Dificil",
+    "CREC": "Medio Lento",
+    "H1": "Insomnio",
+    "H2": "Vista Lince",
+    "H": {
+      "O": "Cromolente"
+    },
+    "ECLO": "Volador"
   }
 ]
