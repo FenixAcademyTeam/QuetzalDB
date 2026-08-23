@@ -6589,5 +6589,60 @@
       "O": "Cromolente"
     },
     "ECLO": "Volador"
+  },
+  {
+    "Pokemon": "Ledyba",
+    "Mayus": "LEDYBA",
+    "No": "0165",
+    "IMG": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Tipos/Volador.png",
+    "Type1": "Bicho",
+    "Type2": "Volador",
+    "Descripcion": "Es tan temeroso que no se mueve si no es en grupo. Comunica sus sentimientos con olores.",
+    "PS": "40",
+    "ATQ": "20",
+    "DEF": "30",
+    "VEL": "55",
+    "AES": "40",
+    "DES": "80",
+    "MINI": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/MiniSprites/LEDYBA.png",
+    "PKM": "5 Estrellas",
+    "ALT": "1.0 m",
+    "PESO": "10.8 kg",
+    "%CAP": "Facil",
+    "CREC": "Medio Lento",
+    "H1": "Enjambre",
+    "H2": "Madrugar",
+    "H": {
+      "O": "Cobardia"
+    },
+    "ECLO": "Bicho",
+    "AREA": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Areas/0165.png"
+  },
+  {
+    "Pokemon": "Ledian",
+    "Mayus": "LEDIAN",
+    "No": "0166",
+    "IMG": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Tipos/Volador.png",
+    "Type1": "Bicho",
+    "Type2": "Volador",
+    "Descripcion": "Se nutre de la luz de las estrellas. Cuanto más estrellada es la noche, más crecen los motivos que luce en el dorso.",
+    "PS": "55",
+    "ATQ": "35",
+    "DEF": "50",
+    "VEL": "85",
+    "AES": "55",
+    "DES": "110",
+    "MINI": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/MiniSprites/LEDIAN.png",
+    "PKM": "5 Estrellas",
+    "ALT": "1.4 m",
+    "PESO": "35.6 kg",
+    "%CAP": "Dificil",
+    "CREC": "Medio Lento",
+    "H1": "Enjambre",
+    "H2": "Madrugar",
+    "H": {
+      "O": "Puño Ferreo"
+    },
+    "ECLO": "Bicho"
   }
 ]
