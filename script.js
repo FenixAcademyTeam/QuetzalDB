@@ -144,18 +144,21 @@ function closeSidebarMobile() {
   sidebar?.classList.remove('open');
   sidebarOverlay?.classList.remove('visible');
   if (sidebarOverlay) sidebarOverlay.hidden = true;
+  document.body.style.overflow = '';
 }
 
 function openSidebarMobile() {
   sidebar?.classList.add('open');
   sidebarOverlay?.classList.add('visible');
   if (sidebarOverlay) sidebarOverlay.hidden = false;
+  document.body.style.overflow = 'hidden';
 }
 
 loadData();
 
 document.querySelectorAll('.side-nav').forEach(btn => {
-  btn.addEventListener('click', () => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
     currentTab = btn.dataset.tab;
     searchInput.value = '';
     setNavVisibility(currentTab);
@@ -164,9 +167,22 @@ document.querySelectorAll('.side-nav').forEach(btn => {
   });
 });
 
-document.getElementById('mobileMenuBtn')?.addEventListener('click', openSidebarMobile);
-document.getElementById('sidebarToggle')?.addEventListener('click', closeSidebarMobile);
-sidebarOverlay?.addEventListener('click', closeSidebarMobile);
+document.getElementById('mobileMenuBtn')?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  openSidebarMobile();
+});
+document.getElementById('sidebarToggle')?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  closeSidebarMobile();
+});
+// Solo cerrar si el clic es realmente en el overlay, no en el sidebar
+sidebarOverlay?.addEventListener('click', (e) => {
+  if (e.target === sidebarOverlay) closeSidebarMobile();
+});
+// Impedir que clics dentro del sidebar cierren el menú
+sidebar?.addEventListener('click', (e) => {
+  e.stopPropagation();
+});
 
 searchInput.addEventListener('input', () => {
   const term = searchInput.value.toLowerCase().trim();
@@ -448,6 +464,8 @@ function renderObjects(objetos) {
       header.dataset.open = isOpen ? 'false' : 'true';
       header.setAttribute('aria-expanded', String(!isOpen));
       header.querySelector('.object-category-chevron').textContent = isOpen ? '▸' : '▾';
+      // Igual que regiones de Pokémon: style.display (hidden se anula por display:grid del CSS)
+      grid.style.display = isOpen ? 'none' : 'grid';
       grid.hidden = isOpen;
     });
     header.setAttribute('aria-expanded', 'true');
