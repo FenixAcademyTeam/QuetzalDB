@@ -66,6 +66,7 @@ const pk = {
   eclo1:    p => p.ECLO,
   eclo2:    p => p.ECLO2,
   area:     p => p.AREA || null,
+  area2:    p => p.AREA2 || null,
 };
 
 const ob = {
@@ -485,7 +486,7 @@ function renderHabilidades(habilidades) {
     card.className = 'card';
     card.innerHTML = `
       <div class="card-blob" style="background: radial-gradient(circle, rgba(100,100,255,0.12) 0%, transparent 70%);"></div>
-      <div style="width:54px;height:54px;border-radius:14px;background:rgba(0,200,83,0.08);border:1px solid rgba(0,200,83,0.2);display:flex;align-items:center;justify-content:center;margin:8px auto 12px;font-size:1.4rem;">🧬</div>
+      <div style="width:54px;height:54px;border-radius:14px;background:rgba(0,200,83,0.08);border:1px solid rgba(0,200,83,0.2);display:flex;align-items:center;justify-content:center;margin:8px auto 12px;font-size:1.2rem;color:rgba(156,136,255,0.8);font-weight:300;">✦</div>
       <h3>${hab.nombre(h)}</h3>
       <p style="font-size:0.8em;color:#666;margin-top:8px;line-height:1.5;">${hab.desc(h) || '-'}</p>
     `;
@@ -553,8 +554,8 @@ function showHabilidadDetail(h) {
         background:linear-gradient(135deg,rgba(0,200,83,0.3),rgba(100,221,23,0.15));
         border:2px solid rgba(0,200,83,0.5);
         display:flex;align-items:center;justify-content:center;
-        font-size:1.4rem;flex-shrink:0;
-      ">🧬</div>
+        font-size:1.1rem;flex-shrink:0;color:rgba(156,136,255,0.9);
+      ">✦</div>
       <h2 style="font-size:1.7rem;font-weight:700;color:#fff;">${hab.nombre(h)}</h2>
     </div>
 
@@ -836,8 +837,11 @@ function showPokemonDetail(p) {
 
     ${pk.area(p) ? `
     <div style="margin-top:22px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px;">
-      <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">🗺️ Área de Encuentro</h3>
-      <img src="${pk.area(p)}" alt="Área de encuentro" style="width:100%;border-radius:12px;image-rendering:pixelated;border:1px solid rgba(255,255,255,0.06);">
+      <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">✦ Área de Encuentro</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
+        <img src="${pk.area(p)}" alt="Área de encuentro" style="width:100%;border-radius:10px;image-rendering:pixelated;border:1px solid rgba(255,255,255,0.06);" onerror="this.style.display='none'">
+        ${pk.area2(p) ? `<img src="${pk.area2(p)}" alt="Área de encuentro 2" style="width:100%;border-radius:10px;image-rendering:pixelated;border:1px solid rgba(255,255,255,0.06);" onerror="this.style.display='none'">` : ''}
+      </div>
     </div>` : ''}
 
     </div>
