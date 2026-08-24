@@ -837,7 +837,7 @@ function showPokemonDetail(p) {
 
     ${pk.area(p) ? `
     <div style="margin-top:22px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px;">
-      <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">✦ Área de Encuentro</h3>
+      <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">Área de Encuentro</h3>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
         <img src="${pk.area(p)}" alt="Área de encuentro" style="width:100%;border-radius:10px;image-rendering:pixelated;border:1px solid rgba(255,255,255,0.06);" onerror="this.style.display='none'">
         ${pk.area2(p) ? `<img src="${pk.area2(p)}" alt="Área de encuentro 2" style="width:100%;border-radius:10px;image-rendering:pixelated;border:1px solid rgba(255,255,255,0.06);" onerror="this.style.display='none'">` : ''}
