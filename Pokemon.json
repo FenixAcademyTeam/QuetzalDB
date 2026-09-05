@@ -6784,5 +6784,59 @@
     },
     "ECLO": "Agua 2",
     "AREA": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Areas/0171.png"
+  },
+  {
+    "Pokemon": "Pichu",
+    "Mayus": "PICHU",
+    "No": "0172",
+    "IMG": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Tipos/Electrico.png",
+    "Type1": "Electrico",
+    "Descripcion": "Las bolsas de sus mejillas son aún demasiado pequeñas para almacenar mucha electricidad.",
+    "PS": "20",
+    "ATQ": "40",
+    "DEF": "15",
+    "VEL": "60",
+    "AES": "35",
+    "DES": "35",
+    "MINI": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/MiniSprites/PICHU.png",
+    "PKM": "Ratoncito",
+    "ALT": "0.3 m",
+    "PESO": "2.0 kg",
+    "%CAP": "Moderado",
+    "CREC": "Medio Lento",
+    "OBJ": "Raichunita X",
+    "OBJ 2": "Raichunita Y",
+    "H1": "Elec. Estatica",
+    "H": {
+      "O": "Pararrayos"
+    },
+    "AREA": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Areas/0172.png"
+  },
+  {
+    "Pokemon": "Cleffa",
+    "Mayus": "CLEFFA",
+    "No": "0173",
+    "IMG": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Tipos/Hada.png",
+    "Type1": "Hada",
+    "Descripcion": "Su silueta recuerda a una estrella y se cree que llegan montados en estrellas fugaces.",
+    "PS": "50",
+    "ATQ": "25",
+    "DEF": "28",
+    "VEL": "15",
+    "AES": "45",
+    "DES": "55",
+    "MINI": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/MiniSprites/CLEFFA.png",
+    "PKM": "Estrella",
+    "ALT": "0.3 m",
+    "PESO": "3.0 kg",
+    "%CAP": "Medio",
+    "CREC": "Medio Lento",
+    "OBJ": "Clefablita",
+    "H1": "Gran Encanto",
+    "H2": "Muro Magico",
+    "H": {
+      "O": "Compiescolta"
+    },
+    "AREA": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Areas/0173.png"
   }
 ]
