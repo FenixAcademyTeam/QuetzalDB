@@ -546,5 +546,9 @@
   {
     "Habilidad": "Mandibula Dragon",
     "Descripcion": "Potencia Dragon."
+  },
+  {
+    "Habilidad": "Afortunado",
+    "Descripcion": "Sube % golpes criticos."
   }
 ]

@@ -6838,5 +6838,84 @@
       "O": "Compiescolta"
     },
     "AREA": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Areas/0173.png"
+  },
+  {
+    "Pokemon": "Igglybuff",
+    "Mayus": "IGGLYBUFF",
+    "No": "0174",
+    "IMG": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Tipos/Hada.png",
+    "Type1": "Normal",
+    "Type2": "Hada",
+    "Descripcion": "Su cuerpo es tan blando y elástico que, una vez que empieza a rebotar, ya no puede parar.",
+    "PS": "90",
+    "ATQ": "30",
+    "DEF": "15",
+    "VEL": "15",
+    "AES": "40",
+    "DES": "20",
+    "MINI": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/MiniSprites/IGGLYBUFF.png",
+    "PKM": "Globo",
+    "ALT": "0.3 m",
+    "PESO": "1.0 kg",
+    "%CAP": "Moderado",
+    "CREC": "Medio Lento",
+    "H1": "Gran Encanto",
+    "H2": "Tenacidad",
+    "H": {
+      "O": "Compiescolta"
+    }
+  },
+  {
+    "Pokemon": "Togepi",
+    "Mayus": "TOGEPI",
+    "No": "0175",
+    "IMG": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Tipos/Hada.png",
+    "Type1": "Hada",
+    "Descripcion": "Se dice que su cascaron está lleno de alegría que comparte con las personas de buen corazón.",
+    "PS": "35",
+    "ATQ": "20",
+    "DEF": "65",
+    "VEL": "20",
+    "AES": "40",
+    "DES": "65",
+    "MINI": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/MiniSprites/TOGEPI.png",
+    "PKM": "Bolaclavos",
+    "ALT": "0.3 m",
+    "PESO": "1.5 kg",
+    "%CAP": "Moderado",
+    "CREC": "Medio Lento",
+    "H1": "Entusiasmo",
+    "H2": "Dicha",
+    "H": {
+      "O": "Afortunado"
+    }
+  },
+  {
+    "Pokemon": "Togetic",
+    "Mayus": "TOGETIC",
+    "No": "0176",
+    "IMG": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Tipos/Volador.png",
+    "Type1": "Hada",
+    "Type2": "Volador",
+    "Descripcion": "Dicen que aparece junto a gente de buen corazón que esparce un plumón luminoso apodado polvillo de la alegría.",
+    "PS": "55",
+    "ATQ": "40",
+    "DEF": "85",
+    "VEL": "40",
+    "AES": "80",
+    "DES": "105",
+    "MINI": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/MiniSprites/TOGETIC.png",
+    "PKM": "Felicidad",
+    "ALT": "0.6 m",
+    "PESO": "3.2 kg",
+    "%CAP": "Dificil",
+    "CREC": "Medio Lento",
+    "H1": "Entusiasmo",
+    "H2": "Dicha",
+    "H": {
+      "O": "Afortunado"
+    },
+    "ECLO": "Volador",
+    "ECLO2": "Hada"
   }
 ]
