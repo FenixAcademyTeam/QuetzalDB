@@ -550,5 +550,13 @@
   {
     "Habilidad": "Afortunado",
     "Descripcion": "Sube % golpes criticos."
+  },
+  {
+    "Habilidad": "Espejo Magico",
+    "Descripcion": "Refleja mov. Estado."
+  },
+  {
+    "Habilidad": "Mas",
+    "Descripcion": "Sube At. Esp. con Menos."
   }
 ]
