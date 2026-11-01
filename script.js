@@ -411,29 +411,16 @@ function renderObjects(objetos) {
   resultsDiv.innerHTML = '';
   if (resultCountEl) resultCountEl.textContent = objetos.length + ' resultados';
 
-  // Cartel de la tienda
+  // Toldo de la tienda (solo decorativo)
   const banner = document.createElement('div');
   banner.className = 'shop-banner';
-  banner.innerHTML = `
-    <div class="shop-awning" aria-hidden="true"></div>
-    <div class="shop-front">
-      <div class="shop-signboard">
-        <span class="shop-signboard-title">QUETZAL MART</span>
-        <span class="shop-signboard-sub">Tienda de objetos</span>
-      </div>
-      <div class="shop-dialog" role="note">
-        <p>¡Bienvenido! ¿Qué desea llevar hoy?</p>
-        <small>${objetos.length} artículo${objetos.length === 1 ? '' : 's'} en existencia</small>
-        <span class="shop-dialog-arrow" aria-hidden="true">▼</span>
-      </div>
-    </div>
-  `;
+  banner.innerHTML = '<div class="shop-awning" aria-hidden="true"></div>';
   resultsDiv.appendChild(banner);
 
   if (objetos.length === 0) {
     const empty = document.createElement('p');
     empty.className = 'shop-empty';
-    empty.textContent = 'Lo siento, no tenemos ese artículo en existencia.';
+    empty.textContent = 'No se encontraron objetos con esa búsqueda.';
     resultsDiv.appendChild(empty);
     return;
   }
