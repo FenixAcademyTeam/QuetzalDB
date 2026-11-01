@@ -135,6 +135,9 @@ function setNavVisibility(tab) {
   // El códice de habilidades también va sin sidebar y con fondo propio
   document.body.classList.toggle('ability-mode', tab === 'habilidades');
   if (tab !== 'habilidades') abilityLetter = '';
+  // Inicio y Créditos: sin sidebar, con el fondo del menú principal
+  document.body.classList.toggle('home-mode', tab === 'home');
+  document.body.classList.toggle('credits-mode', tab === 'creditos');
   const hideSearch = (tab === 'home' || tab === 'creditos');
   searchInput.style.display = hideSearch ? 'none' : 'block';
   searchInput.parentElement.style.display = hideSearch ? 'none' : 'block';
@@ -576,7 +579,7 @@ function getAbilityHolderCounts() {
   return counts;
 }
 
-const CHIP_ICON = '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/><rect x="9.5" y="9.5" width="5" height="5"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/></svg>';
+const EMBLEM_ICON = '✦';
 
 function renderHabilidades(habilidades) {
   resultsDiv.innerHTML = '';
@@ -594,7 +597,7 @@ function renderHabilidades(habilidades) {
   section.setAttribute('aria-label', 'Habilidades');
   section.innerHTML = `
     <div class="codex-head">
-      <span class="codex-emblem">${CHIP_ICON}</span>
+      <span class="codex-emblem">${EMBLEM_ICON}</span>
       <div>
         <p class="codex-kicker-top">// Base de datos</p>
         <h2>Habilidades</h2>
@@ -799,61 +802,86 @@ function buildRegionList() {
 }
 
 function renderHome() {
-  const sections = [
-    {
-      tab: 'pokemon',
-      icon: `<img src="https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/PokemonSprites/PIKACHU.png" alt="" width="104" height="104">`,
-      title: 'Pokémon',
-      desc: 'Consulta tipos, estadísticas, habilidades, objetos y áreas registradas.',
-      label: 'Pokédex',
-      btn: 'Explorar Pokémon',
-      accent: '#00c853',
-      count: pokemonData.length
-    },
-    {
-      tab: 'objetos',
-      icon: `<img src="https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Objetos/POKE_BALL.png" alt="" width="104" height="104">`,
-      title: 'Objetos',
-      desc: 'Revisa descripciones, precios y los Pokémon que pueden portarlos.',
-      label: 'Inventario',
-      btn: 'Explorar objetos',
-      accent: '#FFD700',
-      count: objetosData.length
-    },
-    {
-      tab: 'habilidades',
-      icon: `<span class="home-icon" aria-hidden="true">✦</span>`,
-      title: 'Habilidades',
-      desc: 'Descubre sus efectos y qué Pokémon tienen cada habilidad disponible.',
-      label: 'Habilidades',
-      btn: 'Explorar habilidades',
-      accent: '#9c88ff',
-      count: habilidadesData.length
-    }
-  ];
+  const pad = n => String(n).padStart(3, '0');
+  const RAYQUAZA = 'https://raw.githubusercontent.com/nellyama7w7/QuetzalSprites/main/PokemonSprites/RAYQUAZA.png';
+  const PIKACHU = 'https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/PokemonSprites/PIKACHU.png';
+  const POKEBALL = 'https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Objetos/POKE_BALL.png';
+  const nPokemon = pokemonData.length, nObjetos = objetosData.length, nHab = habilidadesData.length;
 
   resultsDiv.innerHTML = `
-    <section class="home-page" aria-labelledby="homeTitle">
-      <div class="home-intro">
-        <p class="home-kicker">Guía de consulta</p>
-        <h2 id="homeTitle">Todo lo que ya hemos documentado de Pokémon Quetzal.</h2>
-        <p>Una base creada por la comunidad para consultar datos del fangame con claridad. Cada entrada se actualiza a medida que la investigación avanza.</p>
+    <section class="home-hub" aria-labelledby="homeTitle">
+
+      <header class="home-topbar">
+        <div class="home-brand"><img src="${RAYQUAZA}" alt="" width="34" height="34"><span>Quetzal DB</span></div>
+        <nav class="home-nav" aria-label="Secciones">
+          <button type="button" onclick="goToTab('pokemon')"><i style="background:#d4202f"></i>Pokémon</button>
+          <button type="button" onclick="goToTab('objetos')"><i style="background:#ffc928"></i>Objetos</button>
+          <button type="button" onclick="goToTab('habilidades')"><i style="background:#8b7bff"></i>Habilidades</button>
+          <button type="button" onclick="goToTab('creditos')"><i style="background:#8a93a6"></i>Créditos</button>
+        </nav>
+      </header>
+
+      <div class="home-hero">
+        <img class="home-hero-sprite" src="${RAYQUAZA}" alt="" width="150" height="150">
+        <p class="home-kicker">Guía de consulta · Fangame</p>
+        <h1 id="homeTitle">Pokémon <span>Quetzal</span> Database</h1>
+        <p class="home-lead">Todo lo que ya hemos documentado de Pokémon Quetzal, creado por la comunidad. Cada entrada se actualiza a medida que la investigación avanza.</p>
+        <ul class="home-stats">
+          <li style="--sc:#ff4a5c"><strong>${pad(nPokemon)}</strong><span>Pokémon</span></li>
+          <li style="--sc:#ffc928"><strong>${pad(nObjetos)}</strong><span>Objetos</span></li>
+          <li style="--sc:#8b7bff"><strong>${pad(nHab)}</strong><span>Habilidades</span></li>
+        </ul>
       </div>
-      <div class="home-section-heading">
-        <div><p class="home-kicker">Catálogos</p><h2>Comienza a explorar</h2></div>
-        <button class="home-link" type="button" onclick="goToTab('creditos')">Proyecto y cambios <span aria-hidden="true">→</span></button>
+
+      <div class="home-portals">
+
+        <button type="button" class="portal is-dex" onclick="goToTab('pokemon')" aria-label="Explorar Pokémon">
+          <div class="portal-visual">
+            <div class="dex-lights" aria-hidden="true"><i class="dex-lens"></i><i class="led r"></i><i class="led y"></i><i class="led g"></i></div>
+            <div class="portal-screen">
+              <span class="portal-platform" aria-hidden="true"></span>
+              <img src="${PIKACHU}" alt="" width="104" height="104">
+            </div>
+          </div>
+          <div class="portal-info">
+            <span class="portal-label">Pokédex</span>
+            <h3>Pokémon</h3>
+            <p>Consulta tipos, estadísticas, habilidades, objetos y áreas registradas.</p>
+            <div class="portal-meta"><strong>${pad(nPokemon)}</strong><span>registros</span></div>
+            <span class="portal-cta">Explorar Pokémon <b aria-hidden="true">→</b></span>
+          </div>
+        </button>
+
+        <button type="button" class="portal is-shop" onclick="goToTab('objetos')" aria-label="Explorar objetos">
+          <div class="portal-visual">
+            <div class="portal-shelf-display"><img src="${POKEBALL}" alt="" width="96" height="96"></div>
+            <div class="portal-plank" aria-hidden="true"></div>
+          </div>
+          <div class="portal-info">
+            <span class="portal-label">Inventario</span>
+            <h3>Objetos</h3>
+            <p>Revisa descripciones, precios y los Pokémon que pueden portarlos.</p>
+            <div class="portal-meta"><i class="shop-coin" aria-hidden="true"></i><strong>${pad(nObjetos)}</strong><span>artículos</span></div>
+            <span class="portal-cta">Explorar objetos <b aria-hidden="true">→</b></span>
+          </div>
+        </button>
+
+        <button type="button" class="portal is-codex" onclick="goToTab('habilidades')" aria-label="Explorar habilidades">
+          <div class="portal-visual">
+            <div class="portal-medal" aria-hidden="true"><span>✦</span></div>
+            <span class="portal-code" aria-hidden="true">HAB-001 → HAB-${pad(nHab)}</span>
+          </div>
+          <div class="portal-info">
+            <span class="portal-label">Base de datos</span>
+            <h3>Habilidades</h3>
+            <p>Descubre sus efectos y qué Pokémon tienen cada habilidad disponible.</p>
+            <div class="portal-meta"><strong>${pad(nHab)}</strong><span>módulos</span></div>
+            <span class="portal-cta">Explorar habilidades <b aria-hidden="true">→</b></span>
+          </div>
+        </button>
+
       </div>
-      <div class="home-cards">
-        ${sections.map(s => `
-          <article class="home-card" style="--section-accent:${s.accent}">
-            <div class="home-card-top"><span class="home-card-label">${s.label}</span><span class="home-card-count">${s.count} registrados</span></div>
-            <div class="home-card-icon">${s.icon}</div>
-            <h3>${s.title}</h3>
-            <p>${s.desc}</p>
-            <button type="button" class="home-card-action" onclick="goToTab('${s.tab}')" aria-label="${s.btn}">${s.btn} <span aria-hidden="true">→</span></button>
-          </article>
-        `).join('')}
-      </div>
+
       <aside class="coverage-note"><span class="coverage-icon" aria-hidden="true">i</span><div><strong>Cobertura en progreso.</strong> Algunos campos aún pueden no estar documentados; preferimos mostrar solo información confirmada en el juego.</div></aside>
     </section>
   `;
