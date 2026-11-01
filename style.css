@@ -10,17 +10,11 @@
   --card: #162033;
   --text: #e8ecf7;
   --sidebar-w: 200px;
-  --font-pixel: 'Pixelify Sans', 'Courier New', monospace;
-}
-
-html {
-  font-size: 17px; /* las fuentes pixel se leen mejor un poco más grandes */
+  --font-main: 'Nunito', 'Segoe UI', system-ui, sans-serif;
 }
 
 body {
-  font-family: var(--font-pixel);
-  line-height: 1.5;
-  text-rendering: optimizeSpeed;
+  font-family: var(--font-main);
   background: #070f1a;
   min-height: 100vh;
   color: var(--text);
@@ -500,7 +494,7 @@ body::before {
 }
 .pokemon-detail-mini { width: 38px; height: 38px; flex-shrink: 0; image-rendering: pixelated; }
 .pokemon-description { margin-bottom: 20px; padding: 14px 18px; border: 1px solid rgba(255,255,255,.07); border-radius: 14px; background: rgba(255,255,255,.03); }
-.pokemon-description p { color: #b0b8cc; font-size: .88rem; font-style: normal; line-height: 1.65; }
+.pokemon-description p { color: #b0b8cc; font-size: .88rem; font-style: italic; line-height: 1.65; }
 .pokemon-detail-panel { padding: 20px; border: 1px solid color-mix(in srgb, var(--pokemon-accent) 28%, transparent); border-radius: 18px; background: rgba(255,255,255,.03); }
 
 /* Barras de estadísticas mejoradas */
@@ -959,4 +953,77 @@ body::before {
   .card {
     padding: 14px 10px;
   }
+}
+
+
+/* ================== MODO TIENDA: sin sidebar y con fondo propio ================== */
+.shop-back {
+  display: none;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 8px 14px;
+  border: 2px solid #24150a;
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--paper-ink);
+  box-shadow: 0 3px 0 #1b1307;
+  font: inherit;
+  font-size: .78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.shop-back:hover { background: #fff3c4; }
+.shop-back:active { transform: translateY(2px); box-shadow: 0 1px 0 #1b1307; }
+.shop-back:focus-visible { outline: 3px solid var(--coin); outline-offset: 2px; }
+
+body.shop-mode {
+  background: #1b3a73;
+}
+body.shop-mode::before {
+  /* papel tapiz de rayas en lugar de los puntos verdes */
+  background-image:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.045) 0 4px, transparent 4px 52px),
+    linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,.28));
+  background-size: auto;
+}
+/* Piso de cuadros en la parte inferior */
+body.shop-mode::after {
+  content: '';
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  height: 30px;
+  background: conic-gradient(#ece6d3 25%, #b9b09a 0 50%, #ece6d3 0 75%, #b9b09a 0) 0 0 / 30px 30px;
+  border-top: 4px solid #24150a;
+  pointer-events: none;
+  z-index: 5;
+}
+body.shop-mode .app-layout { grid-template-columns: 1fr; }
+body.shop-mode .sidebar,
+body.shop-mode .sidebar-overlay,
+body.shop-mode .mobile-menu-btn { display: none !important; }
+body.shop-mode .shop-back { display: inline-flex; }
+body.shop-mode .main-area { background: transparent; }
+body.shop-mode .main-top {
+  background: linear-gradient(180deg, #6b4423, #4a2f17);
+  border-bottom: 4px solid #24150a;
+  box-shadow: 0 4px 0 rgba(0,0,0,.25);
+}
+body.shop-mode .search-input {
+  background: var(--paper);
+  border: 2px solid #24150a;
+  border-radius: 4px;
+  color: var(--paper-ink);
+}
+body.shop-mode .search-input:focus { border-color: var(--coin); background: #fffaf0; }
+body.shop-mode .search-input::placeholder { color: #8a7650; }
+body.shop-mode .main-result-count { color: #f0d9ad; }
+body.shop-mode .main-body {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-bottom: 80px; /* espacio para el piso */
+}
+@media (max-width: 480px) {
+  .shop-back { padding: 7px 10px; font-size: .7rem; }
+  body.shop-mode .main-result-count { display: none; }
 }

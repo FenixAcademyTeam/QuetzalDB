@@ -127,6 +127,8 @@ const sidebarOverlay = document.getElementById('sidebarOverlay');
 let lastFocusedElement = null;
 
 function setNavVisibility(tab) {
+  // La tienda de objetos oculta el sidebar y usa su propio fondo
+  document.body.classList.toggle('shop-mode', tab === 'objetos');
   const hideSearch = (tab === 'home' || tab === 'creditos');
   searchInput.style.display = hideSearch ? 'none' : 'block';
   searchInput.parentElement.style.display = hideSearch ? 'none' : 'block';
@@ -166,6 +168,10 @@ document.querySelectorAll('.side-nav').forEach(btn => {
     renderCurrentTab();
     closeSidebarMobile();
   });
+});
+
+document.getElementById('shopBack')?.addEventListener('click', () => {
+  document.querySelector('.side-nav[data-tab="home"]')?.click();
 });
 
 document.getElementById('mobileMenuBtn')?.addEventListener('click', (e) => {
