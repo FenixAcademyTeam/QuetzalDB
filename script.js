@@ -129,6 +129,8 @@ let lastFocusedElement = null;
 function setNavVisibility(tab) {
   // La tienda de objetos oculta el sidebar y usa su propio fondo
   document.body.classList.toggle('shop-mode', tab === 'objetos');
+  // La Pokédex también oculta el sidebar y usa su propia carcasa
+  document.body.classList.toggle('dex-mode', tab === 'pokemon');
   const hideSearch = (tab === 'home' || tab === 'creditos');
   searchInput.style.display = hideSearch ? 'none' : 'block';
   searchInput.parentElement.style.display = hideSearch ? 'none' : 'block';
@@ -279,24 +281,33 @@ function getRegion(numStr) {
 function makePokemonCard(p) {
   const card = document.createElement('div');
   card.className = 'card pokemon-card';
+  card.tabIndex = 0;
+  card.setAttribute('role', 'button');
   const type1 = pk.tipo1(p), type2 = pk.tipo2(p);
-  const color1 = typeColors[type1] || '#666';
+  const color1 = typeColors[type1] || '#5f8aa0';
   const color2 = typeColors[type2] || color1;
   card.style.setProperty('--card-stripe', color1);
-  const totalStats = [pk.ps(p), pk.atq(p), pk.def(p), pk.aes(p), pk.des(p), pk.vel(p)]
-    .reduce((sum, v) => sum + (parseInt(v) || 0), 0);
+  const total = getPokemonStatTotal(p);
+  const pct = Math.min(100, Math.round(total / 720 * 100));
+  const num = String(pk.num(p) ?? '').padStart(3, '0');
   card.innerHTML = `
-    <div class="card-blob" style="background:radial-gradient(circle,${color1}22 0%,transparent 70%);"></div>
-    <span class="card-number">#${pk.num(p)}</span>
-    <img src="${pk.sprite(p)}" alt="${pk.nombre(p)}">
+    <span class="card-number">No. ${num}</span>
+    <div class="card-stage">
+      <span class="card-platform" aria-hidden="true"></span>
+      <img src="${pk.sprite(p)}" alt="${pk.nombre(p)}">
+    </div>
     <h3>${pk.nombre(p)}</h3>
     <div class="types">
-      ${type1 ? `<span class="type-pill" style="background:${color1}22;border:1px solid ${color1}44;color:${color1};">${type1}</span>` : ''}
-      ${type2 ? `<span class="type-pill" style="background:${color2}22;border:1px solid ${color2}44;color:${color2};">${type2}</span>` : ''}
+      ${type1 ? `<span class="type-pill" style="--tc:${color1}">${type1}</span>` : ''}
+      ${type2 ? `<span class="type-pill" style="--tc:${color2}">${type2}</span>` : ''}
     </div>
-    <div class="card-total">Total <strong>${totalStats}</strong></div>
+    <div class="card-total"><span>Total</span><strong>${total}</strong></div>
+    <div class="card-bar" aria-hidden="true"><i style="width:${pct}%"></i></div>
   `;
   card.addEventListener('click', () => showPokemonDetail(p));
+  card.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showPokemonDetail(p); }
+  });
   return card;
 }
 
@@ -323,15 +334,29 @@ function renderPokemonCatalog() {
 
   if (resultCountEl) resultCountEl.textContent = pokemons.length + ' resultados';
 
+  const pad = n => String(n).padStart(4, '0');
+  const regionCounts = {};
+  pokemonData.forEach(p => { const r = getRegion(pk.num(p)).nombre; regionCounts[r] = (regionCounts[r] || 0) + 1; });
+
   resultsDiv.innerHTML = `
-    <section class="pokemon-catalog" aria-label="Filtros de Pokémon">
+    <section class="pokemon-catalog" aria-label="Pokédex">
       <div class="catalog-toolbar">
-        <div class="catalog-toolbar-heading"><span>${pokemons.length}</span> Pokémon encontrados</div>
+        <div class="dex-readout" aria-live="polite">
+          <span class="dex-readout-label">Registros</span>
+          <span class="dex-readout-num">${pad(pokemons.length)}</span>
+          <span class="dex-readout-total">/ ${pad(pokemonData.length)}</span>
+        </div>
         <div class="catalog-filters">
           <label>Tipo<select id="filterType"><option value="">Todos los tipos</option>${availableTypes.map(type => `<option value="${type}" ${pokemonFilters.type === type ? 'selected' : ''}>${type}</option>`).join('')}</select></label>
           <label>Ordenar por<select id="filterOrder"><option value="number" ${pokemonFilters.order === 'number' ? 'selected' : ''}>Número</option><option value="name" ${pokemonFilters.order === 'name' ? 'selected' : ''}>Nombre</option><option value="stats" ${pokemonFilters.order === 'stats' ? 'selected' : ''}>Estadísticas base</option></select></label>
           <button type="button" class="filter-reset" id="resetPokemonFilters">Limpiar filtros</button>
         </div>
+      </div>
+      <div class="dex-regions" role="group" aria-label="Filtrar por región">
+        <button type="button" class="dex-region ${!pokemonFilters.region ? 'active' : ''}" data-region="" style="--rc:#36e6ff">Todas <small>${pokemonData.length}</small></button>
+        ${REGIONES.filter(r => r.inicio > 0).map(r => `
+          <button type="button" class="dex-region ${pokemonFilters.region === r.nombre ? 'active' : ''}" data-region="${r.nombre}" style="--rc:${r.color}">${r.nombre} <small>${regionCounts[r.nombre] || 0}</small></button>
+        `).join('')}
       </div>
       <div id="pokemonResults" class="pokemon-results"></div>
     </section>
@@ -339,6 +364,13 @@ function renderPokemonCatalog() {
 
   document.getElementById('filterType').addEventListener('change', e => { pokemonFilters.type = e.target.value; renderPokemonCatalog(); });
   document.getElementById('filterOrder').addEventListener('change', e => { pokemonFilters.order = e.target.value; renderPokemonCatalog(); });
+  document.querySelectorAll('.dex-region').forEach(btn => {
+    btn.addEventListener('click', () => {
+      pokemonFilters.region = btn.dataset.region || '';
+      buildRegionList();
+      renderPokemonCatalog();
+    });
+  });
   document.getElementById('resetPokemonFilters').addEventListener('click', () => {
     pokemonFilters.region = ''; pokemonFilters.type = ''; pokemonFilters.order = 'number'; searchInput.value = '';
     buildRegionList();
@@ -383,12 +415,18 @@ function renderResults(pokemons, container = resultsDiv, showFlat = false) {
     header.style.gridColumn = '1/-1';
     header.dataset.region = region.nombre;
     header.dataset.open = 'true';
+    header.setAttribute('role', 'button');
+    header.tabIndex = 0;
     header.innerHTML = `
-      <div class="region-stripe" style="background:${region.color};"></div>
+      <span class="region-stripe" style="--rc:${region.color};"></span>
       <span class="region-name">${region.nombre}</span>
-      <span class="region-count">${items.length} Pokémon</span>
-      <span class="region-chevron">▾</span>
+      <span class="region-line" aria-hidden="true"></span>
+      <span class="region-count">${items.length} reg.</span>
+      <span class="region-chevron" aria-hidden="true">▾</span>
     `;
+    header.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); header.click(); }
+    });
     header.addEventListener('click', () => {
       const isOpen = header.dataset.open === 'true';
       header.dataset.open = isOpen ? 'false' : 'true';
@@ -758,121 +796,123 @@ function renderCreditsAndChangelog() {
 
 function showPokemonDetail(p) {
   const stats = [
-    {name: "PS",          value: pk.ps(p),  color: "#FF5959"},
-    {name: "Ataque",      value: pk.atq(p), color: "#F5AC78"},
-    {name: "Defensa",     value: pk.def(p), color: "#FAE078"},
-    {name: "At. Especial",value: pk.aes(p), color: "#9DB7F5"},
-    {name: "Def. Especial",value: pk.des(p),color: "#A7DB8D"},
-    {name: "Velocidad",   value: pk.vel(p), color: "#FA92B2"}
+    {name: "PS",            value: pk.ps(p),  color: "#ff5959"},
+    {name: "Ataque",        value: pk.atq(p), color: "#f5ac78"},
+    {name: "Defensa",       value: pk.def(p), color: "#fae078"},
+    {name: "At. Especial",  value: pk.aes(p), color: "#9db7f5"},
+    {name: "Def. Especial", value: pk.des(p), color: "#a7db8d"},
+    {name: "Velocidad",     value: pk.vel(p), color: "#fa92b2"}
   ];
+  const accent = typeColors[pk.tipo1(p)] || '#36e6ff';
+  const total = getPokemonStatTotal(p);
+  const jsArg = s => String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
 
-  const bannerColor = typeColors[pk.tipo1(p)] || '#00c853';
-
-  let statsHtml = '';
-  stats.forEach(stat => {
+  const statsHtml = stats.map(stat => {
     const value = parseInt(stat.value) || 0;
     const percent = Math.min(100, (value / 255) * 100);
-    statsHtml += `
-      <div>
-        <div style="display:flex;justify-content:space-between;font-size:0.9em;">
-          <span style="color:#aaa;">${stat.name}</span>
-          <strong style="color:#fff;">${value}</strong>
-        </div>
-        <div class="stats-bar">
-          <div class="stats-fill" style="width:${percent}%;--stat-color:${stat.color};"></div>
-        </div>
+    return `
+      <div class="dex-stat">
+        <span class="dex-stat-name">${stat.name}</span>
+        <div class="dex-bar"><i style="width:${percent}%;--sc:${stat.color};"></i></div>
+        <strong>${value}</strong>
       </div>`;
-  });
+  }).join('') + `
+      <div class="dex-stat is-total">
+        <span class="dex-stat-name">Total</span>
+        <div class="dex-bar"><i style="width:${Math.min(100, total / 720 * 100)}%;--sc:#ffd24a;"></i></div>
+        <strong>${total}</strong>
+      </div>`;
 
   const obj1name = pk.obj1(p);
   const obj2name = pk.obj2(p);
   const obj1data = obj1name ? objetosData.find(o => ob.nombre(o) && ob.nombre(o).toLowerCase() === obj1name.toLowerCase()) : null;
   const obj2data = obj2name ? objetosData.find(o => ob.nombre(o) && ob.nombre(o).toLowerCase() === obj2name.toLowerCase()) : null;
 
-  const renderItemSprite = (nombre, objData) => {
+  const renderItemLink = (nombre, objData) => {
     if (!nombre) return '';
-    const safe = nombre.replace(/'/g, "\\'");
-    const spriteHtml = objData ? `<img src="${ob.sprite(objData)}" alt="${nombre}" style="width:24px;height:24px;image-rendering:pixelated;vertical-align:middle;margin-right:4px;">` : '';
-    return `<span style="cursor:pointer;border-bottom:1px dashed rgba(255,255,255,0.3);display:inline-flex;align-items:center;gap:2px;" onclick="openObjeto('${safe}')">${spriteHtml}${nombre}</span>`;
+    const sprite = objData ? `<img src="${ob.sprite(objData)}" alt="" class="dex-item-sprite">` : '';
+    return `<button type="button" class="dex-link" onclick="openObjeto('${jsArg(nombre)}')">${sprite}${nombre}</button>`;
   };
+  const abilityLink = (nombre, extra = '', cls = '') =>
+    `<button type="button" class="dex-link ${cls}" onclick="openHabilidad('${jsArg(nombre)}')">${nombre}${extra}</button>`;
 
   const tipo1 = pk.tipo1(p), tipo2 = pk.tipo2(p);
+  const typeTag = (tipo, img) => tipo
+    ? `<span class="dex-type" style="--tc:${typeColors[tipo] || '#5f8aa0'}">${img ? `<img src="${img}" width="16" height="16" alt="">` : ''}${tipo}</span>`
+    : '';
+  const num = String(pk.num(p) ?? '').padStart(3, '0');
+
+  const habilidades = [
+    pk.h1(p) ? abilityLink(pk.h1(p)) : '',
+    pk.h2(p) ? abilityLink(pk.h2(p)) : '',
+    pk.hoculta(p) ? abilityLink(pk.hoculta(p), ' <small>(Oculta)</small>', 'is-hidden') : ''
+  ].filter(Boolean).join('');
 
   const html = `
-    <div class="pokemon-detail-banner" style="--pokemon-accent:${bannerColor}">
-      <img src="${pk.mini(p)}" alt="" class="pokemon-detail-mini">
-      <div style="flex-shrink:0;">
-        <span style="font-size:0.75em;color:${bannerColor};font-weight:600;letter-spacing:2px;text-transform:uppercase;display:block;">#${pk.num(p)}</span>
-        <h2 style="font-size:1.6rem;font-weight:700;line-height:1.1;color:#fff;white-space:nowrap;">${pk.nombre(p)}</h2>
-      </div>
-      <div style="margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
-        ${tipo1 ? `<span class="type" style="background:${typeColors[tipo1]||'#666'};box-shadow:0 4px 10px rgba(0,0,0,0.3);font-size:0.85em;white-space:nowrap;">
-          <img src="${pk.tipo1img(p)}" width="15" height="15" style="vertical-align:middle;"> ${tipo1}
-        </span>` : ''}
-        ${tipo2 ? `<span class="type" style="background:${typeColors[tipo2]||'#666'};box-shadow:0 4px 10px rgba(0,0,0,0.3);font-size:0.85em;white-space:nowrap;">
-          <img src="${pk.tipo2img(p)}" width="15" height="15" style="vertical-align:middle;"> ${tipo2}
-        </span>` : ''}
-      </div>
-    </div>
-
-    <div class="modal-inner">
-
-    ${pk.desc(p) ? `
-    <div class="pokemon-description">
-      <p>${pk.desc(p)}</p>
-    </div>` : ''}
-
-    <div style="display:grid;grid-template-columns:200px 1fr;gap:24px;">
-
-      <div style="display:flex;flex-direction:column;gap:16px;">
-        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:16px;text-align:center;">
-          <p style="font-size:0.7em;color:#aaa;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Normal</p>
-          <img src="${pk.sprite(p)}" alt="${pk.nombre(p)}" style="width:150px;height:150px;image-rendering:pixelated;">
-        </div>
+    <div class="dex-sheet" style="--dex-accent:${accent};">
+      <div class="dex-top">
+        <div class="dex-lights" aria-hidden="true"><i class="dex-lens"></i><i class="led r"></i><i class="led y"></i><i class="led g"></i></div>
+        <span class="dex-top-title">Pokédex</span>
+        <span class="dex-top-sub">Registro de datos</span>
       </div>
 
-      <div style="display:flex;flex-direction:column;gap:22px;">
+      <div class="dex-screen">
+        <div class="dex-grid">
 
-        <div class="pokemon-detail-panel" style="--pokemon-accent:${bannerColor}">
-          <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">Datos del Pokémon</h3>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.88em;color:#e8ecf7;">
-            <p><strong style="color:#aaa;">Categoría</strong><br>${pk.cat(p) || '-'}</p>
-            <p><strong style="color:#aaa;">Altura</strong><br>${pk.alt(p) || '-'}</p>
-            <p><strong style="color:#aaa;">Peso</strong><br>${pk.peso(p) || '-'}</p>
-            <p><strong style="color:#aaa;">Captura</strong><br>${pk.cap(p) || '-'}</p>
-            <p><strong style="color:#aaa;">Crecimiento</strong><br>${pk.crec(p) || '-'}</p>
-            <p><strong style="color:#aaa;">Grupo Huevo</strong><br>${pk.eclo1(p) || '-'}${pk.eclo2(p) ? ` / ${pk.eclo2(p)}` : ''}</p>
-            <p style="grid-column:1/-1;"><strong style="color:#aaa;">Habilidades</strong><br>
-              ${pk.h1(p) ? `<span style="color:#00c853;cursor:pointer;border-bottom:1px dashed rgba(0,200,83,0.4);" onclick="openHabilidad('${pk.h1(p).replace(/'/g,"\\'")}')">` + pk.h1(p) + `</span>` : '-'}
-              ${pk.h2(p) ? ` / <span style="cursor:pointer;border-bottom:1px dashed rgba(255,255,255,0.3);" onclick="openHabilidad('${pk.h2(p).replace(/'/g,"\\'")}')">` + pk.h2(p) + `</span>` : ''}
-              ${pk.hoculta(p) ? ` / <em style="color:#ff80ab;cursor:pointer;border-bottom:1px dashed rgba(255,128,171,0.4);" onclick="openHabilidad('${pk.hoculta(p).replace(/'/g,"\\'")}')">` + pk.hoculta(p) + ` (Oculta)</em>` : ''}
-            </p>
-            ${obj1name ? `<p style="grid-column:1/-1;"><strong style="color:#aaa;">Objetos</strong><br>
-              <span style="display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;">
-                ${renderItemSprite(obj1name, obj1data)}
-                ${obj2name ? `<span style="color:#555;">/</span>${renderItemSprite(obj2name, obj2data)}` : ''}
-              </span>
-            </p>` : ''}
+          <!-- Escáner -->
+          <div class="dex-scanner">
+            <div class="dex-stage">
+              <span class="dex-ring r1" aria-hidden="true"></span>
+              <span class="dex-ring r2" aria-hidden="true"></span>
+              <span class="dex-stage-tag">No. ${num}</span>
+              <img src="${pk.sprite(p)}" alt="${pk.nombre(p)}" class="dex-sprite">
+            </div>
+            <div class="dex-id">
+              <h2>${pk.nombre(p)}</h2>
+              ${pk.cat(p) ? `<p class="dex-cat">${pk.cat(p)}</p>` : ''}
+              <div class="dex-types">${typeTag(tipo1, pk.tipo1img(p))}${typeTag(tipo2, pk.tipo2img(p))}</div>
+            </div>
+            <div class="dex-readouts">
+              <div><span>Altura</span><strong>${pk.alt(p) || '-'}</strong></div>
+              <div><span>Peso</span><strong>${pk.peso(p) || '-'}</strong></div>
+            </div>
+          </div>
+
+          <!-- Datos -->
+          <div class="dex-data">
+            ${pk.desc(p) ? `
+            <section class="dex-panel dex-entry">
+              <h3 class="dex-panel-title">Entrada</h3>
+              <p>${pk.desc(p)}</p>
+            </section>` : ''}
+
+            <section class="dex-panel">
+              <h3 class="dex-panel-title">Estadísticas base</h3>
+              <div class="dex-stats">${statsHtml}</div>
+            </section>
+
+            <section class="dex-panel">
+              <h3 class="dex-panel-title">Datos</h3>
+              <div class="dex-cells">
+                <div><span>Captura</span><strong>${pk.cap(p) || '-'}</strong></div>
+                <div><span>Crecimiento</span><strong>${pk.crec(p) || '-'}</strong></div>
+                <div><span>Grupo huevo</span><strong>${pk.eclo1(p) || '-'}${pk.eclo2(p) ? ` / ${pk.eclo2(p)}` : ''}</strong></div>
+                <div class="wide"><span>Habilidades</span><div class="dex-links">${habilidades || '<strong>-</strong>'}</div></div>
+                ${obj1name ? `<div class="wide"><span>Objetos</span><div class="dex-links">${renderItemLink(obj1name, obj1data)}${obj2name ? `<em class="dex-sep">/</em>${renderItemLink(obj2name, obj2data)}` : ''}</div></div>` : ''}
+              </div>
+            </section>
           </div>
         </div>
 
-        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px;">
-          <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">Estadísticas Base</h3>
-          <div style="display:flex;flex-direction:column;gap:12px;">${statsHtml}</div>
-        </div>
-
+        ${pk.area(p) ? `
+        <section class="dex-panel dex-area">
+          <h3 class="dex-panel-title">Área de encuentro</h3>
+          <div class="dex-area-grid">
+            <img src="${pk.area(p)}" alt="Área de encuentro" onerror="this.style.display='none'">
+            ${pk.area2(p) ? `<img src="${pk.area2(p)}" alt="Área de encuentro 2" onerror="this.style.display='none'">` : ''}
+          </div>
+        </section>` : ''}
       </div>
-    </div>
-
-    ${pk.area(p) ? `
-    <div style="margin-top:22px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px;">
-      <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">Área de Encuentro</h3>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
-        <img src="${pk.area(p)}" alt="Área de encuentro" style="width:100%;border-radius:10px;image-rendering:pixelated;border:1px solid rgba(255,255,255,0.06);" onerror="this.style.display='none'">
-        ${pk.area2(p) ? `<img src="${pk.area2(p)}" alt="Área de encuentro 2" style="width:100%;border-radius:10px;image-rendering:pixelated;border:1px solid rgba(255,255,255,0.06);" onerror="this.style.display='none'">` : ''}
-      </div>
-    </div>` : ''}
-
     </div>
   `;
 
