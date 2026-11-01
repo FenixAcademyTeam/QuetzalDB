@@ -411,12 +411,6 @@ function renderObjects(objetos) {
   resultsDiv.innerHTML = '';
   if (resultCountEl) resultCountEl.textContent = objetos.length + ' resultados';
 
-  // Toldo de la tienda (solo decorativo)
-  const banner = document.createElement('div');
-  banner.className = 'shop-banner';
-  banner.innerHTML = '<div class="shop-awning" aria-hidden="true"></div>';
-  resultsDiv.appendChild(banner);
-
   if (objetos.length === 0) {
     const empty = document.createElement('p');
     empty.className = 'shop-empty';
@@ -895,99 +889,73 @@ function showObjectDetail(o) {
     (pk.obj2(p) && pk.obj2(p).toLowerCase() === nombreO)
   );
 
-  const getSlotLabel = (p) => {
-    if (pk.obj2(p) && pk.obj2(p).toLowerCase() === nombreO) return { txt: 'Raro', color: '#FFD700' };
-    return { txt: 'Común', color: '#81D4FA' };
-  };
+  const getSlotLabel = (p) =>
+    (pk.obj2(p) && pk.obj2(p).toLowerCase() === nombreO)
+      ? { txt: 'Raro', cls: 'is-rare' }
+      : { txt: 'Común', cls: 'is-common' };
 
-  const pokemonListHtml = portadores.length === 0
-    ? '<p style="color:#aaa;font-size:0.9em;">Ningún Pokémon registrado portando este objeto.</p>'
-    : `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px;">
+  const hasPrice = v => v !== undefined && v !== null && /\d/.test(String(v));
+  const compra = ob.compra(o), venta = ob.venta(o);
+
+  const holdersHtml = portadores.length === 0
+    ? '<p class="sheet-empty">Ningún Pokémon registrado portando este objeto.</p>'
+    : `<div class="sheet-holders">
         ${portadores.map(p => {
           const sl = getSlotLabel(p);
           return `
-            <div style="
-              background:rgba(255,255,255,0.04);
-              border:1px solid rgba(255,255,255,0.08);
-              border-radius:14px;
-              padding:12px 8px;
-              text-align:center;
-              cursor:pointer;
-              transition:all 0.25s;
-            " onclick="closeModal(); setTimeout(()=>{ const found = pokemonData.find(x=>x.Mayus==='${p.Mayus}'); if(found) showPokemonDetail(found); }, 200);"
-              onmouseover="this.style.borderColor='rgba(0,200,83,0.4)'; this.style.transform='translateY(-3px)'"
-              onmouseout="this.style.borderColor='rgba(255,255,255,0.08)'; this.style.transform='translateY(0)'">
-              <img src="${pk.sprite(p)}" alt="${pk.nombre(p)}" style="width:54px;height:54px;image-rendering:pixelated;">
-              <p style="font-size:0.75em;color:#ddd;margin-top:6px;font-weight:500;">${pk.nombre(p)}</p>
-              <span style="font-size:0.65em;color:${sl.color};font-weight:600;">${sl.txt}</span>
+            <div class="holder" tabindex="0" role="button"
+              onclick="closeModal(); setTimeout(()=>{ const found = pokemonData.find(x=>x.Mayus==='${p.Mayus}'); if(found) showPokemonDetail(found); }, 200);"
+              onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">
+              <div class="holder-display"><img src="${pk.sprite(p)}" alt=""></div>
+              <div class="shop-plank" aria-hidden="true"></div>
+              <div class="holder-label">
+                <span class="holder-name">${pk.nombre(p)}</span>
+                <span class="holder-chip ${sl.cls}">${sl.txt}</span>
+              </div>
             </div>
           `;
         }).join('')}
       </div>`;
 
   const html = `
-    <!-- BANNER SUPERIOR -->
-    <div style="
-      padding: 20px 60px 18px 24px;
-      background: linear-gradient(135deg, rgba(42,111,224,0.4), rgba(42,111,224,0.12));
-      border-bottom: 3px solid #2a6fe0;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      flex-wrap: wrap;
-      min-height: 78px;
-    ">
-      <img src="${ob.sprite(o)}" alt="${ob.nombre(o)}" style="width:44px;height:44px;image-rendering:pixelated;flex-shrink:0;">
-      <div>
-        <span style="font-size:0.75em;color:#ffc928;font-weight:600;letter-spacing:2px;text-transform:uppercase;display:block;">#${ob.num(o)}</span>
-        <h2 style="font-size:1.6rem;font-weight:700;line-height:1.1;color:#fff;">${ob.nombre(o)}</h2>
+    <div class="shop-sheet">
+      <div class="sheet-header">
+        <span class="sheet-num">#${ob.num(o)}</span>
+        <h2>${ob.nombre(o)}</h2>
       </div>
-    </div>
 
-    <div class="modal-inner">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:8px;">
+      <div class="sheet-body">
+        <div class="sheet-grid">
 
-      <!-- Sprite grande + precios -->
-      <div style="display:flex;flex-direction:column;gap:16px;">
-        <div style="
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 18px;
-          padding: 20px;
-          text-align:center;
-        ">
-          <img src="${ob.sprite(o)}" alt="${ob.nombre(o)}" style="width:120px;height:120px;image-rendering:pixelated;">
+          <!-- Vitrina con el objeto + precios -->
+          <div class="sheet-shelf">
+            <div class="sheet-display"><img src="${ob.sprite(o)}" alt="${ob.nombre(o)}"></div>
+            <div class="shop-plank" aria-hidden="true"></div>
+            <div class="sheet-prices">
+              <h3>Precios</h3>
+              <p><i class="shop-coin" aria-hidden="true"></i><span class="sheet-price-label">Compra</span>
+                 <strong>${hasPrice(compra) ? compra : 'No se vende'}</strong></p>
+              <p><i class="shop-coin is-dim" aria-hidden="true"></i><span class="sheet-price-label">Venta</span>
+                 <strong>${hasPrice(venta) ? venta : 'Sin venta'}</strong></p>
+            </div>
+          </div>
+
+          <!-- Descripción -->
+          <div class="sheet-note">
+            <h3>Descripción</h3>
+            <p>${ob.desc(o) || 'Sin descripción'}</p>
+          </div>
+
         </div>
-        <div style="background:#f6ecd2;border:3px solid #3a2a14;box-shadow:inset 0 0 0 3px #fffaf0, 0 5px 0 #1b1307;padding:16px 18px;color:#3a2a14;">
-          <h3 style="color:#3a2a14;margin-bottom:12px;font-size:0.95rem;border-bottom:2px dashed rgba(58,42,20,0.35);padding-bottom:6px;">Precios</h3>
-          <p style="font-size:0.95em;margin-bottom:8px;display:flex;align-items:center;gap:8px;"><i class="shop-coin" aria-hidden="true"></i><strong style="color:#7b6540;">Compra:</strong> ${ob.compra(o) || '-'}</p>
-          <p style="font-size:0.95em;display:flex;align-items:center;gap:8px;"><i class="shop-coin" aria-hidden="true" style="opacity:.55;"></i><strong style="color:#7b6540;">Venta:</strong> ${ob.venta(o) || '-'}</p>
+
+        <!-- Pokémon portadores -->
+        <div class="sheet-sign">
+          <span>Pokémon que portan este objeto</span>
+          <span class="sheet-sign-count">${portadores.length}</span>
         </div>
+        ${holdersHtml}
       </div>
-
-      <!-- Descripción -->
-      <div style="
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(42,111,224,0.35);
-        border-radius: 18px;
-        padding: 20px;
-      ">
-        <h3 style="color:#ffc928;margin-bottom:12px;font-size:0.95rem;border-bottom:1px solid rgba(255,201,40,0.2);padding-bottom:6px;">Descripción</h3>
-        <p style="color:#e8ecf7;line-height:1.7;font-size:0.92em;">${ob.desc(o) || 'Sin descripción'}</p>
-      </div>
-
     </div>
-
-    <!-- Pokémon portadores -->
-    <div style="margin-top:24px;">
-      <h3 style="color:#ffc928;margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(255,201,40,0.2);padding-bottom:8px;">
-        Pokémon que portan este objeto
-        <span style="font-size:0.8em;color:#aaa;font-weight:400;margin-left:8px;">(${portadores.length})</span>
-      </h3>
-      ${pokemonListHtml}
-    </div>
-
-    </div><!-- end modal-inner -->
   `;
   modalBody.innerHTML = html;
   openModal();
