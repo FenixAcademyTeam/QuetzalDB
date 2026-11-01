@@ -545,8 +545,8 @@ function renderObjects(objetos) {
   });
 }
 
-// ---------- Códice de habilidades ----------
-const ABILITY_COLORS = ['#9c88ff', '#6c8cff', '#4fd1c5', '#ff7eb6', '#ffb86b', '#9be15d', '#5ac8fa', '#e056fd'];
+// ---------- Base de datos de habilidades (módulos) ----------
+const ABILITY_COLORS = ['#8b7bff', '#36e6ff', '#3dff8a', '#ff4fa3', '#ffb347', '#c6ff4f', '#4f9dff', '#e056fd'];
 
 // Color estable por habilidad (misma habilidad = mismo color siempre)
 function abilityColor(name) {
@@ -561,6 +561,11 @@ function abilityInitial(name) {
   return /[A-Z]/.test(c) ? c : '#';
 }
 
+// Código de módulo estable según la posición en la base de datos (HAB-012)
+function abilityCode(h) {
+  return 'HAB-' + String(habilidadesData.indexOf(h) + 1).padStart(3, '0');
+}
+
 // Cuántos Pokémon tienen cada habilidad (normal, secundaria u oculta)
 function getAbilityHolderCounts() {
   const counts = {};
@@ -571,11 +576,14 @@ function getAbilityHolderCounts() {
   return counts;
 }
 
+const CHIP_ICON = '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/><rect x="9.5" y="9.5" width="5" height="5"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/></svg>';
+
 function renderHabilidades(habilidades) {
   resultsDiv.innerHTML = '';
   if (resultCountEl) resultCountEl.textContent = habilidades.length + ' resultados';
 
   const counts = getAbilityHolderCounts();
+  const maxCount = Math.max(1, ...Object.values(counts));
   const sorted = [...habilidades].sort((a, b) => hab.nombre(a).localeCompare(hab.nombre(b), 'es'));
   const letters = [...new Set(sorted.map(h => abilityInitial(hab.nombre(h))))];
   if (abilityLetter && !letters.includes(abilityLetter)) abilityLetter = '';
@@ -586,10 +594,14 @@ function renderHabilidades(habilidades) {
   section.setAttribute('aria-label', 'Habilidades');
   section.innerHTML = `
     <div class="codex-head">
-      <span class="codex-emblem" aria-hidden="true">✦</span>
+      <span class="codex-emblem">${CHIP_ICON}</span>
       <div>
+        <p class="codex-kicker-top">// Base de datos</p>
         <h2>Habilidades</h2>
-        <p>${habilidades.length} registrada${habilidades.length === 1 ? '' : 's'}</p>
+      </div>
+      <div class="codex-readout" aria-live="polite">
+        <span>Módulos</span>
+        <strong>${String(habilidades.length).padStart(3, '0')}</strong>
       </div>
     </div>
     <nav class="codex-index" aria-label="Filtrar por inicial">
@@ -622,9 +634,9 @@ function renderHabilidades(habilidades) {
     const head = document.createElement('div');
     head.className = 'codex-group-head';
     head.innerHTML = `
-      <span class="codex-group-letter" aria-hidden="true"><b>${letter}</b></span>
+      <span class="codex-group-letter" aria-hidden="true">${letter}</span>
       <span class="codex-group-line" aria-hidden="true"></span>
-      <span class="codex-group-count">${items.length} habilidad${items.length === 1 ? '' : 'es'}</span>
+      <span class="codex-group-count">${String(items.length).padStart(2, '0')} registro${items.length === 1 ? '' : 's'}</span>
     `;
     const grid = document.createElement('div');
     grid.className = 'codex-grid';
@@ -638,11 +650,22 @@ function renderHabilidades(habilidades) {
       card.setAttribute('role', 'button');
       card.style.setProperty('--ac', abilityColor(name));
       card.innerHTML = `
-        <span class="codex-shine" aria-hidden="true"></span>
-        <div class="codex-medal" aria-hidden="true"><span>${abilityInitial(name)}</span></div>
-        <h3>${name}</h3>
-        <p class="codex-desc">${hab.desc(h) || '-'}</p>
-        <div class="codex-foot">${n ? `${n} Pokémon` : 'Sin registros'}</div>
+        <div class="codex-card-body">
+          <span class="codex-scan" aria-hidden="true"></span>
+          <div class="codex-card-top">
+            <div class="codex-medal" aria-hidden="true"><span>${abilityInitial(name)}</span></div>
+            <div class="codex-card-id">
+              <h3>${name}</h3>
+              <span class="codex-code">${abilityCode(h)}</span>
+            </div>
+            <i class="codex-led" aria-hidden="true"></i>
+          </div>
+          <p class="codex-desc">${hab.desc(h) || '-'}</p>
+          <div class="codex-foot">
+            <div class="codex-foot-row"><span>Pokémon</span><strong>${String(n).padStart(2, '0')}</strong></div>
+            <div class="codex-meter" aria-hidden="true"><i style="width:${Math.round(n / maxCount * 100)}%"></i></div>
+          </div>
+        </div>
       `;
       card.addEventListener('click', () => showHabilidadDetail(h));
       card.addEventListener('keydown', e => {
@@ -672,25 +695,26 @@ function showHabilidadDetail(h) {
   };
 
   const roleLabel = {
-    normal:     { txt: 'Normal',     color: '#4ade80' },
-    secundaria: { txt: 'Secundaria', color: '#64b5f6' },
-    oculta:     { txt: 'Oculta',     color: '#ff80ab' }
+    normal:     { txt: 'Normal',     color: '#3dff8a' },
+    secundaria: { txt: 'Secundaria', color: '#4f9dff' },
+    oculta:     { txt: 'Oculta',     color: '#ff4fa3' }
   };
   const roleOrder = { normal: 0, secundaria: 1, oculta: 2 };
   const withRole = poseedores.map(p => ({ p, role: getPokemonRole(p) }))
     .sort((a, b) => roleOrder[a.role] - roleOrder[b.role]);
   const roleCount = r => withRole.filter(x => x.role === r).length;
+  const total = poseedores.length;
 
   const holdersHtml = withRole.length === 0
     ? '<p class="codex-empty">Ningún Pokémon registrado con esta habilidad.</p>'
     : `<div class="codex-holders">
         ${withRole.map(({ p, role }) => `
-          <div class="codex-holder" tabindex="0" role="button"
+          <div class="codex-holder" style="--rc:${roleLabel[role].color}" tabindex="0" role="button"
             onclick="closeModal(); setTimeout(()=>{ const found = pokemonData.find(x=>x.Mayus==='${p.Mayus}'); if(found) showPokemonDetail(found); }, 200);"
             onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">
             <div class="codex-holder-sprite"><img src="${pk.sprite(p)}" alt=""></div>
             <span class="codex-holder-name">${pk.nombre(p)}</span>
-            <span class="codex-chip" style="--rc:${roleLabel[role].color}">${roleLabel[role].txt}</span>
+            <span class="codex-chip">${roleLabel[role].txt}</span>
           </div>`).join('')}
       </div>`;
 
@@ -700,26 +724,28 @@ function showHabilidadDetail(h) {
       <div class="codex-hero">
         <div class="codex-medal is-big" aria-hidden="true"><span>${abilityInitial(hab.nombre(h))}</span></div>
         <div>
-          <p class="codex-kicker">Habilidad</p>
+          <p class="codex-kicker">Módulo de habilidad · ${abilityCode(h)}</p>
           <h2>${hab.nombre(h)}</h2>
         </div>
       </div>
 
       <div class="codex-body">
         <section class="codex-desc-panel">
+          <h3 class="codex-panel-title">Descripción</h3>
           <p>${hab.desc(h) || 'Sin descripción.'}</p>
         </section>
 
         <div class="codex-roles">
           ${['normal', 'secundaria', 'oculta'].map(r => `
             <div class="codex-role" style="--rc:${roleLabel[r].color}">
-              <strong>${roleCount(r)}</strong><span>${roleLabel[r].txt}</span>
+              <div class="codex-role-row"><span>${roleLabel[r].txt}</span><strong>${String(roleCount(r)).padStart(2, '0')}</strong></div>
+              <div class="codex-meter" aria-hidden="true"><i style="width:${total ? Math.round(roleCount(r) / total * 100) : 0}%"></i></div>
             </div>`).join('')}
         </div>
 
         <div class="codex-sign">
           <span>Pokémon con esta habilidad</span>
-          <b>${poseedores.length}</b>
+          <b>${String(total).padStart(2, '0')}</b>
         </div>
         ${holdersHtml}
       </div>
