@@ -404,33 +404,75 @@ function renderResults(pokemons, container = resultsDiv, showFlat = false) {
 function renderObjects(objetos) {
   resultsDiv.innerHTML = '';
   if (resultCountEl) resultCountEl.textContent = objetos.length + ' resultados';
+
+  // Cartel de la tienda
+  const banner = document.createElement('div');
+  banner.className = 'shop-banner';
+  banner.innerHTML = `
+    <div class="shop-awning" aria-hidden="true"></div>
+    <div class="shop-front">
+      <div class="shop-signboard">
+        <span class="shop-signboard-title">QUETZAL MART</span>
+        <span class="shop-signboard-sub">Tienda de objetos</span>
+      </div>
+      <div class="shop-dialog" role="note">
+        <p>¡Bienvenido! ¿Qué desea llevar hoy?</p>
+        <small>${objetos.length} artículo${objetos.length === 1 ? '' : 's'} en existencia</small>
+        <span class="shop-dialog-arrow" aria-hidden="true">▼</span>
+      </div>
+    </div>
+  `;
+  resultsDiv.appendChild(banner);
+
   if (objetos.length === 0) {
-    resultsDiv.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#aaa;">No se encontraron Objetos</p>';
+    const empty = document.createElement('p');
+    empty.className = 'shop-empty';
+    empty.textContent = 'Lo siento, no tenemos ese artículo en existencia.';
+    resultsDiv.appendChild(empty);
     return;
   }
 
+  // Un precio válido contiene al menos un dígito (evita mostrar "—" o "-" como precio)
+  const hasPrice = v => v !== undefined && v !== null && /\d/.test(String(v));
+
   const appendObjectCard = (o, container) => {
     const card = document.createElement('div');
-    card.className = 'card';
+    card.className = 'shop-item';
+    card.tabIndex = 0;
+    card.setAttribute('role', 'button');
+    const compra = ob.compra(o), venta = ob.venta(o);
+    const desc = ob.desc(o) ? ob.desc(o).substring(0, 72) + '…' : '';
     card.innerHTML = `
-      <div class="card-blob" style="background: radial-gradient(circle, rgba(255,215,0,0.15) 0%, transparent 70%);"></div>
-      <span class="card-number">#${ob.num(o)}</span>
-      <img src="${ob.sprite(o)}" alt="${ob.nombre(o)}" style="width:96px;height:96px;margin-top:8px;">
-      <h3>${ob.nombre(o)}</h3>
-      <p style="font-size:0.78em;color:#666;margin-top:6px;line-height:1.4;">${ob.desc(o) ? ob.desc(o).substring(0, 72) + '…' : ''}</p>
-      <div class="card-total" style="opacity:1;transform:none;margin-top:8px;">
-        <span style="color:#aaa;font-size:0.72rem;">
-          <strong style="color:#FFD700;">${ob.compra(o) || '—'}</strong> compra &nbsp;·&nbsp; <strong style="color:#81D4FA;">${ob.venta(o) || '—'}</strong> venta
-        </span>
+      <div class="shop-display">
+        <span class="shop-item-num">#${ob.num(o)}</span>
+        <img src="${ob.sprite(o)}" alt="">
+      </div>
+      <div class="shop-plank" aria-hidden="true"></div>
+      <div class="shop-label">
+        <h3>${ob.nombre(o)}</h3>
+        ${desc ? `<p class="shop-desc">${desc}</p>` : ''}
+        <div class="shop-price">
+          ${hasPrice(compra)
+            ? `<span class="shop-price-buy" title="Precio de compra"><i class="shop-coin" aria-hidden="true"></i>${compra}</span>`
+            : `<span class="shop-price-buy is-na">No se vende</span>`}
+          <span class="shop-price-sell">${hasPrice(venta) ? `Venta<br><b>${venta}</b>` : 'Sin venta'}</span>
+        </div>
       </div>
     `;
     card.addEventListener('click', () => showObjectDetail(o));
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showObjectDetail(o); }
+    });
     container.appendChild(card);
   };
 
   const hasSearch = searchInput.value.trim();
   if (hasSearch) {
-    objetos.forEach(o => appendObjectCard(o, resultsDiv));
+    const shelf = document.createElement('div');
+    shelf.className = 'object-category-grid';
+    shelf.style.gridColumn = '1/-1';
+    objetos.forEach(o => appendObjectCard(o, shelf));
+    resultsDiv.appendChild(shelf);
     return;
   }
 
@@ -894,8 +936,8 @@ function showObjectDetail(o) {
     <!-- BANNER SUPERIOR -->
     <div style="
       padding: 20px 60px 18px 24px;
-      background: linear-gradient(135deg, rgba(0,200,83,0.2), rgba(0,200,83,0.08));
-      border-bottom: 2px solid rgba(0,200,83,0.3);
+      background: linear-gradient(135deg, rgba(42,111,224,0.4), rgba(42,111,224,0.12));
+      border-bottom: 3px solid #2a6fe0;
       display: flex;
       align-items: center;
       gap: 14px;
@@ -904,7 +946,7 @@ function showObjectDetail(o) {
     ">
       <img src="${ob.sprite(o)}" alt="${ob.nombre(o)}" style="width:44px;height:44px;image-rendering:pixelated;flex-shrink:0;">
       <div>
-        <span style="font-size:0.75em;color:#00c853;font-weight:600;letter-spacing:2px;text-transform:uppercase;display:block;">#${ob.num(o)}</span>
+        <span style="font-size:0.75em;color:#ffc928;font-weight:600;letter-spacing:2px;text-transform:uppercase;display:block;">#${ob.num(o)}</span>
         <h2 style="font-size:1.6rem;font-weight:700;line-height:1.1;color:#fff;">${ob.nombre(o)}</h2>
       </div>
     </div>
@@ -923,26 +965,21 @@ function showObjectDetail(o) {
         ">
           <img src="${ob.sprite(o)}" alt="${ob.nombre(o)}" style="width:120px;height:120px;image-rendering:pixelated;">
         </div>
-        <div style="
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 18px;
-          padding: 18px;
-        ">
-          <h3 style="color:var(--green);margin-bottom:12px;font-size:0.95rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:6px;">Precios</h3>
-          <p style="font-size:0.95em;color:#e8ecf7;margin-bottom:8px;"><strong style="color:#aaa;">Compra:</strong> ${ob.compra(o) || '-'}</p>
-          <p style="font-size:0.95em;color:#e8ecf7;"><strong style="color:#aaa;">Venta:</strong> ${ob.venta(o) || '-'}</p>
+        <div style="background:#f6ecd2;border:3px solid #3a2a14;box-shadow:inset 0 0 0 3px #fffaf0, 0 5px 0 #1b1307;padding:16px 18px;color:#3a2a14;">
+          <h3 style="color:#3a2a14;margin-bottom:12px;font-size:0.95rem;border-bottom:2px dashed rgba(58,42,20,0.35);padding-bottom:6px;">Precios</h3>
+          <p style="font-size:0.95em;margin-bottom:8px;display:flex;align-items:center;gap:8px;"><i class="shop-coin" aria-hidden="true"></i><strong style="color:#7b6540;">Compra:</strong> ${ob.compra(o) || '-'}</p>
+          <p style="font-size:0.95em;display:flex;align-items:center;gap:8px;"><i class="shop-coin" aria-hidden="true" style="opacity:.55;"></i><strong style="color:#7b6540;">Venta:</strong> ${ob.venta(o) || '-'}</p>
         </div>
       </div>
 
       <!-- Descripción -->
       <div style="
         background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(0,200,83,0.2);
+        border: 1px solid rgba(42,111,224,0.35);
         border-radius: 18px;
         padding: 20px;
       ">
-        <h3 style="color:var(--green);margin-bottom:12px;font-size:0.95rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:6px;">Descripción</h3>
+        <h3 style="color:#ffc928;margin-bottom:12px;font-size:0.95rem;border-bottom:1px solid rgba(255,201,40,0.2);padding-bottom:6px;">Descripción</h3>
         <p style="color:#e8ecf7;line-height:1.7;font-size:0.92em;">${ob.desc(o) || 'Sin descripción'}</p>
       </div>
 
@@ -950,7 +987,7 @@ function showObjectDetail(o) {
 
     <!-- Pokémon portadores -->
     <div style="margin-top:24px;">
-      <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">
+      <h3 style="color:#ffc928;margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(255,201,40,0.2);padding-bottom:8px;">
         Pokémon que portan este objeto
         <span style="font-size:0.8em;color:#aaa;font-weight:400;margin-left:8px;">(${portadores.length})</span>
       </h3>
