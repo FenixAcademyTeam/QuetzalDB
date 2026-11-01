@@ -3,6 +3,7 @@ let objetosData = [];
 let habilidadesData = [];
 let currentTab = 'home';
 const pokemonFilters = { region: '', type: '', order: 'number' };
+let abilityLetter = '';
 
 // Datos de Créditos y Changelog (Fácil de editar aquí mismo)
 const infoExtra = {
@@ -131,6 +132,9 @@ function setNavVisibility(tab) {
   document.body.classList.toggle('shop-mode', tab === 'objetos');
   // La Pokédex también oculta el sidebar y usa su propia carcasa
   document.body.classList.toggle('dex-mode', tab === 'pokemon');
+  // El códice de habilidades también va sin sidebar y con fondo propio
+  document.body.classList.toggle('ability-mode', tab === 'habilidades');
+  if (tab !== 'habilidades') abilityLetter = '';
   const hideSearch = (tab === 'home' || tab === 'creditos');
   searchInput.style.display = hideSearch ? 'none' : 'block';
   searchInput.parentElement.style.display = hideSearch ? 'none' : 'block';
@@ -541,31 +545,121 @@ function renderObjects(objetos) {
   });
 }
 
+// ---------- Códice de habilidades ----------
+const ABILITY_COLORS = ['#9c88ff', '#6c8cff', '#4fd1c5', '#ff7eb6', '#ffb86b', '#9be15d', '#5ac8fa', '#e056fd'];
+
+// Color estable por habilidad (misma habilidad = mismo color siempre)
+function abilityColor(name) {
+  let hash = 0;
+  for (const ch of String(name)) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
+  return ABILITY_COLORS[hash % ABILITY_COLORS.length];
+}
+
+// Inicial sin acentos para agrupar (Á → A)
+function abilityInitial(name) {
+  const c = String(name || '?').trim().charAt(0).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase();
+  return /[A-Z]/.test(c) ? c : '#';
+}
+
+// Cuántos Pokémon tienen cada habilidad (normal, secundaria u oculta)
+function getAbilityHolderCounts() {
+  const counts = {};
+  pokemonData.forEach(p => {
+    new Set([pk.h1(p), pk.h2(p), pk.hoculta(p)].filter(Boolean).map(x => x.toLowerCase()))
+      .forEach(name => { counts[name] = (counts[name] || 0) + 1; });
+  });
+  return counts;
+}
+
 function renderHabilidades(habilidades) {
   resultsDiv.innerHTML = '';
   if (resultCountEl) resultCountEl.textContent = habilidades.length + ' resultados';
-  if (habilidades.length === 0) {
-    resultsDiv.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#aaa;">No se encontraron Habilidades</p>';
+
+  const counts = getAbilityHolderCounts();
+  const sorted = [...habilidades].sort((a, b) => hab.nombre(a).localeCompare(hab.nombre(b), 'es'));
+  const letters = [...new Set(sorted.map(h => abilityInitial(hab.nombre(h))))];
+  if (abilityLetter && !letters.includes(abilityLetter)) abilityLetter = '';
+  const visible = abilityLetter ? sorted.filter(h => abilityInitial(hab.nombre(h)) === abilityLetter) : sorted;
+
+  const section = document.createElement('section');
+  section.className = 'codex';
+  section.setAttribute('aria-label', 'Habilidades');
+  section.innerHTML = `
+    <div class="codex-head">
+      <span class="codex-emblem" aria-hidden="true">✦</span>
+      <div>
+        <h2>Habilidades</h2>
+        <p>${habilidades.length} registrada${habilidades.length === 1 ? '' : 's'}</p>
+      </div>
+    </div>
+    <nav class="codex-index" aria-label="Filtrar por inicial">
+      <button type="button" class="codex-letter is-all ${!abilityLetter ? 'active' : ''}" data-letter="">Todas</button>
+      ${letters.map(l => `<button type="button" class="codex-letter ${abilityLetter === l ? 'active' : ''}" data-letter="${l}">${l}</button>`).join('')}
+    </nav>
+  `;
+  section.querySelectorAll('.codex-letter').forEach(btn => {
+    btn.addEventListener('click', () => {
+      abilityLetter = btn.dataset.letter;
+      renderHabilidades(habilidades);
+    });
+  });
+
+  if (visible.length === 0) {
+    const empty = document.createElement('p');
+    empty.className = 'catalog-empty';
+    empty.textContent = 'No se encontraron habilidades.';
+    section.appendChild(empty);
+    resultsDiv.appendChild(section);
     return;
   }
-  habilidades.forEach(h => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <div class="card-blob" style="background: radial-gradient(circle, rgba(100,100,255,0.12) 0%, transparent 70%);"></div>
-      <div style="width:54px;height:54px;border-radius:14px;background:rgba(0,200,83,0.08);border:1px solid rgba(0,200,83,0.2);display:flex;align-items:center;justify-content:center;margin:8px auto 12px;font-size:1.2rem;color:rgba(156,136,255,0.8);font-weight:300;">✦</div>
-      <h3>${hab.nombre(h)}</h3>
-      <p style="font-size:0.8em;color:#666;margin-top:8px;line-height:1.5;">${hab.desc(h) || '-'}</p>
+
+  // Agrupar por inicial
+  const groups = {};
+  visible.forEach(h => { (groups[abilityInitial(hab.nombre(h))] ||= []).push(h); });
+
+  Object.keys(groups).sort().forEach(letter => {
+    const items = groups[letter];
+    const head = document.createElement('div');
+    head.className = 'codex-group-head';
+    head.innerHTML = `
+      <span class="codex-group-letter" aria-hidden="true"><b>${letter}</b></span>
+      <span class="codex-group-line" aria-hidden="true"></span>
+      <span class="codex-group-count">${items.length} habilidad${items.length === 1 ? '' : 'es'}</span>
     `;
-    card.addEventListener('click', () => showHabilidadDetail(h));
-    resultsDiv.appendChild(card);
+    const grid = document.createElement('div');
+    grid.className = 'codex-grid';
+
+    items.forEach(h => {
+      const name = hab.nombre(h);
+      const n = counts[String(name).toLowerCase()] || 0;
+      const card = document.createElement('div');
+      card.className = 'codex-card';
+      card.tabIndex = 0;
+      card.setAttribute('role', 'button');
+      card.style.setProperty('--ac', abilityColor(name));
+      card.innerHTML = `
+        <span class="codex-shine" aria-hidden="true"></span>
+        <div class="codex-medal" aria-hidden="true"><span>${abilityInitial(name)}</span></div>
+        <h3>${name}</h3>
+        <p class="codex-desc">${hab.desc(h) || '-'}</p>
+        <div class="codex-foot">${n ? `${n} Pokémon` : 'Sin registros'}</div>
+      `;
+      card.addEventListener('click', () => showHabilidadDetail(h));
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showHabilidadDetail(h); }
+      });
+      grid.appendChild(card);
+    });
+    section.append(head, grid);
   });
+
+  resultsDiv.appendChild(section);
 }
 
 function showHabilidadDetail(h) {
   // Pokémon que poseen esta habilidad (normal, secundaria u oculta)
   const nombreH = hab.nombre(h).toLowerCase();
-  const poseedores = pokemonData.filter(p => 
+  const poseedores = pokemonData.filter(p =>
     (pk.h1(p) && pk.h1(p).toLowerCase() === nombreH) ||
     (pk.h2(p) && pk.h2(p).toLowerCase() === nombreH) ||
     (pk.hoculta(p) && pk.hoculta(p).toLowerCase() === nombreH)
@@ -577,73 +671,58 @@ function showHabilidadDetail(h) {
     return 'normal';
   };
 
-  const roleLabel = { normal: { txt: 'Normal', color: '#00c853' }, secundaria: { txt: 'Secundaria', color: '#64b5f6' }, oculta: { txt: 'Oculta', color: '#ff80ab' } };
+  const roleLabel = {
+    normal:     { txt: 'Normal',     color: '#4ade80' },
+    secundaria: { txt: 'Secundaria', color: '#64b5f6' },
+    oculta:     { txt: 'Oculta',     color: '#ff80ab' }
+  };
+  const roleOrder = { normal: 0, secundaria: 1, oculta: 2 };
+  const withRole = poseedores.map(p => ({ p, role: getPokemonRole(p) }))
+    .sort((a, b) => roleOrder[a.role] - roleOrder[b.role]);
+  const roleCount = r => withRole.filter(x => x.role === r).length;
 
-  const pokemonListHtml = poseedores.length === 0
-    ? '<p style="color:#aaa;font-size:0.9em;">Ningún Pokémon registrado con esta habilidad.</p>'
-    : `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px;">
-        ${poseedores.map(p => {
-          const role = getPokemonRole(p);
-          const rl = roleLabel[role];
-          return `
-            <div style="
-              background:rgba(255,255,255,0.04);
-              border:1px solid rgba(255,255,255,0.08);
-              border-radius:14px;
-              padding:12px 8px;
-              text-align:center;
-              cursor:pointer;
-              transition:all 0.25s;
-            " onclick="closeModal(); setTimeout(()=>{ const found = pokemonData.find(x=>x.Mayus==='${p.Mayus}'); if(found) showPokemonDetail(found); }, 200);"
-              onmouseover="this.style.borderColor='rgba(0,200,83,0.4)'; this.style.transform='translateY(-3px)'"
-              onmouseout="this.style.borderColor='rgba(255,255,255,0.08)'; this.style.transform='translateY(0)'">
-              <img src="${pk.sprite(p)}" alt="${pk.nombre(p)}" style="width:54px;height:54px;image-rendering:pixelated;">
-              <p style="font-size:0.75em;color:#ddd;margin-top:6px;font-weight:500;">${pk.nombre(p)}</p>
-              <span style="font-size:0.65em;color:${rl.color};font-weight:600;">${rl.txt}</span>
-            </div>
-          `;
-        }).join('')}
+  const holdersHtml = withRole.length === 0
+    ? '<p class="codex-empty">Ningún Pokémon registrado con esta habilidad.</p>'
+    : `<div class="codex-holders">
+        ${withRole.map(({ p, role }) => `
+          <div class="codex-holder" tabindex="0" role="button"
+            onclick="closeModal(); setTimeout(()=>{ const found = pokemonData.find(x=>x.Mayus==='${p.Mayus}'); if(found) showPokemonDetail(found); }, 200);"
+            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">
+            <div class="codex-holder-sprite"><img src="${pk.sprite(p)}" alt=""></div>
+            <span class="codex-holder-name">${pk.nombre(p)}</span>
+            <span class="codex-chip" style="--rc:${roleLabel[role].color}">${roleLabel[role].txt}</span>
+          </div>`).join('')}
       </div>`;
 
+  const color = abilityColor(hab.nombre(h));
   const html = `
-    <!-- BANNER -->
-    <div style="
-      padding: 20px 60px 18px 24px;
-      background: linear-gradient(135deg, rgba(0,200,83,0.25), rgba(0,200,83,0.08));
-      border-bottom: 2px solid rgba(0,200,83,0.35);
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      min-height: 78px;
-    ">
-      <div style="
-        width:48px;height:48px;border-radius:50%;
-        background:linear-gradient(135deg,rgba(0,200,83,0.3),rgba(100,221,23,0.15));
-        border:2px solid rgba(0,200,83,0.5);
-        display:flex;align-items:center;justify-content:center;
-        font-size:1.1rem;flex-shrink:0;color:rgba(156,136,255,0.9);
-      ">✦</div>
-      <h2 style="font-size:1.7rem;font-weight:700;color:#fff;">${hab.nombre(h)}</h2>
-    </div>
-
-    <div class="modal-inner">
-      <!-- Descripción -->
-      <div style="
-        background:rgba(0,200,83,0.06);
-        border:1px solid rgba(0,200,83,0.2);
-        border-radius:16px;
-        padding:18px 20px;
-        margin-bottom:24px;
-      ">
-        <p style="color:#e8ecf7;font-size:1rem;line-height:1.7;">${hab.desc(h) || 'Sin descripción.'}</p>
+    <div class="codex-sheet" style="--ac:${color};">
+      <div class="codex-hero">
+        <div class="codex-medal is-big" aria-hidden="true"><span>${abilityInitial(hab.nombre(h))}</span></div>
+        <div>
+          <p class="codex-kicker">Habilidad</p>
+          <h2>${hab.nombre(h)}</h2>
+        </div>
       </div>
 
-      <!-- Pokémon que la poseen -->
-      <h3 style="color:var(--green);margin-bottom:14px;font-size:1rem;border-bottom:1px solid rgba(0,200,83,0.15);padding-bottom:8px;">
-        Pokémon con esta habilidad
-        <span style="font-size:0.8em;color:#aaa;font-weight:400;margin-left:8px;">(${poseedores.length})</span>
-      </h3>
-      ${pokemonListHtml}
+      <div class="codex-body">
+        <section class="codex-desc-panel">
+          <p>${hab.desc(h) || 'Sin descripción.'}</p>
+        </section>
+
+        <div class="codex-roles">
+          ${['normal', 'secundaria', 'oculta'].map(r => `
+            <div class="codex-role" style="--rc:${roleLabel[r].color}">
+              <strong>${roleCount(r)}</strong><span>${roleLabel[r].txt}</span>
+            </div>`).join('')}
+        </div>
+
+        <div class="codex-sign">
+          <span>Pokémon con esta habilidad</span>
+          <b>${poseedores.length}</b>
+        </div>
+        ${holdersHtml}
+      </div>
     </div>
   `;
 
