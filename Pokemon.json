@@ -25,7 +25,8 @@
       "O": "Clorofila"
     },
     "ECLO": "Monstruo",
-    "ECLO2": "Planta"
+    "ECLO2": "Planta",
+    "AREA": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Areas/0001.png"
   },
   {
     "Pokemon": "Ivysaur",
@@ -158,7 +159,8 @@
       "O": "Poder Solar"
     },
     "ECLO": "Monstruo",
-    "ECLO2": "Dragon"
+    "ECLO2": "Dragon",
+    "AREA": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Areas/0004.png"
   },
   {
     "Pokemon": "Charmeleon",
@@ -313,7 +315,8 @@
       "O": "Cura Lluvia"
     },
     "ECLO": "Monstruo",
-    "ECLO2": "Agua 1"
+    "ECLO2": "Agua 1",
+    "AREA": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Areas/0007.png"
   },
   {
     "Pokemon": "Wartortle",
@@ -439,7 +442,8 @@
     "H": {
       "O": "Fuga"
     },
-    "ECLO": "Bicho"
+    "ECLO": "Bicho",
+    "AREA": "https://raw.githubusercontent.com/FenixAcademyTeam/QuetzalSprites/main/Areas/0010.png"
   },
   {
     "Pokemon": "Metapod",
